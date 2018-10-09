@@ -215,7 +215,7 @@ namespace Network
             Layers[2].CalcActivation();
             Activations.Add(Layers[2].Activation);
 
-            // TODO: implement cost function for each layer
+            // TODO: implement cost functior
 
 
             // cost derivative
