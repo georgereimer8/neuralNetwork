@@ -1,0 +1,72 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MnistViewer
+{
+    public class MnistImage
+    {
+        public Bitmap Bitmap;
+        public string Label;
+        public double[] Pixels { get; set; }
+        public void ReadImage( BinaryReader imageData, int width, int height )
+        {
+            Pixels = new double[width * height];
+            Bitmap = new Bitmap(width, height);
+            for(int y = 0; y < height; ++y)
+            {
+                for( int x = 0; x < width; ++x)
+                {
+                    int pix = imageData.ReadByte();
+                    Pixels[x * y] = pix;
+                    Color c = Color.FromArgb(pix, pix, pix);
+                    Bitmap.SetPixel(x,y,c);
+                }
+            }
+        }
+    }
+    public class MnistImageReader
+    {
+        public List<MnistImage> ImageList = new List<MnistImage>();
+        int lablesHeader;
+        int imagesHeader;
+        int x;
+        int y;
+        int imageCount;
+        int lablesCount;
+
+    int ReverseBytes(int val)
+    {
+        return (val & 0x000000FF) << 24 |
+                (val & 0x0000FF00) << 8 |
+                (val & 0x00FF0000) >> 8 |
+                ((int)(val & 0xFF000000)) >> 24;
+    }
+        public void ReadImages( FileStream imageData, FileStream labelData)
+        {
+            BinaryReader labels = new BinaryReader(labelData);
+            BinaryReader images = new BinaryReader(imageData);
+
+
+            imagesHeader = ReverseBytes(images.ReadInt32());
+            imageCount = ReverseBytes(images.ReadInt32());
+            x = ReverseBytes(images.ReadInt32());
+            y = ReverseBytes(images.ReadInt32());
+
+            lablesHeader = ReverseBytes(labels.ReadInt32());
+            lablesCount = ReverseBytes(labels.ReadInt32());
+            
+            for(int i = 0; i <imageCount; ++i)
+            {
+                MnistImage mi = new MnistImage();
+                mi.Label = labels.ReadByte().ToString();
+                mi.ReadImage(images, x, y);
+                ImageList.Add(mi);
+            }
+        }
+    }
+}
