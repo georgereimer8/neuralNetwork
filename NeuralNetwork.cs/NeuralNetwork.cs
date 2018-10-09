@@ -215,7 +215,8 @@ namespace Network
             Layers[2].CalcActivation();
             Activations.Add(Layers[2].Activation);
 
-            // TODO: implement cost function
+            // TODO: implement cost function for each layer
+
 
             // cost derivative
             var delta = (Layers[2].Activation - batch.label) * SigmoidPrime(Layers[2].Z);
