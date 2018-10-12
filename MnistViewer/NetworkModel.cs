@@ -65,9 +65,13 @@ namespace MnistViewer
             Network = new NeuralNetwork();
             Network.Log = Log;
 
-            Network.AddLayer(10);
             Network.AddLayer(5);
-            Network.AddLayer(3);
+            Network.AddLayer(1);
+            Network.AddLayer(1);
+
+            //Network.AddLayer(784);
+            //Network.AddLayer(30);
+            //Network.AddLayer(10);
         }
 
         double[] TestData = new double[5] {1, 2, 3, 4, 5};

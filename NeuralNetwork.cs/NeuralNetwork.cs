@@ -81,8 +81,8 @@ namespace Network
                 Inputs = DenseVector.Build.Dense(Neurons.Count());
                 Activation = DenseVector.Build.Dense(Neurons.Count());
                 Biases = DenseVector.Build.Dense(Neurons.Count(), 0);
-                Weights = DenseMatrix.Build.Dense(Neurons.Count(), Neurons.Count(), 0);
-                Weights = DenseMatrix.Build.Diagonal(Neurons.Count(), Neurons.Count(), 1);
+                // one input, one output
+                Weights = DenseMatrix.Build.Dense(1,Neurons.Count(), 0);
 
             }
             else
@@ -92,6 +92,8 @@ namespace Network
                 PreviousLayer.NextLayer = this;
                 Inputs = DenseVector.Build.Dense(PreviousLayer.Neurons.Count());
                 Activation = DenseVector.Build.Dense(Neurons.Count());
+                // activation weights,  one row per neurons
+                Weights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count(), 0);
 #if TEST_NETWORK_MATH
                 // set biaes and weights equal to neuron number + 1
                 List<double> biasValues = new List<double>();
@@ -109,29 +111,32 @@ namespace Network
                     weightValues.Add(i + 1); // test weights are 1,2,3...
                 }
                 Biases = DenseVector.Build.Dense(biasValues.ToArray());
-                Weights = DenseMatrix.Build.Dense(PreviousLayer.Neurons.Count(), PreviousLayer.Neurons.Count(), (i, j) => i + j);
+                Weights = DenseMatrix.Build.Dense(PreviousLayer.Neurons.Count(), Neurons.Count(), (i, j) => i + j);
 
                 var weightVector = DenseVector.Build.Dense(weightValues.ToArray());
                 Weights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count());
-                for( int i = 0; i < Neurons.Count; ++i  )
+                if (Weights.RowCount > 1)
                 {
-                    // replace values
-                    Weights = Weights.InsertRow(i, weightVector);
-                    Weights = Weights.RemoveRow(i + 1);
-                }
+                    for (int i = 0; i < Neurons.Count; ++i)
+                    {
+                        // replace values
+                        Weights = Weights.InsertRow(i, weightVector);
+                        Weights = Weights.RemoveRow(i + 1);
+                    }
+                } 
                 var w = Weights.ToString();
 #else
                 Biases = DenseVector.Build.Random(Neurons.Count());
-                Weights = DenseMatrix.Build.Random(Neurons.Count(), PreviousLayer.Neurons.Count());
+                Weights = DenseMatrix.Build.Random(Neurons.Count(), PrevioActivationusLayer.Neurons.Count());
 #endif
             }
         }
-
+        
         public void CalcActivation()
-        {
-            //var h = Weights * Inputs;
-            //var k = h + Biases;
-            Z = (Weights * Inputs )- Biases;
+        {  
+            var h = Weights * PreviousLayer.Activation;
+            var k = h + Biases;
+            Z = (Weights * PreviousLayer.Activation )- Biases;
             Activation = NeuralNetwork.Sigmoid(Z);
         }
 
