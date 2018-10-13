@@ -55,7 +55,7 @@ namespace MnistViewer
             List<TrainingData> trainingData = new List<TrainingData>();
             foreach (var i in MnistImageReader.ImageList)
             {
-                trainingData.Add(new TrainingData(i.Pixels, i.Label ));
+                trainingData.Add(new TrainingData(i.Pixels, i.Label, Network.Layers.Last().Neurons.Count() ));
             }
             Network.Train(trainingData, Epochs, BatchSize, LearningRate, includeTestData: false);
         }
@@ -80,7 +80,7 @@ namespace MnistViewer
         {
             SetConsoleVisible?.Invoke(true);
             List<TrainingData> trainingData = new List<TrainingData>();
-            trainingData.Add(new TrainingData(TestData, "5" ));
+            trainingData.Add(new TrainingData(TestData, "0", Network.Layers.Last().Neurons.Count()  ));
             Network.TrainingTest(trainingData);
         }
 
