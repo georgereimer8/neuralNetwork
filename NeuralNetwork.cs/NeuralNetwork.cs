@@ -234,17 +234,18 @@ namespace Network
         {
             try
             {
-                // cost derivative
-                var delta = (Layers[2].Activations - label) * SigmoidPrime(Layers[2].Z);
+                // cost derivative for bias
+                var delta = (label - Layers[2].Activations) * SigmoidPrime(Layers[2].Z);
                 Layers[2].GradientBiases = delta;
 
-                var deltaM = DenseMatrix.Build.DenseOfColumnVectors(delta);
 
+                // cost derivative for weights
+                var deltaM = DenseMatrix.Build.DenseOfColumnVectors(delta);
                 var act = DenseMatrix.Build.DenseOfColumnVectors(Layers[1].Activations);
                 Layers[2].GradientWeights = deltaM * act.Transpose();
-
                 var sp = SigmoidPrime(Layers[1].Activations);
                 var bm = (Layers[2].Weights.Transpose() * deltaM) * sp;
+
                 Layers[1].GradientBiases = bm.Column(0);
                 Layers[1].GradientWeights = deltaM * act.Transpose() * sp;
             }
