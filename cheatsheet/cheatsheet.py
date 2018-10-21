@@ -61,11 +61,9 @@ def feed_forward(X,Wh,Wo,Bh,Bo):
     Zo = np.dot(H, Wo) + Bo
     yHat = relu(Zo)
     print("FF done")
+    return yHat,Zo
 
-def relu_prime(z):
-    if z > 0:
-        return 1
-    return 0
+
 
 def cost(yHat, y):
     return 0.5 * (yHat - y)**2
@@ -73,10 +71,9 @@ def cost(yHat, y):
 def cost_prime(yHat, y):
     return yHat - y
 
-def backprop(x, y, Wh, Wo, lr):
-    yHat = feed_forward(x, Wh, Wo)
-
+def backprop(x, yHat, y, Wh, Wo, lr):
     # Layer Error
+    Zo = y
     Eo = (yHat - y) * relu_prime(Zo)
     Eh = Eo * Wo * relu_prime(Zh)
 
@@ -87,6 +84,7 @@ def backprop(x, y, Wh, Wo, lr):
     # Update weights
     Wh -= lr * dWh
     Wo -= lr * dWo
+    print("BackPropogation Done")
 
 def update_weights(m, b, X, Y, learning_rate):
     m_deriv = 0
@@ -110,8 +108,11 @@ def main():
     Bh,Bo = init_bias()
     Wh,Wo = init_weights()
     X = initInput()
-    feed_forward(X,Wh,Wo,Bh,Bo)
+    yHat,Zo = feed_forward(X,Wh,Wo,Bh,Bo)
+    learningRate = 0.5
+    backprop(X, yHat, Zo, Wh, Wo, learningRate)
 
-
+Zh = []
+Zo = []
 if __name__ == "__main__":
     main()
