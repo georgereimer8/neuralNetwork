@@ -2,7 +2,7 @@ import numpy as np
 
 INPUT_LAYER_SIZE = 10
 HIDDEN_LAYER_SIZE = 4
-OUTPUT_LAYER_SIZE = 1
+OUTPUT_LAYER_SIZE = 10
 
 Zh = []
 Zo = []
@@ -65,8 +65,6 @@ def backprop():
     global H,Wh,Wo,Bh,Bo,Zh,Zo,yHat,X,Y,lr
     # Layer Error
     Eo = (yHat - Y) * sigmoid_prime(Zo)
-    Eh = (Eo * Wo )
-    sp = sigmoid_prime(Zh)
     Eh = (Eo * Wo ) * sigmoid_prime(Zh)
 
     # Cost derivative for weights
