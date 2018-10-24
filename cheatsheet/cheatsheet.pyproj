@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>81a0511f-c85a-4fa9-bc00-414bbbb42dbe</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>cheatsheet.py</StartupFile>
+    <StartupFile>binaryConvertor.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
