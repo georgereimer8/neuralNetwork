@@ -1,9 +1,10 @@
 import numpy as np
 import os
 import sys
+import random
 
 INPUT_LAYER_SIZE = 10
-HIDDEN_LAYER_SIZE = 4
+HIDDEN_LAYER_SIZE = 10
 OUTPUT_LAYER_SIZE = 10
 
 Zh = []
@@ -17,6 +18,8 @@ Y = []
 H = []
 yHat = []
 lr = 1.0
+OutputError = 1.0
+OutputErrorLimit = 0.00001
 
 
 def sigmoid(z):
@@ -29,8 +32,8 @@ def sigmoid_prime(z):
 
 def initWeights():
     global Wh,Wo
-    Wh = np.full((INPUT_LAYER_SIZE, HIDDEN_LAYER_SIZE),1.0) 
-    Wo = np.full((HIDDEN_LAYER_SIZE, OUTPUT_LAYER_SIZE),1.0) 
+    Wh = np.full((INPUT_LAYER_SIZE, HIDDEN_LAYER_SIZE),0.5) 
+    Wo = np.full((HIDDEN_LAYER_SIZE, OUTPUT_LAYER_SIZE),0.5) 
 
 def initBias():
     global Bh,Bo
@@ -38,7 +41,7 @@ def initBias():
     Bo = np.full((1, OUTPUT_LAYER_SIZE), 0.5)
 
 def initInput( value):
-    global X,Y
+    global X,Y,yHat
     '''
     TODO: convert value to binary and put it into X
     ONLY value=zero works for now
@@ -79,6 +82,7 @@ def initInput( value):
     ''' training data '''
     X[0] = binary[value] 
     Y[0] = decimal[ value ]
+    yHat = np.full((1,10),0)
 
 '''
 X    - input matrix
@@ -121,6 +125,15 @@ def backprop():
     Bo -= lr * dBo
     Bh -= lr * dBh
 
+''' Loss Functions '''
+def MSE(yHat, y):
+    return np.sum((yHat - y)**2) / y.size
+
+def MSE_prime(yHat, y):
+    return np.sum((yHat - y)/y.size)
+
+''' Activation Functions '''
+
 def relu_prime(Z):
     '''
     Z - weighted input matrix
@@ -133,34 +146,65 @@ def relu_prime(Z):
     Z[Z > 0] = 1
     return Z
 
+''' print all outputs that are over 0.99 '''
 def prediction():
-    print("\nPrediction:")
+    p = [] 
     for i in range(10):
         if yHat[0,i] > 0.99:
-            print(str(9-i) + ",", end ="")
+            p.append( 9-i )
+    return p
+
+def outputIdentified():
+    for i in range(10):
+        if yHat[0,i] > 0.99:
+            return True
+
+
+def train():
+    global H,Wh,Wo,Bh,Bo,Zh,Zo,yHat,X,Y,lr
+
+    for i in range(1,10000):
+        msg = str(i) + " "
+        
+        feedForward()
+
+        #if outputIdentified() == True:
+        #    break
+
+        OutputError = MSE(yHat, Y)
+        msg += 'MSE({0: >#016.5f}) '.format(float(OutputError)) 
+
+        #lr = OutputError
+        msg += ' lr={0: >#010.5f} '.format(float(lr))
+
+        for p in yHat[0]:
+            msg += '{0: >#010.5f}'.format(p)
+
+        msg = msg.replace('\n','')
+
+        print(msg,end='\r')
+
+        if( OutputError < OutputErrorLimit):
+            break
+
+        backprop()
     print()
 
 def main():
     os.system("mode con cols=250 lines=50")
 
-    lr = 2.0
+    lr = 0.5 
+    trainingSampleSize = 100
 
     initWeights()
-    initInput(5)
     initBias()
 
-    for i in range(1,10000):
-        feedForward()
-        backprop()
-        
-
-        b = str(yHat)        
-        c = b.replace('\n','')
-        print(str(i)+' '+c,end='\r')
-
-    print()
-    prediction()
-
+    for i in range(trainingSampleSize):
+        sample = random.randint(5,6)
+        initInput(sample)
+        train()
+        p = prediction()
+        print('Input:{} Prediction:{}'.format(sample,p ))
 
 
 
