@@ -160,52 +160,54 @@ def outputIdentified():
             return True
 
 
-def train():
+def train(i):
     global H,Wh,Wo,Bh,Bo,Zh,Zo,yHat,X,Y,lr
 
-    for i in range(1,10000):
-        msg = str(i) + " "
-        
-        feedForward()
+    msg = str(i) + " "
+    
+    feedForward()
 
-        #if outputIdentified() == True:
-        #    break
+    #if outputIdentified() == True:
+    #    break
 
-        OutputError = MSE(yHat, Y)
-        msg += 'MSE({0: >#016.5f}) '.format(float(OutputError)) 
+    OutputError = MSE(yHat, Y)
+    msg += 'MSE({0: >#016.5f}) '.format(float(OutputError)) 
 
-        #lr = OutputError
-        msg += ' lr={0: >#010.5f} '.format(float(lr))
+    #lr = OutputError
+    msg += ' lr={0: >#010.5f} '.format(float(lr))
 
-        for p in yHat[0]:
-            msg += '{0: >#010.5f}'.format(p)
+    for p in yHat[0]:
+        msg += '{0: >#010.5f}'.format(p)
 
-        msg = msg.replace('\n','')
+    msg = msg.replace('\n','')
 
-        print(msg,end='\r')
+    print(msg,end='\r')
 
-        if( OutputError < OutputErrorLimit):
-            break
 
-        backprop()
-    print()
+    backprop()
 
 def main():
     os.system("mode con cols=250 lines=50")
 
     lr = 0.5 
-    trainingSampleSize = 100
+    trainingSampleSize = 10000
+    testDataSize = 100
 
     initWeights()
     initBias()
 
     for i in range(trainingSampleSize):
-        sample = random.randint(5,6)
+        sample = random.randint(0,9)
         initInput(sample)
-        train()
+        train(i)
+        
+
+    for i in range(testDataSize):
+        sample = random.randint(0,9)
+        initInput(sample)
+        feedForward()
         p = prediction()
         print('Input:{} Prediction:{}'.format(sample,p ))
-
 
 
 if __name__ == "__main__":
