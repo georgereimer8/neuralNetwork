@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.LinearAlgebra.Double;
+﻿
+using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics;
 using System;
@@ -7,20 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/*
 // Neural Network Class
-namespace Network
+namespace NetworkAlpha
 {
     public class TrainingData
     {
         public Vector<double> data { get; set; }
         public Vector<double> label { get; set; }
-
-        public TrainingData( Vector<double>myData, Vector<double> myLabel)
-        {
-            data = myData;
-            label = myLabel;
-        }
-
         public TrainingData(double[] myValues, string myLabel, int outputActivations)
         {
             data = DenseVector.Build.Dense(myValues);
@@ -44,15 +39,33 @@ namespace Network
             Parent = myParent;
         }
 
+        double activation;
         public double Activation
         {
             get
             {
-                return Parent.Activations[NeuronID];
+                double value;
+                if (Parent.Number == Layer.InputLayerID)
+                {
+                    value = activation;
+                }
+                else
+                {
+                    value = Parent.Activations[NeuronID];
+                }
+                return value;
             }
+
             set
             {
-                 Parent.Activations[NeuronID] = value;
+                if (Parent.Number == Layer.InputLayerID)
+                {
+                    activation = value;
+                }
+                else
+                {
+                    Parent.Activations[NeuronID] = value;
+                }
             }
         }
     }
@@ -60,6 +73,7 @@ namespace Network
     public class Layer
     {
         public const int InputLayerID = 0;
+        public int Number { get; set; }
         public Layer PreviousLayer { get; set; }
         public Layer NextLayer { get; set; }
 
@@ -67,11 +81,10 @@ namespace Network
         public Vector<double> Biases { get; set; }
         public Matrix<double> Weights { get; set; }
         public Vector<double> Z { get; set; }
-        public Vector<double> Error { get; set; }
 
         public Vector<double> GradientBiases { get; set; }
         public Matrix<double> GradientWeights { get; set; }
-        
+
 
         public List<Neuron> Neurons;
         public Layer(int myNeuronCount, Layer myPreviousLayer = null)
@@ -90,25 +103,29 @@ namespace Network
         {
             if (PreviousLayer == null)
             {
-                // Input Layer,  just need activations for input values
-                Activations = DenseVector.Build.Dense(Neurons.Count(),0.0);
+                // setup default outputs, one per neuron, no bias, unity weight
+                Activations = DenseVector.Build.Dense(Neurons.Count());
+                Biases = DenseVector.Build.Dense(Neurons.Count(), 0);
+                GradientBiases = DenseVector.Build.Dense(Neurons.Count(), 0);
+                // one input, one output
+                Weights = DenseMatrix.Build.Dense(1, Neurons.Count(), 0);
+                GradientWeights = DenseMatrix.Build.Dense(1, Neurons.Count(), 0);
+
             }
             else
             {
+                // connections are a view backwards to previous layer
                 // so setup connections between this and the previous layer
                 PreviousLayer.NextLayer = this;
                 Activations = DenseVector.Build.Dense(Neurons.Count());
-                Biases = DenseVector.Build.Dense(Neurons.Count());
-                // activation weights,  one row per previous layer neurons, columns = this layer neurons
-                Weights = DenseMatrix.Build.Dense(PreviousLayer.Neurons.Count(), Neurons.Count(), 1.0);
-                GradientWeights = DenseMatrix.Build.Dense(PreviousLayer.Neurons.Count(), Neurons.Count(), 0);
-                GradientBiases = DenseVector.Build.Random(Neurons.Count());
-
+                // activation weights,  one row per neurons
+                Weights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count(), 0);
+                GradientWeights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count(), 0);
 #if TEST_NETWORK_MATH
                 // set biaes and weights equal to neuron number + 1
                 List<double> biasValues = new List<double>();
                 // one overall bias per neuron in current layer
-                for(int i = 0; i < Neurons.Count(); ++i)
+                for (int i = 0; i < Neurons.Count(); ++i)
                 {
                     biasValues.Add(0.5);
                 }
@@ -116,7 +133,7 @@ namespace Network
                 List<double> weightValues = new List<double>();
                 // one overall bias per neuron in current layer
                 // one weight per neuron in previous layer
-                for(int i = 0; i < PreviousLayer.Neurons.Count(); ++i)
+                for (int i = 0; i < PreviousLayer.Neurons.Count(); ++i)
                 {
                     PreviousLayer.Activations[i] = i + 1;
                     weightValues.Add(i + 1); // test weights are 1,2,3...
@@ -134,41 +151,47 @@ namespace Network
                         Weights = Weights.InsertRow(i, weightVector);
                         Weights = Weights.RemoveRow(i + 1);
                     }
-                } 
+                }
                 var w = Weights.ToString();
+#else
+                Biases = DenseVector.Build.Random(Neurons.Count());
+                GradientBiases = DenseVector.Build.Random(Neurons.Count());
+                Weights = DenseMatrix.Build.Random(Neurons.Count(), PrevioActivationusLayer.Neurons.Count());
+                GradientWeights = DenseMatrix.Build.Random(Neurons.Count(), PrevioActivationusLayer.Neurons.Count());
 #endif
             }
         }
-        
+
         public void CalcActivation()
         {
             // first layer is input layer so activations don't get updated
             if (PreviousLayer != null)
             {
-                var h = Weights.Transpose() * PreviousLayer.Activations;
-                Z = (Weights.Transpose() * PreviousLayer.Activations) - Biases;
+                var h = Weights * PreviousLayer.Activations;
+                var k = h + Biases;
+                Z = (Weights * PreviousLayer.Activations) - Biases;
                 Activations = NeuralNetwork.Sigmoid(Z);
             }
         }
 
-    } 
+    }
 
     public class NeuralNetwork
     {
         public Action<string> Log { get; set; }
         public List<Layer> Layers { get; set; }
 
-        public NeuralNetwork( )
+        public NeuralNetwork()
         {
             Layers = new List<Layer>();
         }
 
-        public void AddLayer( int neuronCount )
+        public void AddLayer(int neuronCount)
         {
             Layers.Add(new Layer(neuronCount, Layers.LastOrDefault()));
         }
 
-        public void TrainingTest( List<TrainingData> trainingData )
+        public void TrainingTest(List<TrainingData> trainingData)
         {
             update(trainingData, learningRate: 1.0);
         }
@@ -178,51 +201,55 @@ namespace Network
             StochasticGradientDescent(trainingData, epochs, batchSize, learningRate, includeTestData);
         }
 
-        void StochasticGradientDescent( List<TrainingData>trainingData, int epochs, int batchSize, double learningRate, bool includeTestData )
+        void StochasticGradientDescent(List<TrainingData> trainingData, int epochs, int batchSize, double learningRate, bool includeTestData)
         {
+            var testDataCount = 0;
+            if (includeTestData)
+            {
+                //testDataCount = TODO:
+            }
+
             for (int epoch = 0; epoch < epochs; ++epoch)
             {
                 var batchData = trainingData.GetRange(0, batchSize);
                 update(batchData, learningRate);
-                trainingData.Shuffle();
-                Log?.Invoke(String.Format("Completed epoch {0}",epoch));
+                // trainingData.Shuffle(); TODO include Network namespace extensions
+                Log?.Invoke(String.Format("Completed epoch {0}", epoch));
             }
         }
 
-        void update( List<TrainingData> batchData, double learningRate )
+        void update(List<TrainingData> batchData, double learningRate)
         {
             foreach (var batch in batchData)
             {
                 // feed forward
-                Layers.First().Activations = batch.data;
-                foreach(var layer in Layers)
+                Layers[Layer.InputLayerID].Activations = batch.data;
+                foreach (var layer in Layers)
                 {
                     layer.CalcActivation();
                 }
-
-                // back propagate
-                // don't do the first layer
-                for( int i = Layers.Count-1; i > 0; --i )
-                {
-                    backPropagation(Layers[i], batch.label);
-                }
+                backPropagation(batch.label);
             }
         }
 
-        void backPropagation( Layer layer, Vector<double> label)
+        void backPropagation(Vector<double> label)
         {
             try
             {
-                // layer error : (yHat - y ) * Sigmoid'(Z)
-                layer.Error = (layer.Activations - label) * SigmoidPrime(layer.Z);
+                // cost derivative for bias
+                var delta = (label - Layers[2].Activations) * SigmoidPrime(Layers[2].Z);
+                Layers[2].GradientBiases = delta;
+
 
                 // cost derivative for weights
-                var deltaM = DenseMatrix.Build.DenseOfColumnVectors(layer.Error);
-                var act = DenseMatrix.Build.DenseOfColumnVectors(layer.PreviousLayer.Activations);
-                layer.GradientWeights = deltaM * act.Transpose();
-
+                var deltaM = DenseMatrix.Build.DenseOfColumnVectors(delta);
+                var act = DenseMatrix.Build.DenseOfColumnVectors(Layers[1].Activations);
+                Layers[2].GradientWeights = deltaM * act.Transpose();
                 var sp = SigmoidPrime(Layers[1].Activations);
                 var bm = (Layers[2].Weights.Transpose() * deltaM) * sp;
+
+                Layers[1].GradientBiases = bm.Column(0);
+                Layers[1].GradientWeights = deltaM * act.Transpose() * sp;
             }
             catch
             {
@@ -230,7 +257,7 @@ namespace Network
             }
         }
 
-        void updateParameters( Layer layer, Matrix<double> deltaM )
+        void updateParameters(Layer layer, Matrix<double> deltaM)
         {
 
         }
@@ -250,3 +277,4 @@ namespace Network
         }
     }
 }
+*/

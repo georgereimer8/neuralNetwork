@@ -62,12 +62,12 @@ namespace MnistViewer
 
         public void CreateTestNetwork()
         {
-            Network = new NeuralNetwork();
+            Network = new Network.NeuralNetwork();
             Network.Log = Log;
 
-            Network.AddLayer(5);
-            Network.AddLayer(1);
-            Network.AddLayer(1);
+            Network.AddLayer(10);
+            Network.AddLayer(4);
+            Network.AddLayer(10);
 
             //Network.AddLayer(784);
             //Network.AddLayer(30);
@@ -86,7 +86,7 @@ namespace MnistViewer
 
         public void CreateNetwork()
         {
-            Network = new NeuralNetwork();
+            Network = new Network.NeuralNetwork();
             Network.Log = Log;
 
             Network.AddLayer(MnistImageReader.ImageList.First().Pixels.Length); // input layer

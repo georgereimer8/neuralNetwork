@@ -18,10 +18,10 @@ namespace TestNetwork
             InitializeComponent();
         }
 
-        public NeuralNetwork Network;
+        public Network.NeuralNetwork Network;
         private void button_create_Click(object sender, EventArgs e)
         {
-            Network = new NeuralNetwork();
+            Network = new Network.NeuralNetwork();
             Network.AddLayer(20); // input layer
             Network.AddLayer(15);// hidden layer
             Network.AddLayer(10); // output layer

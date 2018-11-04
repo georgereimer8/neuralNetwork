@@ -20,6 +20,7 @@ yHat = []
 lr = 1.0
 OutputError = 1.0
 OutputErrorLimit = 0.00001
+costHistory = [] 
 
 
 def sigmoid(z):
@@ -104,7 +105,7 @@ def feedForward():
     yHat = sigmoid(Zo)
 
 def backprop():
-    global H,Wh,Wo,Bh,Bo,Zh,Zo,yHat,X,Y,lr
+    global H,Wh,Wo,Bh,Bo,Zh,Zo,yHat,X,Y,lr,costHistory
     # Layer Error
     Eo = (yHat - Y) * sigmoid_prime(Zo)
     Eh = np.dot(Eo,Wo.transpose() ) * sigmoid_prime(Zh)
@@ -113,6 +114,9 @@ def backprop():
     dWo = np.dot( H.transpose(), Eo )
     dWh = np.dot( X.transpose(), Eh)
     
+    cost = sum( dWo )
+    costHistory.append(sum( cost ))
+
     # Update weights
     Wh -= lr * dWh
     Wo -= lr * dWo
@@ -161,7 +165,7 @@ def outputIdentified():
 
 
 def train(i):
-    global H,Wh,Wo,Bh,Bo,Zh,Zo,yHat,X,Y,lr
+    global H,Wh,Wo,Bh,Bo,Zh,Zo,yHat,X,Y,lr,costHistory
 
     msg = str(i) + " "
     
@@ -187,9 +191,10 @@ def train(i):
     backprop()
 
 def main():
+    global lr
     os.system("mode con cols=250 lines=50")
 
-    lr = 0.5 
+    lr = 0.05 
     trainingSampleSize = 10000
     testDataSize = 100
 
@@ -197,7 +202,8 @@ def main():
     initBias()
 
     for i in range(trainingSampleSize):
-        sample = random.randint(0,9)
+        #sample = random.randint(0,9)
+        sample = 1
         initInput(sample)
         train(i)
         
