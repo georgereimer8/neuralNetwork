@@ -192,7 +192,7 @@ def train(i):
 
 def test():
     a = [ 1,2 ]
-    b = [[ 3,4 ][5,6]]
+    b = [[ 3,4 ],[5,6]]
     c = np.dot(a,b)
     print(c)
 

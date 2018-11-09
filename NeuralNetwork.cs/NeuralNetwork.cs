@@ -86,8 +86,10 @@ namespace Network
             Init();
         }
 
+
         public void Init()
         {
+            // Extensions.TestDot();
             if (PreviousLayer == null)
             {
                 // Input Layer,  just need activations for input values
@@ -98,7 +100,7 @@ namespace Network
                 // so setup connections between this and the previous layer
                 PreviousLayer.NextLayer = this;
                 Activations = DenseVector.Build.Dense(Neurons.Count());
-                Biases = DenseVector.Build.Dense(Neurons.Count());
+                Biases = DenseVector.Build.Dense(Neurons.Count(),0.5);
                 // activation weights,  one row per previous layer neurons, columns = this layer neurons
                 Weights = DenseMatrix.Build.Dense(PreviousLayer.Neurons.Count(), Neurons.Count(), 1.0);
                 GradientWeights = DenseMatrix.Build.Dense(PreviousLayer.Neurons.Count(), Neurons.Count(), 0);
@@ -145,8 +147,7 @@ namespace Network
             // first layer is input layer so activations don't get updated
             if (PreviousLayer != null)
             {
-                var h = Weights.Transpose() * PreviousLayer.Activations;
-                Z = (Weights.Transpose() * PreviousLayer.Activations) - Biases;
+                Z = Weights.Dot( PreviousLayer.Activations) + Biases;
                 Activations = NeuralNetwork.Sigmoid(Z);
             }
         }
@@ -201,7 +202,7 @@ namespace Network
                 }
 
                 // back propagate
-                // don't do the first layer
+                // start at the last layer and don't do the first layer
                 for( int i = Layers.Count-1; i > 0; --i )
                 {
                     backPropagation(Layers[i], batch.label);
