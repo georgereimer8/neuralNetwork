@@ -190,9 +190,17 @@ def train(i):
 
     backprop()
 
+def test():
+    a = [ 1,2 ]
+    b = [[ 3,4 ][5,6]]
+    c = np.dot(a,b)
+    print(c)
+
 def main():
     global lr
     os.system("mode con cols=250 lines=50")
+
+    test()
 
     lr = 0.05 
     trainingSampleSize = 10000
