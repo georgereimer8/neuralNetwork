@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryConvertor", "BinaryCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{EB8D18FF-E9C4-43DE-ABE2-C8FC6F1244CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "miniNetwork", "miniNetwork\miniNetwork.csproj", "{CAA8D9EF-68E7-4E02-9ACA-54CF4EE10122}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{EB8D18FF-E9C4-43DE-ABE2-C8FC6F1244CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB8D18FF-E9C4-43DE-ABE2-C8FC6F1244CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB8D18FF-E9C4-43DE-ABE2-C8FC6F1244CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAA8D9EF-68E7-4E02-9ACA-54CF4EE10122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAA8D9EF-68E7-4E02-9ACA-54CF4EE10122}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAA8D9EF-68E7-4E02-9ACA-54CF4EE10122}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAA8D9EF-68E7-4E02-9ACA-54CF4EE10122}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -23,8 +23,8 @@ namespace Common
                 else if (control.IsHandleCreated == false)
                 {
                     IntPtr h = control.Handle;
+                    action.Invoke();
                 }
-                action.Invoke();
             }
         }
     }
