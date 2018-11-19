@@ -87,5 +87,21 @@ namespace BinaryConvertor
         {
             TrainNetwork?.Invoke(); 
         }
+
+        delegate void DisplayLogSafe(string msg);
+        public void Log(string msg)
+        {
+            if (richTextBox_log.InvokeRequired == true)
+            {
+                DisplayLogSafe d = new DisplayLogSafe(Log);
+                richTextBox_log.Invoke(d, msg);
+            }
+            else
+            {
+                richTextBox_log.SelectionStart = 0;
+                richTextBox_log.SelectedText = (msg + Environment.NewLine);
+                richTextBox_log.Update();
+            }
+        }
     }
 }

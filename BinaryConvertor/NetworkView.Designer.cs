@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.numericUpDownLearningRate = new System.Windows.Forms.NumericUpDown();
             this.buttonCreate = new System.Windows.Forms.Button();
             this.buttonTrain = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
@@ -43,16 +45,14 @@
             this.panelCostChart = new System.Windows.Forms.Panel();
             this.chartCost = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.numericUpDownLearningRate = new System.Windows.Forms.NumericUpDown();
+            this.richTextBox_log = new System.Windows.Forms.RichTextBox();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLearningRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOutputLayerNeuronCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHiddenLayerNeuronCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInputLayerNeuronCount)).BeginInit();
             this.panelCostChart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartCost)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLearningRate)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -75,6 +75,34 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(149, 40);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(74, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Learning Rate";
+            // 
+            // numericUpDownLearningRate
+            // 
+            this.numericUpDownLearningRate.DecimalPlaces = 6;
+            this.numericUpDownLearningRate.Location = new System.Drawing.Point(229, 38);
+            this.numericUpDownLearningRate.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericUpDownLearningRate.Name = "numericUpDownLearningRate";
+            this.numericUpDownLearningRate.Size = new System.Drawing.Size(78, 20);
+            this.numericUpDownLearningRate.TabIndex = 9;
+            this.numericUpDownLearningRate.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            131072});
+            this.numericUpDownLearningRate.ValueChanged += new System.EventHandler(this.numericUpDownLearningRate_ValueChanged);
             // 
             // buttonCreate
             // 
@@ -202,15 +230,15 @@
             // 
             // chartCost
             // 
-            chartArea3.Name = "ChartArea1";
-            this.chartCost.ChartAreas.Add(chartArea3);
+            chartArea1.Name = "ChartArea1";
+            this.chartCost.ChartAreas.Add(chartArea1);
             this.chartCost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chartCost.Location = new System.Drawing.Point(0, 0);
             this.chartCost.Name = "chartCost";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            series3.Name = "Series1";
-            this.chartCost.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series1.Name = "Series1";
+            this.chartCost.Series.Add(series1);
             this.chartCost.Size = new System.Drawing.Size(470, 399);
             this.chartCost.TabIndex = 0;
             this.chartCost.Text = "chart1";
@@ -223,49 +251,21 @@
             this.splitter1.TabIndex = 2;
             this.splitter1.TabStop = false;
             // 
-            // richTextBox1
+            // richTextBox_log
             // 
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Location = new System.Drawing.Point(484, 0);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(476, 399);
-            this.richTextBox1.TabIndex = 3;
-            this.richTextBox1.Text = "";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(149, 40);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(74, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Learning Rate";
-            // 
-            // numericUpDownLearningRate
-            // 
-            this.numericUpDownLearningRate.DecimalPlaces = 6;
-            this.numericUpDownLearningRate.Location = new System.Drawing.Point(229, 38);
-            this.numericUpDownLearningRate.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numericUpDownLearningRate.Name = "numericUpDownLearningRate";
-            this.numericUpDownLearningRate.Size = new System.Drawing.Size(78, 20);
-            this.numericUpDownLearningRate.TabIndex = 9;
-            this.numericUpDownLearningRate.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            131072});
-            this.numericUpDownLearningRate.ValueChanged += new System.EventHandler(this.numericUpDownLearningRate_ValueChanged);
+            this.richTextBox_log.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox_log.Location = new System.Drawing.Point(484, 0);
+            this.richTextBox_log.Name = "richTextBox_log";
+            this.richTextBox_log.Size = new System.Drawing.Size(476, 399);
+            this.richTextBox_log.TabIndex = 3;
+            this.richTextBox_log.Text = "";
             // 
             // NetworkView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(960, 527);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.richTextBox_log);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.panelCostChart);
             this.Controls.Add(this.groupBox1);
@@ -273,12 +273,12 @@
             this.Text = "Form1";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLearningRate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOutputLayerNeuronCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHiddenLayerNeuronCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInputLayerNeuronCount)).EndInit();
             this.panelCostChart.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chartCost)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLearningRate)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -292,7 +292,7 @@
         private System.Windows.Forms.Panel panelCostChart;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartCost;
         private System.Windows.Forms.Splitter splitter1;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox richTextBox_log;
         private System.Windows.Forms.Button buttonCreate;
         private System.Windows.Forms.Button buttonTrain;
         private System.Windows.Forms.Label label4;

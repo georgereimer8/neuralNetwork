@@ -22,6 +22,7 @@ namespace BinaryConvertor
         public Action<int> SetHiddenLayerSize;
         public Action<int> SetOutputLayerSize;
         public Action<decimal> SetLearningRate;
+        public Action<string> Log;
 
         public int InputLayerSize { get { return inputLayerSize; } set { inputLayerSize = value;  SetInputLayerSize?.Invoke(value); } }
         public int HiddenLayerSize { get { return hiddenLayerSize; } set { hiddenLayerSize = value;  SetHiddenLayerSize?.Invoke(value); } }
@@ -52,10 +53,15 @@ namespace BinaryConvertor
             Network.AddLayer(InputLayerSize);
             Network.AddLayer(HiddenLayerSize);
             Network.AddLayer(OutputLayerSize);
+
+            Network.Log = Log;
+
+            Log?.Invoke("Network Created");
         }
 
         public void TrainFixed()
         {
+            Log?.Invoke("Network Training Started");
             BinaryTrainingData binaryData = new BinaryTrainingData();
             var trainingData = binaryData.GenerateTrainingData(DefaultTrainingSampleCount, 0);
             Network.Train(trainingData, DefaultEpochCount, DefaultBatchSize, (double)LearningRate, includeTestData:false);

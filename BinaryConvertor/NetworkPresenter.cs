@@ -14,6 +14,8 @@ namespace BinaryConvertor
             model.SetHiddenLayerSize = view.ShowHiddenLayerSize;
             model.SetOutputLayerSize = view.ShowOutputLayerSize;
 
+            model.Log = view.Log;
+
             view.SetInputLayerSize = (size) => model.InputLayerSize = size;
             view.SetHiddenLayerSize = (size) => model.HiddenLayerSize = size;
             view.SetOutputLayerSize = (size) => model.OutputLayerSize = size;
