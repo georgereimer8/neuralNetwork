@@ -119,7 +119,7 @@ namespace Network
         void calcCost( Layer layer)
         {
             return; 
-            // TODO implement cost and gradient descent
+            // TODO implement cost and gradient descent test
             layer.Costs = layer.Error.PointwiseMultiply(layer.Activations);
             // cost derivative for weights
             var deltaM = DenseMatrix.Build.DenseOfColumnVectors(layer.Error);
