@@ -14,6 +14,8 @@ namespace Network
     {
         public Action<string> Log { get; set; }
         public Action<List<Layer>> DisplayLayers { get; set; }
+        public Action<int> UpdateCurrentImage { get; set; }
+        public Action<int> ShowCurrentEpoch { get; set; }
 
         public List<Layer> Layers { get; set; }
         public double LearningRate { get; set; }
@@ -26,7 +28,7 @@ namespace Network
 
         public void AddLayer( int neuronCount )
         {
-            Layers.Add(new Layer(neuronCount, Layers.LastOrDefault()));
+            Layers.Add(new Layer(neuronCount, Layers.LastOrDefault(), Layers.Count));
         }
 
         public void TrainingTest( List<TrainingData> trainingData )
@@ -60,7 +62,8 @@ namespace Network
                 var batchData = trainingData.GetRange(0, batchSize);
                 update(batchData, learningRate);
                 trainingData.Shuffle();
-                Log?.Invoke(String.Format("Completed epoch {0}",epoch));
+                ShowCurrentEpoch?.Invoke(epoch);
+                DisplayLayers?.Invoke(Layers);
             }
         }
 
@@ -68,6 +71,7 @@ namespace Network
         {
             foreach (var batch in batchData)
             {
+                UpdateCurrentImage?.Invoke(batch.Index);
                 // feed forward
                 Layers.First().Activations = batch.data;
                 foreach(var layer in Layers)
@@ -80,6 +84,7 @@ namespace Network
                 for( int i = Layers.Count-1; i > 0; --i )
                 {
                     backPropagation(Layers[i], batch.label);
+                    calcCost(Layers[i]);
                 }
             }
         }
@@ -89,35 +94,40 @@ namespace Network
             bool result = false;
             try
             {
-                if( layer.NextLayer == null )
+                if (layer.NextLayer == null)
                 {
                     // output layer
-                    layer.Error = (layer.Activations - label) * Activation.SigmoidPrime(layer.Z);
+                    layer.GradientBiases = (layer.Activations - label) * Activation.SigmoidPrime(layer.Z); // update output error
+                    layer.GradientWeights = layer.PreviousLayer.Activations.Dot(layer.GradientBiases);
                 }
                 else
                 {
                     // hidden layers
-                    layer.Error = layer.NextLayer.Error * layer.Weights * Activation.SigmoidPrime(layer.Z);
+                    layer.GradientBiases = layer.Weights.Dot(layer.NextLayer.GradientBiases) * Activation.SigmoidPrime(layer.Z); // update output error
+                    layer.GradientWeights = layer.PreviousLayer.Activations.Dot(layer.GradientBiases);
                 }
-
-                layer.Costs = layer.Error.PointwiseMultiply( layer.Activations );
-                // cost derivative for weights
-                var deltaM = DenseMatrix.Build.DenseOfColumnVectors(layer.Error);
-                var act = DenseMatrix.Build.DenseOfColumnVectors(layer.PreviousLayer.Activations);
-                layer.GradientWeights = deltaM * act.Transpose();
-
-                var dw = LearningRate * layer.GradientWeights;
-                layer.Weights -= dw.Transpose();
-                layer.Weights -= (LearningRate * layer.GradientWeights).Transpose();
-
                 result = true;
             }
             catch( System.ArgumentOutOfRangeException ex)
             {
-                Log?.Invoke(String.Format("Backpropagation exception: {0}", ex.Message));
+                Log?.Invoke(String.Format("Backpropagation exception in layer #{0}: {1}", layer.Index, ex.Message));
                 throw;
             }
             return result;
+        }
+
+        void calcCost( Layer layer)
+        {
+            return; // TODO
+            layer.Costs = layer.Error.PointwiseMultiply(layer.Activations);
+            // cost derivative for weights
+            var deltaM = DenseMatrix.Build.DenseOfColumnVectors(layer.Error);
+            var act = DenseMatrix.Build.DenseOfColumnVectors(layer.PreviousLayer.Activations);
+            layer.GradientWeights = deltaM * act.Transpose();
+
+            //var dw = LearningRate * layer.GradientWeights;
+            //layer.Weights -= dw.Transpose();
+            layer.Weights -= (LearningRate * layer.GradientWeights).Transpose();
         }
 
         void updateParameters( Layer layer, Matrix<double> deltaM )

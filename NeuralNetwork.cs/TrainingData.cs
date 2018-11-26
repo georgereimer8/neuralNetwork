@@ -12,17 +12,20 @@ namespace Network
     {
         public Vector<double> data { get; set; }
         public Vector<double> label { get; set; }
+        public int Index { get; set; }
 
-        public TrainingData(Vector<double> myData, Vector<double> myLabel)
+        public TrainingData(int myIndex, Vector<double> myData, Vector<double> myLabel )
         {
             data = myData;
             label = myLabel;
+            Index = myIndex;
         }
 
-        public TrainingData(double[] myValues, string myLabel, int outputActivations)
+        public TrainingData(int myIndex, double[] myValues, string myLabel, int outputActivations)
         {
             data = DenseVector.Build.Dense(myValues);
             label = DenseVector.Build.Dense(toArray(myLabel, outputActivations));
+            Index = myIndex;
         }
         double[] toArray(string label, int outputActivations)
         {

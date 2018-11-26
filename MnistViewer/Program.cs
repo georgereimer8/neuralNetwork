@@ -16,7 +16,7 @@ namespace MnistViewer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var view = new Form1();
+            var view = new NetworkView();
             var console = new TrainingForm();
             new NetworkPresenter(view, console, new NetworkModel());
             Application.Run(view);

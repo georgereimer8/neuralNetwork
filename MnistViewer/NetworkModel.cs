@@ -15,6 +15,9 @@ namespace MnistViewer
 
     public class NetworkModel
     {
+        public Action<int> SetEpochsMax;
+        public Action<int> ShowCurrentEpoch;
+        public Action<List<Layer>> DisplayLayers { get; set; }
         public Action<bool> SetConsoleVisible;
         public Action<string> Log { get; set; }
         public Action<int, int, double, bool> InitView { get; set; }
@@ -24,13 +27,33 @@ namespace MnistViewer
         public string IfsImagesPath { get; set; }
         public NeuralNetwork Network { get; set; }
         public DisplayImage DisplayImage { get; set; }
-
-        const int DefaultEpochs = 10;
-        const int DefaultBatchSize = 3;
-        const double DefaultLearningRate = 0.5;
+       
+        const int DefaultEpochs = 30;
+        const int DefaultBatchSize = 10;
+        const double DefaultLearningRate = 3.0;
         const bool DefaultIncludeTestData = false;
 
-        public int Epochs { get; set; }
+        int epochs;
+        public int Epochs
+        {
+            get { return epochs; }
+            set
+            {
+                epochs = value;
+                SetEpochsMax?.Invoke(epochs);
+            }
+        }
+        int currentEpoch;
+        public int CurrentEpoch
+        {
+            get { return currentEpoch; }
+            set
+            {
+                currentEpoch = value;
+                SetEpochsMax?.Invoke(currentEpoch);
+            }
+        }
+
         public int BatchSize { get; set; }
         public double LearningRate { get; set; }
         public bool IncludeTestData { get; set; }
@@ -55,7 +78,7 @@ namespace MnistViewer
             List<TrainingData> trainingData = new List<TrainingData>();
             foreach (var i in MnistImageReader.ImageList)
             {
-                trainingData.Add(new TrainingData(i.Pixels, i.Label, Network.Layers.Last().Neurons.Count() ));
+                trainingData.Add(new TrainingData(i.Index, i.Pixels, i.Label, Network.Layers.Last().Neurons.Count()));
             }
             Network.Train(trainingData, Epochs, BatchSize, LearningRate, includeTestData: false);
         }
@@ -64,14 +87,17 @@ namespace MnistViewer
         {
             Network = new Network.NeuralNetwork();
             Network.Log = Log;
+            Network.UpdateCurrentImage = UpdateCurrentImage;
+            Network.ShowCurrentEpoch = ShowCurrentEpoch;
 
-            Network.AddLayer(10);
-            Network.AddLayer(4);
-            Network.AddLayer(10);
 
-            //Network.AddLayer(784);
-            //Network.AddLayer(30);
             //Network.AddLayer(10);
+            //Network.AddLayer(4);
+            //Network.AddLayer(10);
+
+            Network.AddLayer(784);
+            Network.AddLayer(30);
+            Network.AddLayer(10);
         }
 
         double[] TestData = new double[5] {1, 2, 3, 4, 5};
@@ -80,7 +106,7 @@ namespace MnistViewer
         {
             SetConsoleVisible?.Invoke(true);
             List<TrainingData> trainingData = new List<TrainingData>();
-            trainingData.Add(new TrainingData(TestData, "0", Network.Layers.Last().Neurons.Count()  ));
+            trainingData.Add(new TrainingData(0, TestData, "0", Network.Layers.Last().Neurons.Count()  ));
             Network.TrainingTest(trainingData);
         }
 
@@ -88,6 +114,8 @@ namespace MnistViewer
         {
             Network = new Network.NeuralNetwork();
             Network.Log = Log;
+            Network.ShowCurrentEpoch = ShowCurrentEpoch;
+            Network.DisplayLayers = DisplayLayers;
 
             Network.AddLayer(MnistImageReader.ImageList.First().Pixels.Length); // input layer
             Network.AddLayer(30);// hidden layer

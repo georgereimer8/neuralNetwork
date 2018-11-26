@@ -1,6 +1,6 @@
 ﻿namespace MnistViewer
 {
-    partial class Form1
+    partial class NetworkView
     {
         /// <summary>
         /// Required designer variable.
@@ -47,8 +47,8 @@
             this.textBox_labelsPath = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.zoomPicBox1 = new InspectionStation.Classes.Components.ZoomPicBox();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_zoomLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_currentImage)).BeginInit();
@@ -143,7 +143,7 @@
             // checkBox_IncludeTestData
             // 
             this.checkBox_IncludeTestData.AutoSize = true;
-            this.checkBox_IncludeTestData.Location = new System.Drawing.Point(510, 183);
+            this.checkBox_IncludeTestData.Location = new System.Drawing.Point(651, 189);
             this.checkBox_IncludeTestData.Name = "checkBox_IncludeTestData";
             this.checkBox_IncludeTestData.Size = new System.Drawing.Size(111, 17);
             this.checkBox_IncludeTestData.TabIndex = 10;
@@ -163,7 +163,7 @@
             0,
             0,
             65536});
-            this.numericUpDown_learningRate.ValueChanged += new System.EventHandler(this.numericUpDown_LearningRate_ValueChanged);
+            this.numericUpDown_learningRate.ValueChanged += new System.EventHandler(this.numericUpDown_learningRate_ValueChanged);
             // 
             // numericUpDown_batchSize
             // 
@@ -268,10 +268,6 @@
             this.panel1.Size = new System.Drawing.Size(800, 229);
             this.panel1.TabIndex = 1;
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
             // zoomPicBox1
             // 
             this.zoomPicBox1.AutoScroll = true;
@@ -286,14 +282,18 @@
             this.zoomPicBox1.Text = "zoomPicBox1";
             this.zoomPicBox1.Zoom = 1F;
             // 
-            // Form1
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // NetworkView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);
-            this.Name = "Form1";
+            this.Name = "NetworkView";
             this.Text = "Form1";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

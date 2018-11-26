@@ -33,6 +33,29 @@ namespace Network
             }
         }
         /// <summary>
+        /// Emulate Python's Dot product for np.Dot(Vector 1, Vector 2 )
+        /// no need to transpose Vector2
+        /// </summary>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        /// <returns></returns>
+        static public Matrix<double> Dot( this Vector<double> v1, Vector<double>v2)
+        {
+            Matrix<double> m = DenseMatrix.Build.Dense(v1.Count, v2.Count);
+            if (v1.Count > 0 && v2.Count > 0)
+            {
+                for( int col = 0; col < v2.Count; ++col)
+                {
+                    // for( int row = 0; row < v1.Count; ++row )
+                    Parallel.For(0, v1.Count, (int row) =>
+                    {
+                        m[row, col] = v1[row] * v2[col];
+                    });
+                }
+            }
+            return m;
+        }
+        /// <summary>
         /// Emulate Python's Dot Product for Matrix * Vector 
         /// </summary>
         /// <param name="m"></param>
@@ -41,10 +64,10 @@ namespace Network
         static public Vector<double> Dot(this Matrix<double> m, Vector<double> v)
         {
             Vector<double> result = null;
-            if (m.RowCount == v.Count)
+            if (m.ColumnCount == v.Count)
             {
-                result = DenseVector.Build.Dense(m.ColumnCount);
-                var ca = m.ToColumnArrays();
+                result = DenseVector.Build.Dense(m.RowCount);
+                var ca = m.ToRowArrays();
                 //for ( int i = 0; i < result.Count; ++i  )
                 Parallel.For(0, result.Count, (int i ) =>
                 {
@@ -54,7 +77,7 @@ namespace Network
             }
             else
             {
-                throw new System.ArgumentOutOfRangeException(String.Format("Matrix({0},{1}) rows must equal vector({2}) count", m.RowCount, m.ColumnCount, v.Count));
+                throw new System.ArgumentOutOfRangeException(String.Format("Matrix({0},{1}) columns must equal vector({2}) count", m.RowCount, m.ColumnCount, v.Count));
             }
             return result;
         }

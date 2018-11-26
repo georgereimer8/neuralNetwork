@@ -73,7 +73,7 @@ namespace BinaryConvertor
                 {
                     s = random.Next(binary.Count);
                 }
-                t.Add(new TrainingData(GetSample(s), GetLabel(s)));
+                t.Add(new TrainingData(i, GetSample(s), GetLabel(s)));
             }
             return t;
         }

@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;TEST_NETWORK_MATH</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -40,6 +40,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,11 +53,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="NetworkView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="NetworkView.Designer.cs">
+      <DependentUpon>NetworkView.cs</DependentUpon>
     </Compile>
     <Compile Include="MnistImages.cs" />
     <Compile Include="NetworkModel.cs" />
@@ -72,8 +73,8 @@
     <Compile Include="ZoomPicBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="NetworkView.resx">
+      <DependentUpon>NetworkView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -102,6 +103,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AquaGauge\AquaGauge.csproj">
+      <Project>{0E5542E0-FC5D-4F67-950D-9F28C5D1225A}</Project>
+      <Name>AquaGauge</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NeuralNetwork.cs\Network.csproj">
       <Project>{861ef5a1-07b5-4d7a-bd46-154251896119}</Project>
       <Name>Network</Name>

@@ -13,10 +13,10 @@ using System.Windows.Forms;
 
 namespace MnistViewer
 {
-    public partial class Form1 : Form
+    public partial class NetworkView : Form
     {
 
-        public Form1()
+        public NetworkView()
         {
             InitializeComponent();
         }
@@ -48,6 +48,7 @@ namespace MnistViewer
             button1.SafeInvoke(() =>
             {
                 zoomPicBox1.Image = b;
+                Refresh();
             });
         }
 
@@ -85,7 +86,7 @@ namespace MnistViewer
         }
 
         public Action<double> LearningRate;
-        private void numericUpDown_LearningRate_ValueChanged(object sender, EventArgs e)
+        private void numericUpDown_learningRate_ValueChanged(object sender, EventArgs e)
         {
             var n = sender as NumericUpDown;
             LearningRate?.Invoke((double)n.Value);
@@ -100,10 +101,15 @@ namespace MnistViewer
 
         public void Init(int epochs, int batchSize, double learningRate, bool includeTestData)
         {
-            numericUpDown_epochs.Value = epochs;
-            numericUpDown_batchSize.Value = batchSize;
-            numericUpDown_learningRate.Value = (decimal)learningRate;
-            checkBox_IncludeTestData.Checked = includeTestData;
+            //numericUpDown_epochs.Value = epochs;
+            //numericUpDown_batchSize.Value = batchSize;
+            //numericUpDown_learningRate.Value = (decimal)learningRate;
+            //checkBox_IncludeTestData.Checked = includeTestData;
+
+            numericUpDown_epochs_ValueChanged(numericUpDown_epochs, null);
+            numericUpDown_batchSize_ValueChanged(numericUpDown_batchSize, null);
+            numericUpDown_learningRate_ValueChanged(numericUpDown_learningRate, null);
+            checkBox_IncludeTestData_CheckedChanged(checkBox_IncludeTestData, null);
         }
 
         public Action<int> UpdateCurrentImage { get; set; }

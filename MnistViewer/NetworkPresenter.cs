@@ -8,7 +8,7 @@ namespace MnistViewer
 {
     public class NetworkPresenter
     {
-        public NetworkPresenter( Form1 view, TrainingForm console, NetworkModel model )
+        public NetworkPresenter( NetworkView view, TrainingForm console, NetworkModel model )
         {
             console.Show();
 
@@ -17,6 +17,9 @@ namespace MnistViewer
             model.ShowImage = view.ShowImage;
             model.InitView = view.Init;
             model.SetMaxImageCount = view.SetMaxImageCount;
+            model.ShowCurrentEpoch = console.SetCurrentEpoch;
+            model.SetEpochsMax = console.SetEpochMax;
+            model.DisplayLayers = console.DisplayLayers;
 
             view.UpdateCurrentImage = model.UpdateCurrentImage;
             view.ReadImages = model.ReadImages;

@@ -16,6 +16,7 @@ namespace MnistViewer
         public int PosX;
         public int PosY;
         public Rectangle Rectangle;
+        public int Index;
            
         public void ReadImage( BinaryReader imageData, int width, int height )
         {
@@ -132,6 +133,7 @@ namespace MnistViewer
                 MnistImage mi = new MnistImage();
                 mi.Label = labels.ReadByte().ToString();
                 mi.ReadImage(images, x, y);
+                mi.Index = i;
                 ImageList.Add(mi);
             }
         }
