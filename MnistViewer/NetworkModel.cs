@@ -27,6 +27,7 @@ namespace MnistViewer
         public string IfsImagesPath { get; set; }
         public NeuralNetwork Network { get; set; }
         public DisplayImage DisplayImage { get; set; }
+        public const int MaxImages = 10000;
        
         const int DefaultEpochs = 30;
         const int DefaultBatchSize = 10;
@@ -66,13 +67,13 @@ namespace MnistViewer
         {
             if (File.Exists(@"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-labels.idx1-ubyte"))
             {
-                IfsLabelsPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-labels.idx1-ubyte";
-                IfsImagesPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-images.idx3-ubyte";
+                IfsLabelsPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\train-labels.idx1-ubyte";
+                IfsImagesPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\train-images.idx3-ubyte";
             }
             else
             {
-                IfsLabelsPath = @"C:\Users\georgereimer\Source\Repos\neuralNetwork\mnist\t10k-labels.idx1-ubyte";
-                IfsImagesPath = @"C:\Users\georgereimer\Source\Repos\neuralNetwork\mnist\t10k-images.idx3-ubyte";
+                IfsLabelsPath = @"C:\Users\georgereimer\Source\Repos\neuralNetwork\mnist\train-labels.idx1-ubyte";
+                IfsImagesPath = @"C:\Users\georgereimer\Source\Repos\neuralNetwork\mnist\train-images.idx3-ubyte";
             }
 
             InitView(DefaultEpochs, DefaultBatchSize, DefaultLearningRate, DefaultIncludeTestData);

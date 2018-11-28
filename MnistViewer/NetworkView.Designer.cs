@@ -229,7 +229,7 @@
             this.textBox_imagesPath.Name = "textBox_imagesPath";
             this.textBox_imagesPath.Size = new System.Drawing.Size(733, 20);
             this.textBox_imagesPath.TabIndex = 3;
-            this.textBox_imagesPath.Text = "C:\\Users\\GeorgeR\\source\\repos\\handwriting\\mnist\\t10k-images.idx3-ubyte";
+            this.textBox_imagesPath.Text = "C:\\Users\\GeorgeR\\source\\repos\\neuralNetwork\\mnist\\train-images.idx3-ubyte";
             // 
             // button2
             // 
@@ -247,7 +247,7 @@
             this.textBox_labelsPath.Name = "textBox_labelsPath";
             this.textBox_labelsPath.Size = new System.Drawing.Size(733, 20);
             this.textBox_labelsPath.TabIndex = 1;
-            this.textBox_labelsPath.Text = "C:\\Users\\GeorgeR\\source\\repos\\handwriting\\mnist\\t10k-labels.idx1-ubyte";
+            this.textBox_labelsPath.Text = "C:\\Users\\GeorgeR\\source\\repos\\neuralNetwork\\mnist\\train-labels.idx1-ubyte";
             // 
             // button1
             // 

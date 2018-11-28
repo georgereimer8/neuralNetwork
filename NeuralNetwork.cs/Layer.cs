@@ -52,11 +52,13 @@ namespace Network
                 // so setup connections between this and the previous layer
                 PreviousLayer.NextLayer = this;
                 Activations = DenseVector.Build.Dense(Neurons.Count());
-                Biases = DenseVector.Build.Random(Neurons.Count());
+                // Biases = DenseVector.Build.Random(Neurons.Count());
+                Biases = DenseVector.Build.Dense(Neurons.Count());
                 Costs = DenseVector.Build.Dense(Neurons.Count());
 
                 // activation weights,  one row per previous layer neurons, columns = this layer neurons
-                Weights = DenseMatrix.Build.Random(Neurons.Count(), PreviousLayer.Neurons.Count());
+               // Weights = DenseMatrix.Build.Random(Neurons.Count(), PreviousLayer.Neurons.Count());
+                Weights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count());
                 GradientWeights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count(), 0);
                 GradientBiases = DenseVector.Build.Dense(Neurons.Count());
             }

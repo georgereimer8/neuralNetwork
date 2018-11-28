@@ -61,7 +61,7 @@ namespace Network
             {
                 var batchData = trainingData.GetRange(0, batchSize);
                 update(batchData, learningRate);
-                trainingData.Shuffle();
+                // trainingData.Shuffle();
                 ShowCurrentEpoch?.Invoke(epoch);
                 DisplayLayers?.Invoke(Layers);
             }
@@ -85,7 +85,24 @@ namespace Network
                 {
                     backPropagation(Layers[i], batch.label);
                 }
+
+                updateGradients();
             }
+
+            gradientDescent();
+        }
+
+        void gradientDescent()
+        {
+            //self.weights = [w - (eta / len(mini_batch)) * nw
+            //            for w, nw in zip(self.weights, nabla_w)]
+            //self.biases = [b - (eta / len(mini_batch)) * nb
+            //           for b, nb in zip(self.biases, nabla_b)
+        }
+        void updateGradients()
+        {
+            //nabla_b = [nb + dnb for nb, dnb in zip(nabla_b, delta_nabla_b)]
+            //nabla_w = [nw + dnw for nw, dnw in zip(nabla_w, delta_nabla_w)]
         }
 
         bool backPropagation( Layer layer, Vector<double> label)

@@ -114,7 +114,7 @@ namespace MnistViewer
                 (val & 0x00FF0000) >> 8 |
                 ((int)(val & 0xFF000000)) >> 24;
     }
-        public void ReadImages( FileStream imageData, FileStream labelData)
+        public void ReadImages( FileStream imageData, FileStream labelData, int MaxImages = 10000)
         {
             BinaryReader labels = new BinaryReader(labelData);
             BinaryReader images = new BinaryReader(imageData);
@@ -128,6 +128,11 @@ namespace MnistViewer
             lablesHeader = ReverseBytes(labels.ReadInt32());
             lablesCount = ReverseBytes(labels.ReadInt32());
             
+            if( imageCount > MaxImages )
+            {
+                imageCount = MaxImages;
+            }
+
             for(int i = 0; i <imageCount; ++i)
             {
                 MnistImage mi = new MnistImage();

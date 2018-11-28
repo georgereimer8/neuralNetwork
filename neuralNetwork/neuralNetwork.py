@@ -32,6 +32,16 @@ class Network(object):
         self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
         self.weights = [np.random.randn(y, x)
                         for x, y in zip(sizes[:-1], sizes[1:])]
+
+        # the 0.0 initialization values create 
+        # epoch 0 6479
+        # epoch 1 6611
+        # epoch 2 6518
+        # epoch 3 6513
+        # epoch 4 6718 
+
+        self.biases = [np.full((y,1),0.0) for y in sizes[1:]]
+        self.weights = [np.full((y,x),0.0) for x,y in zip(sizes[:-1], sizes[1:])]
         self.num_layers = len(sizes)
 
     def feedforward(self, a):
@@ -106,6 +116,7 @@ class Network(object):
             zs.append(z)
             activation = sigmoid(z)
             activations.append(activation)
+
         # backward pass
         outputError = self.cost_derivative(activations[output], y) * sigmoid_prime(zs[output])
         nabla_b[output] = outputError
