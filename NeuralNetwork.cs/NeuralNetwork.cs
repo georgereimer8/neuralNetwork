@@ -84,7 +84,6 @@ namespace Network
                 for( int i = Layers.Count-1; i > 0; --i )
                 {
                     backPropagation(Layers[i], batch.label);
-                    calcCost(Layers[i]);
                 }
             }
         }
@@ -94,18 +93,22 @@ namespace Network
             bool result = false;
             try
             {
+                Vector<double> deltaGradientBiases;// = DenseVector.Build.Dense(layer.GradientBiases.Count);
+                Matrix<double> deltaGradientWeights;// = DenseMatrix.Build.Dense(layer.GradientWeights.RowCount, layer.GradientWeights.ColumnCount);
                 if (layer.NextLayer == null)
                 {
                     // output layer
-                    layer.GradientBiases = (layer.Activations - label) * Activation.SigmoidPrime(layer.Z); // update output error
-                    layer.GradientWeights = layer.PreviousLayer.Activations.Dot(layer.GradientBiases);
+                    deltaGradientBiases = (layer.Activations - label) * Activation.SigmoidPrime(layer.Z); // update output error
+                    deltaGradientWeights = layer.PreviousLayer.Activations.Dot(layer.GradientBiases);
                 }
                 else
                 {
                     // hidden layers
-                    layer.GradientBiases = layer.Weights.Dot(layer.NextLayer.GradientBiases) * Activation.SigmoidPrime(layer.Z); // update output error
-                    layer.GradientWeights = layer.PreviousLayer.Activations.Dot(layer.GradientBiases);
+                    deltaGradientBiases = layer.Weights.Transpose().Dot(layer.NextLayer.GradientBiases) * Activation.SigmoidPrime(layer.Z); // update output error
+                    deltaGradientWeights = layer.PreviousLayer.Activations.Dot(layer.GradientBiases);
                 }
+                layer.GradientBiases = layer.GradientBiases.Add(deltaGradientBiases);
+                layer.GradientWeights = layer.GradientWeights.Add(deltaGradientWeights);
                 result = true;
             }
             catch( System.ArgumentOutOfRangeException ex)
@@ -118,6 +121,8 @@ namespace Network
 
         void calcCost( Layer layer)
         {
+            layer.Biases.Add(layer.GradientBiases);
+            layer.Weights.Add(layer.GradientWeights);
             return; 
             // TODO implement cost and gradient descent test4
             layer.Costs = layer.Error.PointwiseMultiply(layer.Activations);

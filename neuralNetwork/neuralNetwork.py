@@ -57,7 +57,8 @@ class Network(object):
         training_data = list(training_data)
         n = len(training_data)
         for j in range(epochs):
-            random.shuffle(training_data)
+            # keep deterministic while debugging so don't shuffle yet
+            # random.shuffle(training_data) 
             mini_batches = [
                 training_data[k:k+mini_batch_size]
                 for k in range(0, n, mini_batch_size)]
@@ -90,6 +91,10 @@ class Network(object):
         gradient for the cost function C_x.  ``nabla_b`` and
         ``nabla_w`` are layer-by-layer lists of numpy arrays, similar
         to ``self.biases`` and ``self.weights``."""
+        input = -3 
+        hidden = -2 
+        output = -1 
+
         nabla_b = [np.zeros(b.shape) for b in self.biases]
         nabla_w = [np.zeros(w.shape) for w in self.weights]
         # feedforward
@@ -97,32 +102,29 @@ class Network(object):
         activations = [x] # list to store all the activations, layer by layer
         zs = [] # list to store all the z vectors, layer by layer
         for b, w in zip(self.biases, self.weights):
-            temp = np.dot(w,activation)
-            temp2 = temp + b
             z = np.dot(w, activation)+b
             zs.append(z)
             activation = sigmoid(z)
             activations.append(activation)
         # backward pass
-        delta = self.cost_derivative(activations[-1], y) * \
-            sigmoid_prime(zs[-1])
-        nabla_b[-1] = delta
+        outputError = self.cost_derivative(activations[output], y) * sigmoid_prime(zs[output])
+        nabla_b[output] = outputError
+        nabla_w[output] = np.dot(outputError, activations[hidden].transpose())
 
-        temp4 = activations[-2];
-        temp3 = activations[-2].transpose();
-        nabla_w[-1] = np.dot(delta, activations[-2].transpose())
         # Note that the variable l in the loop below is used a little
         # differently to the notation in Chapter 2 of the book.  Here,
         # l = 1 means the last layer of neurons, l = 2 is the
         # second-last layer, and so on.  It's a renumbering of the
         # scheme in the book, used here to take advantage of the fact
-        # that Python can use negative indices in lists.
-        for l in range(2, self.num_layers):
-            z = zs[-l]
-            sp = sigmoid_prime(z)
-            delta = np.dot(self.weights[-l+1].transpose(), delta) * sp
-            nabla_b[-l] = delta
-            nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
+           # that Python can use negative indices in lists.
+        #for l in range(2, self.num_layers):
+        #z = zs[hidden]
+        #sp = sigmoid_prime(zs[hidden])
+
+        hiddenError = np.dot(self.weights[output].transpose(), outputError) * sigmoid_prime(zs[hidden])
+        nabla_b[hidden] = hiddenError
+        nabla_w[hidden] = np.dot(hiddenError, activations[input].transpose())
+
         return (nabla_b, nabla_w)
 
     def evaluate(self, test_data):

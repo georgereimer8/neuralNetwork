@@ -58,7 +58,7 @@ namespace Network
                 // activation weights,  one row per previous layer neurons, columns = this layer neurons
                 Weights = DenseMatrix.Build.Random(Neurons.Count(), PreviousLayer.Neurons.Count());
                 GradientWeights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count(), 0);
-                GradientBiases = DenseVector.Build.Random(Neurons.Count());
+                GradientBiases = DenseVector.Build.Dense(Neurons.Count());
             }
         }
 

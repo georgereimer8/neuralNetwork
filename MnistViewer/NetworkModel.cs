@@ -64,11 +64,16 @@ namespace MnistViewer
 
         public void Init()
         {
-            //IfsLabelsPath = @"C:\Users\GeorgeR\source\repos\handwriting\mnist\t10k-labels.idx1-ubyte";
-            //IfsImagesPath = @"C:\Users\GeorgeR\source\repos\handwriting\mnist\t10k-images.idx3-ubyte";
-
-            IfsLabelsPath = @"C:\Users\georgereimer\Source\Repos\handwriting\mnist\t10k-labels.idx1-ubyte";
-            IfsImagesPath = @"C:\Users\georgereimer\Source\Repos\handwriting\mnist\t10k-images.idx3-ubyte";
+            if (File.Exists(@"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-labels.idx1-ubyte"))
+            {
+                IfsLabelsPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-labels.idx1-ubyte";
+                IfsImagesPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-images.idx3-ubyte";
+            }
+            else
+            {
+                IfsLabelsPath = @"C:\Users\georgereimer\Source\Repos\neuralNetwork\mnist\t10k-labels.idx1-ubyte";
+                IfsImagesPath = @"C:\Users\georgereimer\Source\Repos\neuralNetwork\mnist\t10k-images.idx3-ubyte";
+            }
 
             InitView(DefaultEpochs, DefaultBatchSize, DefaultLearningRate, DefaultIncludeTestData);
         }

@@ -41,15 +41,17 @@ namespace Network
         /// <returns></returns>
         static public Matrix<double> Dot( this Vector<double> v1, Vector<double>v2)
         {
-            Matrix<double> m = DenseMatrix.Build.Dense(v1.Count, v2.Count);
+            var rows = v2.Count;
+            var cols = v1.Count;
+            Matrix<double> m = DenseMatrix.Build.Dense(rows, cols);
             if (v1.Count > 0 && v2.Count > 0)
             {
-                for( int col = 0; col < v2.Count; ++col)
+                for( int col = 0; col < cols; ++col)
                 {
                     // for( int row = 0; row < v1.Count; ++row )
-                    Parallel.For(0, v1.Count, (int row) =>
+                    Parallel.For(0, rows, (int row) =>
                     {
-                        m[row, col] = v1[row] * v2[col];
+                        m[row, col] = v2[row] * v1[col];
                     });
                 }
             }
