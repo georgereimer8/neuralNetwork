@@ -87,15 +87,23 @@ namespace Network
                 }
             }
 
-            gradientDescent();
+            gradientDescent( LearningRate / batchData.Count);
         }
 
-        void gradientDescent()
+        void gradientDescent( double eta )
         {
             //self.weights = [w - (eta / len(mini_batch)) * nw
             //            for w, nw in zip(self.weights, nabla_w)]
             //self.biases = [b - (eta / len(mini_batch)) * nb
             //           for b, nb in zip(self.biases, nabla_b)
+            foreach( var layer in Layers )
+            {
+                if( layer.PreviousLayer != null )
+                {
+                    layer.Biases = layer.Biases - eta * layer.GradientBiases;
+                    layer.Weights = layer.Weights - eta * layer.GradientWeights;
+                }
+            }
         }
 
         bool backPropagation( Layer layer, Vector<double> label)
