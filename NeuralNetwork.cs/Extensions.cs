@@ -55,6 +55,10 @@ namespace Network
                     });
                 }
             }
+            else
+            {
+                throw new ArgumentOutOfRangeException(String.Format("parameter error in Vector.Dot()"));
+            }
             return m;
         }
         /// <summary>

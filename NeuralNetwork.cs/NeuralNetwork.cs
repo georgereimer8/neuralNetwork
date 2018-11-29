@@ -85,6 +85,17 @@ namespace Network
                 {
                     backPropagation(Layers[i], batch.label);
                 }
+
+                foreach (var layer in Layers)
+                {
+                    // skip input layer
+                    if (layer.PreviousLayer != null)
+                    {
+                        // update gradients
+                        layer.GradientBiases = layer.GradientBiases.Add(layer.deltaGradientBiases);
+                        layer.GradientWeights = layer.GradientWeights.Add(layer.deltaGradientWeights);
+                    }
+                }
             }
 
             gradientDescent( LearningRate / batchData.Count);
@@ -112,23 +123,18 @@ namespace Network
             bool result = false;
             try
             {
-                Vector<double> deltaGradientBiases;// = DenseVector.Build.Dense(layer.GradientBiases.Count);
-                Matrix<double> deltaGradientWeights;// = DenseMatrix.Build.Dense(layer.GradientWeights.RowCount, layer.GradientWeights.ColumnCount);
                 if (layer.NextLayer == null)
                 {
                     // output layer
-                    deltaGradientBiases = (layer.Activations - label) * Activation.SigmoidPrime(layer.Z); // update output error
-                    deltaGradientWeights = layer.PreviousLayer.Activations.Dot(layer.GradientBiases);
+                    layer.deltaGradientBiases = (layer.Activations - label) * Activation.SigmoidPrime(layer.Z); // update output error
+                    layer.deltaGradientWeights = layer.PreviousLayer.Activations.Dot(layer.deltaGradientBiases);
                 }
                 else
                 {
                     // hidden layers
-                    deltaGradientBiases = layer.NextLayer.Weights.Transpose().Dot(layer.NextLayer.GradientBiases) * Activation.SigmoidPrime(layer.Z); // update output error
-                    deltaGradientWeights = layer.PreviousLayer.Activations.Dot(deltaGradientBiases);
+                    layer.deltaGradientBiases = layer.NextLayer.Weights.Transpose().Dot(layer.NextLayer.GradientBiases) * Activation.SigmoidPrime(layer.Z); // update output error
+                    layer.deltaGradientWeights = layer.PreviousLayer.Activations.Dot(layer.deltaGradientBiases);
                 }
-                // update gradients
-                layer.GradientBiases = layer.GradientBiases.Add(deltaGradientBiases);
-                layer.GradientWeights = layer.GradientWeights.Add(deltaGradientWeights);
                 result = true;
             }
             catch( System.ArgumentOutOfRangeException ex)

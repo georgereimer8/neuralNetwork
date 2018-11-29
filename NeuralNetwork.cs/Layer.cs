@@ -25,6 +25,8 @@ namespace Network
         public Vector<double> GradientBiases { get; set; }
         public Matrix<double> GradientWeights { get; set; }
 
+        public Vector<double> deltaGradientBiases { get; set; }
+        public Matrix<double> deltaGradientWeights { get; set; }
 
         public List<Neuron> Neurons;
         public Layer(int myNeuronCount, Layer myPreviousLayer, int myIndex)
