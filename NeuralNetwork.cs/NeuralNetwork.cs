@@ -92,6 +92,7 @@ namespace Network
 
         void gradientDescent( double eta )
         {
+            // test push to github
             //self.weights = [w - (eta / len(mini_batch)) * nw
             //            for w, nw in zip(self.weights, nabla_w)]
             //self.biases = [b - (eta / len(mini_batch)) * nb
