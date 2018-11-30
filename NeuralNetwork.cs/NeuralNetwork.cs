@@ -30,7 +30,7 @@ namespace Network
             Layers.Add(new Layer(neuronCount, Layers.LastOrDefault(), Layers.Count));
         }
 
-        public void TrainingTest( List<TrainingData> trainingData )
+        public void TrainingTest( List<NetworkData> trainingData )
         {
             try
             {
@@ -42,11 +42,11 @@ namespace Network
             }
         }
 
-        public void Train(List<TrainingData> trainingData, int epochs, int batchSize, double learningRate, bool includeTestData)
+        public void Train(List<NetworkData> trainingData, List<NetworkData> testingData, int epochs, int batchSize, double learningRate)
         {
             try
             {
-                StochasticGradientDescent(trainingData, epochs, batchSize, learningRate, includeTestData);
+                StochasticGradientDescent(trainingData, testingData, epochs, batchSize, learningRate);
             }
             catch (System.Exception ex)
             {
@@ -54,7 +54,7 @@ namespace Network
             }
         }
 
-        void StochasticGradientDescent( List<TrainingData>trainingData, int epochs, int batchSize, double learningRate, bool includeTestData )
+        void StochasticGradientDescent( List<NetworkData>trainingData, List<NetworkData> testingData, int epochs, int batchSize, double learningRate )
         {
             for (int epoch = 0; epoch < epochs; ++epoch)
             {
@@ -63,10 +63,31 @@ namespace Network
                 // trainingData.Shuffle();
                 ShowCurrentEpoch?.Invoke(epoch);
                 DisplayLayers?.Invoke(Layers);
+                var correctCount = evaluate(testingData);
+                Log?.Invoke(String.Format("Epoch #{0}: {1}/{2}", epoch, correctCount, testingData.Count())); 
             }
         }
 
-        void update( List<TrainingData> batchData, double learningRate )
+        int evaluate(List<NetworkData> testingData)
+        {
+            int correctCount = 0;
+            foreach (var networkData in testingData)
+            {
+                Layers.First().Activations = networkData.data;
+                foreach (var layer in Layers)
+                {
+                    layer.CalcActivation();
+                }
+                if( Layers.Last().Activations.MaximumIndex() == networkData.label.MaximumIndex())
+                {
+                    ++correctCount;
+                }
+            }
+            return correctCount;
+        } 
+
+
+        void update( List<NetworkData> batchData, double learningRate )
         {
             foreach (var batch in batchData)
             {

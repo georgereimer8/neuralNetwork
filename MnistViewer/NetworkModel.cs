@@ -4,11 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace MnistViewer
 {
@@ -23,12 +19,14 @@ namespace MnistViewer
         public Action<int, int, double, bool> InitView { get; set; }
         public Action<Bitmap> ShowImage { get; set; }
         public Action<int> SetMaxImageCount { get; set; }
-        public string IfsLabelsPath { get; set; }
-        public string IfsImagesPath { get; set; }
+        public string TrainingLablesPath { get; set; }
+        public string TrainingImagesPath { get; set; }
+        public string TestingLablesPath { get; set; }
+        public string TestingImagesPath { get; set; }
         public NeuralNetwork Network { get; set; }
         public DisplayImage DisplayImage { get; set; }
         public const int MaxImages = 10000;
-       
+
         const int DefaultEpochs = 30;
         const int DefaultBatchSize = 10;
         const double DefaultLearningRate = 3.0;
@@ -59,21 +57,24 @@ namespace MnistViewer
         public double LearningRate { get; set; }
         public bool IncludeTestData { get; set; }
 
-        public FileStream ifsLabels;
-        public FileStream ifsImages;
-        MnistImageReader MnistImageReader = new MnistImageReader();
+        MnistImages TrainingImages;
+        MnistImages TestingImages;
 
         public void Init()
         {
             if (File.Exists(@"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-labels.idx1-ubyte"))
             {
-                IfsLabelsPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\train-labels.idx1-ubyte";
-                IfsImagesPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\train-images.idx3-ubyte";
+                TrainingLablesPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\train-labels.idx1-ubyte";
+                TrainingImagesPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\train-images.idx3-ubyte";
+                TestingLablesPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-labels.idx1-ubyte";
+                TestingImagesPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-images.idx3-ubyte";
             }
             else
             {
-                IfsLabelsPath = @"C:\Users\georgereimer\Source\Repos\neuralNetwork\mnist\train-labels.idx1-ubyte";
-                IfsImagesPath = @"C:\Users\georgereimer\Source\Repos\neuralNetwork\mnist\train-images.idx3-ubyte";
+                TrainingLablesPath = @"C:\Users\georgereimer\Source\Repos\neuralNetwork\mnist\train-labels.idx1-ubyte";
+                TrainingImagesPath = @"C:\Users\georgereimer\Source\Repos\neuralNetwork\mnist\train-images.idx3-ubyte";
+                TestingLablesPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-labels.idx1-ubyte";
+                TestingImagesPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-images.idx3-ubyte";
             }
 
             InitView(DefaultEpochs, DefaultBatchSize, DefaultLearningRate, DefaultIncludeTestData);
@@ -82,14 +83,33 @@ namespace MnistViewer
         {
             CreateNetwork();
             SetConsoleVisible?.Invoke(true);
-            List<TrainingData> trainingData = new List<TrainingData>();
-            foreach (var i in MnistImageReader.ImageList)
-            {
-                trainingData.Add(new TrainingData(i.Index, i.Pixels, i.Label, Network.Layers.Last().Neurons.Count()));
-            }
-            Network.Train(trainingData, Epochs, BatchSize, LearningRate, includeTestData: false);
+
+            //List<NetworkData> trainingData = new List<NetworkData>();
+            //foreach (var i in TrainingImages.ImageList)
+            //{
+            //    trainingData.Add(new NetworkData(i.Index, i.Pixels.ToArray(), i.Label, Network.Layers.Last().Neurons.Count()));
+            //}
+
+            //List<NetworkData> testingData = new List<NetworkData>();
+            //foreach (var i in TestingImages.ImageList)
+            //{
+            //    testingData.Add(new NetworkData(i.Index, i.Pixels.ToArray(), i.Label, Network.Layers.Last().Neurons.Count()));
+            //}
+
+            var trainingData = CreateData(TrainingImages.ImageList);
+            var testingData = CreateData(TestingImages.ImageList);
+            Network.Train( trainingData, testingData, Epochs, BatchSize, LearningRate);
         }
 
+        List<NetworkData> CreateData(List<MnistImage> images)
+        {
+            List<NetworkData> data = new List<NetworkData>();
+            foreach (var i in images)
+            {
+                data.Add(new NetworkData(i.Index, i.Pixels.ToArray(), i.Label, Network.Layers.Last().Neurons.Count()));
+            }
+            return data;
+        }
         public void CreateTestNetwork()
         {
             Network = new Network.NeuralNetwork();
@@ -107,13 +127,13 @@ namespace MnistViewer
             Network.AddLayer(10);
         }
 
-        double[] TestData = new double[5] {1, 2, 3, 4, 5};
-            
+        double[] TestData = new double[5] { 1, 2, 3, 4, 5 };
+
         public void TrainTestNetwork()
         {
             SetConsoleVisible?.Invoke(true);
-            List<TrainingData> trainingData = new List<TrainingData>();
-            trainingData.Add(new TrainingData(0, TestData, "0", Network.Layers.Last().Neurons.Count()  ));
+            List<NetworkData> trainingData = new List<NetworkData>();
+            trainingData.Add(new NetworkData(0, TestData, "0", Network.Layers.Last().Neurons.Count()));
             Network.TrainingTest(trainingData);
         }
 
@@ -124,12 +144,12 @@ namespace MnistViewer
             Network.ShowCurrentEpoch = ShowCurrentEpoch;
             Network.DisplayLayers = DisplayLayers;
 
-            Network.AddLayer(MnistImageReader.ImageList.First().Pixels.Length); // input layer
+            Network.AddLayer(TrainingImages.ImageList.First().Pixels.Count); // input layer
             Network.AddLayer(30);// hidden layer
             Network.AddLayer(10); // output layer
         }
 
-        public void UpdateCurrentImage( int index )
+        public void UpdateCurrentImage(int index)
         {
             DisplayImage.Highlight(index);
             ShowImage?.Invoke(DisplayImage.Composite);
@@ -137,25 +157,18 @@ namespace MnistViewer
 
         public void ReadImages()
         {
-            bool imagesRead = false;
-            if (File.Exists(IfsImagesPath))
+            try
             {
-                ifsImages = new FileStream(IfsImagesPath, FileMode.Open); // test labels
-                if (File.Exists(IfsLabelsPath))
-                {
-                    ifsLabels = new FileStream(IfsLabelsPath, FileMode.Open); // test labels
-                    MnistImageReader.ReadImages(ifsImages, ifsLabels);
-                    DisplayImage = new DisplayImage(MnistImageReader.ImageList);
-                    DisplayImage.GenerateComposite();
-                    UpdateCurrentImage(0);
-                    SetMaxImageCount?.Invoke(MnistImageReader.ImageList.Count);
-                    imagesRead = true;
-                }
+                TrainingImages = new MnistImages(TrainingLablesPath, TrainingImagesPath);
+                TestingImages = new MnistImages(TestingLablesPath, TestingImagesPath);
+                DisplayImage = new DisplayImage(TrainingImages.ImageList);
+                DisplayImage.GenerateComposite();
+                UpdateCurrentImage(0);
+                SetMaxImageCount?.Invoke(TrainingImages.ImageList.Count);
             }
-
-            if( imagesRead == false)
+            catch (System.Exception ex)
             {
-                MessageBox.Show("Failed to read images");
+                Log?.Invoke(String.Format("Failed to read images:{0}", ex.Message));
             }
         }
     }

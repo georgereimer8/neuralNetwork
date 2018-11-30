@@ -10,28 +10,49 @@ namespace MnistViewer
 {
     public class MnistImage
     {
-        public Bitmap Bitmap;
+        public Bitmap Bitmap { get { return GetBitmap(); } }// bitmap; } }
+        public int PixelCount { get { return Width * Height; } }
         public string Label;
-        public double[] Pixels { get; set; }
+        public List<double> Pixels { get; set; }
         public int PosX;
         public int PosY;
         public Rectangle Rectangle;
         public int Index;
-           
-        public void ReadImage( BinaryReader imageData, int width, int height )
+        public int Width;
+        public int Height;
+
+        public MnistImage(int x, int y)
         {
-            Pixels = new double[width * height];
-            Bitmap = new Bitmap(width, height);
-            for(int y = 0; y < height; ++y)
+            Width = x;
+            Height = y;
+            Pixels = new List<double>();
+        }
+
+        public void ReadImage(BinaryReader imageData )
+        {
+            for (int y = 0; y < Height; ++y)
             {
-                for( int x = 0; x < width; ++x)
+                for (int x = 0; x < Width; ++x)
                 {
                     int pix = imageData.ReadByte();
-                    Pixels[x * y] = pix;
-                    Color c = Color.FromArgb(pix, pix, pix);
-                    Bitmap.SetPixel(x,y,c);
+                    Pixels.Add((double)pix);
                 }
             }
+        }
+
+        public Bitmap GetBitmap()
+        {
+            var bitmap = new Bitmap(Width, Height);
+            for (int y = 0; y < Height; ++y)
+            {
+                for (int x = 0; x < Width; ++x)
+                {
+                    int pix = (int)Pixels[x + Height * y];
+                    Color c = Color.FromArgb(pix, pix, pix);
+                    bitmap.SetPixel(x, y, c);
+                }
+            }
+            return bitmap;
         }
     }
     public class DisplayImage
@@ -51,43 +72,51 @@ namespace MnistViewer
         int columns;
         Graphics graphics;
         Rectangle previousRectangle;
+        int ImageCount;
 
-        public DisplayImage(List<MnistImage> myImages, int myColumns = 100)
+        public DisplayImage(List<MnistImage> myImages, int myColumns = 20)
         {
             columns = myColumns;
             Images = myImages;
         }
 
-        public void GenerateComposite()
-        { 
+        public void GenerateComposite(int MaxImagesToDisplay = 200)
+        {
             fullWidth = columns * Images.First().Bitmap.Width;
             fullHeight = ((Images.Count / columns) + 1) * Images.First().Bitmap.Height;
             Composite = new Bitmap(fullWidth, fullHeight);
             int posX = 0;
             int posY = 0;
-            foreach( MnistImage m in Images)
+
+            ImageCount = Images.Count;
+            if (ImageCount > MaxImagesToDisplay)
             {
+                ImageCount = MaxImagesToDisplay;
+            }
+            for (int i = 0; i < ImageCount; ++i)
+            {
+                MnistImage m = Images[i];
                 graphics = Graphics.FromImage(Composite);
                 graphics.DrawImage(m.Bitmap, posX, posY);
                 m.PosX = posX;
                 m.PosY = posY;
                 m.Rectangle = new Rectangle(posX, posY, m.Bitmap.Width, m.Bitmap.Height);
                 posX += m.Bitmap.Width;
-                if( posX >= Composite.Width)
+                if (posX >= Composite.Width)
                 {
                     posX = 0;
                     posY += m.Bitmap.Height;
                 }
-             }
+            }
         }
 
-        public void Highlight( int index )
+        public void Highlight(int index)
         {
-            if( index < Images.Count)
+            if (index < ImageCount)
             {
                 var m = Images[index];
                 graphics = Graphics.FromImage(Composite);
-                if( previousRectangle != null )
+                if (previousRectangle != null)
                 {
                     graphics.DrawRectangle(new Pen(Color.Black), previousRectangle);
                 }
@@ -97,7 +126,7 @@ namespace MnistViewer
         }
     }
 
-    public class MnistImageReader
+    public class MnistImages
     {
         public List<MnistImage> ImageList = new List<MnistImage>();
         int lablesHeader;
@@ -106,19 +135,23 @@ namespace MnistViewer
         int y;
         int imageCount;
         int lablesCount;
+        string labelsPath;
+        string imagesPath;
 
-    int ReverseBytes(int val)
-    {
-        return (val & 0x000000FF) << 24 |
-                (val & 0x0000FF00) << 8 |
-                (val & 0x00FF0000) >> 8 |
-                ((int)(val & 0xFF000000)) >> 24;
-    }
-        public void ReadImages( FileStream imageData, FileStream labelData, int MaxImages = 10000)
+        int ReverseBytes(int val)
         {
-            BinaryReader labels = new BinaryReader(labelData);
-            BinaryReader images = new BinaryReader(imageData);
+            return (val & 0x000000FF) << 24 |
+                    (val & 0x0000FF00) << 8 |
+                    (val & 0x00FF0000) >> 8 |
+                    ((int)(val & 0xFF000000)) >> 24;
+        }
+        public MnistImages ( string myLabelsPath, string myImagesPath)
+        {
+            labelsPath = myLabelsPath;
+            imagesPath = myImagesPath;
 
+            BinaryReader labels = new BinaryReader(new FileStream(labelsPath, FileMode.Open));
+            BinaryReader images = new BinaryReader(new FileStream(imagesPath, FileMode.Open));
 
             imagesHeader = ReverseBytes(images.ReadInt32());
             imageCount = ReverseBytes(images.ReadInt32());
@@ -127,17 +160,12 @@ namespace MnistViewer
 
             lablesHeader = ReverseBytes(labels.ReadInt32());
             lablesCount = ReverseBytes(labels.ReadInt32());
-            
-            if( imageCount > MaxImages )
-            {
-                imageCount = MaxImages;
-            }
 
-            for(int i = 0; i <imageCount; ++i)
+            for (int i = 0; i < imageCount; ++i)
             {
-                MnistImage mi = new MnistImage();
+                MnistImage mi = new MnistImage( x, y);
                 mi.Label = labels.ReadByte().ToString();
-                mi.ReadImage(images, x, y);
+                mi.ReadImage(images);
                 mi.Index = i;
                 ImageList.Add(mi);
             }

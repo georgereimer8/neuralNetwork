@@ -63,9 +63,9 @@ namespace BinaryConvertor
             return result;
         }
 
-        public List<TrainingData> GenerateTrainingData( int count, int fixedSample = -1 )
+        public List<NetworkData> GenerateTrainingData( int count, int fixedSample = -1 )
         {
-            List<TrainingData> t = new List<TrainingData>();
+            List<NetworkData> t = new List<NetworkData>();
             for( int i = 0; i < count; ++i )
             {
                 var s = fixedSample;
@@ -73,7 +73,7 @@ namespace BinaryConvertor
                 {
                     s = random.Next(binary.Count);
                 }
-                t.Add(new TrainingData(i, GetSample(s), GetLabel(s)));
+                t.Add(new NetworkData(i, GetSample(s), GetLabel(s)));
             }
             return t;
         }

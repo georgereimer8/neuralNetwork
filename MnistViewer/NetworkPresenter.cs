@@ -30,8 +30,8 @@ namespace MnistViewer
             view.CreateNetwork = model.CreateNetwork;
             view.TrainNetwork = model.TrainNetwork;
 #endif
-            view.SetIfsImagesPath = (path) => model.IfsImagesPath = path;
-            view.SetIfsLabelsPath = (path) => model.IfsLabelsPath = path;
+            view.SetIfsImagesPath = (path) => model.TrainingImagesPath = path;
+            view.SetIfsLabelsPath = (path) => model.TrainingLablesPath = path;
             view.Epochs = (count) => model.Epochs = count;
             view.BatchSize = (count) => model.BatchSize = count;
             view.LearningRate = (value) => model.LearningRate = value;

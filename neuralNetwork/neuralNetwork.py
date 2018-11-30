@@ -49,9 +49,10 @@ class Network(object):
 
     def feedforward(self, a):
         """Return the output of the network if ``a`` is input."""
+        result = a
         for b, w in zip(self.biases, self.weights):
-            a = sigmoid(np.dot(w, a)+b)
-        return a
+            result = sigmoid(np.dot(w, result)+b)
+        return result
 
     def SGD(self, training_data, epochs, mini_batch_size, eta,
             test_data=None):
@@ -156,7 +157,8 @@ class Network(object):
         neuron in the final layer has the highest activation."""
         test_results = [(np.argmax(self.feedforward(x)), y)
                         for (x, y) in test_data]
-        return sum(int(x == y) for (x, y) in test_results)
+        result = sum(int(x == y) for (x, y) in test_results)
+        return result
 
     def cost_derivative(self, output_activations, y):
         """Return the vector of partial derivatives \partial C_x /

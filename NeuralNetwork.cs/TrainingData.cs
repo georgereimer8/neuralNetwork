@@ -8,20 +8,20 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace Network 
 {
-    public class TrainingData
+    public class NetworkData
     {
         public Vector<double> data { get; set; }
         public Vector<double> label { get; set; }
         public int Index { get; set; }
 
-        public TrainingData(int myIndex, Vector<double> myData, Vector<double> myLabel )
+        public NetworkData(int myIndex, Vector<double> myData, Vector<double> myLabel )
         {
             data = myData;
             label = myLabel;
             Index = myIndex;
         }
 
-        public TrainingData(int myIndex, double[] myValues, string myLabel, int outputActivations)
+        public NetworkData(int myIndex, double[] myValues, string myLabel, int outputActivations)
         {
             data = DenseVector.Build.Dense(myValues);
             label = DenseVector.Build.Dense(toArray(myLabel, outputActivations));
