@@ -18,7 +18,6 @@ namespace Network
         public Action<int> ShowCurrentEpoch { get; set; }
 
         public List<Layer> Layers { get; set; }
-        public double LearningRate { get; set; }
         public double Epochs { get; set; }
 
         public NeuralNetwork( )
@@ -98,16 +97,11 @@ namespace Network
                 }
             }
 
-            gradientDescent( LearningRate / batchData.Count);
+            gradientDescent( learningRate / batchData.Count);
         }
 
         void gradientDescent( double eta )
         {
-            // test push to github
-            //self.weights = [w - (eta / len(mini_batch)) * nw
-            //            for w, nw in zip(self.weights, nabla_w)]
-            //self.biases = [b - (eta / len(mini_batch)) * nb
-            //           for b, nb in zip(self.biases, nabla_b)
             foreach( var layer in Layers )
             {
                 if( layer.PreviousLayer != null )
@@ -126,13 +120,16 @@ namespace Network
                 if (layer.NextLayer == null)
                 {
                     // output layer
-                    layer.deltaGradientBiases = (layer.Activations - label) * Activation.SigmoidPrime(layer.Z); // update output error
+                    var o = (layer.Activations - label);
+                    var z = Activation.SigmoidPrime(layer.Z);
+                    var db = o * z; 
+                    layer.deltaGradientBiases = (layer.Activations - label).PointwiseMultiply( Activation.SigmoidPrime(layer.Z)); // update output error
                     layer.deltaGradientWeights = layer.PreviousLayer.Activations.Dot(layer.deltaGradientBiases);
                 }
                 else
                 {
                     // hidden layers
-                    layer.deltaGradientBiases = layer.NextLayer.Weights.Transpose().Dot(layer.NextLayer.GradientBiases) * Activation.SigmoidPrime(layer.Z); // update output error
+                    layer.deltaGradientBiases = layer.NextLayer.Weights.Transpose().Dot(layer.NextLayer.GradientBiases).PointwiseMultiply( Activation.SigmoidPrime(layer.Z)); // update output error
                     layer.deltaGradientWeights = layer.PreviousLayer.Activations.Dot(layer.deltaGradientBiases);
                 }
                 result = true;
@@ -157,9 +154,9 @@ namespace Network
             var act = DenseMatrix.Build.DenseOfColumnVectors(layer.PreviousLayer.Activations);
             layer.GradientWeights = deltaM * act.Transpose();
 
-            //var dw = LearningRate * layer.GradientWeights;
+            //var dw = learningRate * layer.GradientWeights;
             //layer.Weights -= dw.Transpose();
-            layer.Weights -= (LearningRate * layer.GradientWeights).Transpose();
+            //layer.Weights -= (learningRate * layer.GradientWeights).Transpose();
         }
 
         void updateParameters( Layer layer, Matrix<double> deltaM )

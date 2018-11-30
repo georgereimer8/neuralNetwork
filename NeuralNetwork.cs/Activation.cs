@@ -12,17 +12,21 @@ namespace Network
     {
         static public Vector<double> Sigmoid(Vector<double> z)
         {
-            return 1.0 / (1.0 + Vector.Exp(-z));
+            var result = 1.0 / (1.0 + Vector.Exp(-z));
+            return result;
         }
 
         /// <summary>
         /// Derivative of the sigmoid function.
+        ///  result =  Sigmoid(z) * (1 - Sigmoid(z));
         /// </summary>
         /// <param name="z"></param>
         /// <returns></returns>
-        static public double SigmoidPrime(Vector<double> z)
+        static public Vector<double> SigmoidPrime(Vector<double> z)
         {
-            return Sigmoid(z) * (1 - Sigmoid(z));
+            var s1 = Sigmoid(z);
+            var result = s1.PointwiseMultiply(1 - s1);
+            return result;
         }
     }
 }

@@ -33,16 +33,19 @@ class Network(object):
         self.weights = [np.random.randn(y, x)
                         for x, y in zip(sizes[:-1], sizes[1:])]
 
-        # the 0.0 initialization values create 
-        # epoch 0 6479
-        # epoch 1 6611
-        # epoch 2 6518
-        # epoch 3 6513
-        # epoch 4 6718 
+        # the 0.0 initialization values and no mini bach shuffle produce: 
+        # epoch 0 3298
+        # epoch 1 3247
+        # epoch 2 3207
+        # epoch 3 3197
+        # epoch 4 3259  etc
 
-        self.biases = [np.full((y,1),0.0) for y in sizes[1:]]
-        self.weights = [np.full((y,x),0.0) for x,y in zip(sizes[:-1], sizes[1:])]
-        self.num_layers = len(sizes)
+        # zero start 
+        zeroStart = 1 
+        if zeroStart == 1:
+            self.biases = [np.full((y,1),0.0) for y in sizes[1:]]
+            self.weights = [np.full((y,x),0.0) for x,y in zip(sizes[:-1], sizes[1:])]
+            self.num_layers = len(sizes)
 
     def feedforward(self, a):
         """Return the output of the network if ``a`` is input."""
@@ -91,10 +94,18 @@ class Network(object):
             delta_nabla_b, delta_nabla_w = self.backprop(x, y)
             nabla_b = [nb+dnb for nb, dnb in zip(nabla_b, delta_nabla_b)]
             nabla_w = [nw+dnw for nw, dnw in zip(nabla_w, delta_nabla_w)]
-        self.weights = [w-(eta/len(mini_batch))*nw
-                        for w, nw in zip(self.weights, nabla_w)]
+
+        for b, nb in zip(self.biases, nabla_b):
+            eta1 = eta / len(mini_batch)
+            a1 = eta1 * nb
+            a2 = b - a1
+            a3 = 0
+
         self.biases = [b-(eta/len(mini_batch))*nb
                        for b, nb in zip(self.biases, nabla_b)]
+
+        self.weights = [w-(eta/len(mini_batch))*nw
+                        for w, nw in zip(self.weights, nabla_w)]
 
     def backprop(self, x, y):
         """Return a tuple ``(nabla_b, nabla_w)`` representing the

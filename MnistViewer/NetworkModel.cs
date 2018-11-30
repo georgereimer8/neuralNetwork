@@ -80,6 +80,7 @@ namespace MnistViewer
         }
         public void TrainNetwork()
         {
+            CreateNetwork();
             SetConsoleVisible?.Invoke(true);
             List<TrainingData> trainingData = new List<TrainingData>();
             foreach (var i in MnistImageReader.ImageList)
