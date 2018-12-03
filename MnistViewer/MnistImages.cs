@@ -13,7 +13,7 @@ namespace MnistViewer
         public Bitmap Bitmap { get { return GetBitmap(); } }// bitmap; } }
         public int PixelCount { get { return Width * Height; } }
         public string Label;
-        public List<double> Pixels { get; set; }
+        public List<int> Pixels { get; set; }
         public int PosX;
         public int PosY;
         public Rectangle Rectangle;
@@ -25,7 +25,7 @@ namespace MnistViewer
         {
             Width = x;
             Height = y;
-            Pixels = new List<double>();
+            Pixels = new List<int>();
         }
 
         public void ReadImage(BinaryReader imageData )
@@ -35,7 +35,7 @@ namespace MnistViewer
                 for (int x = 0; x < Width; ++x)
                 {
                     int pix = imageData.ReadByte();
-                    Pixels.Add((double)pix);
+                    Pixels.Add(pix);
                 }
             }
         }
@@ -47,7 +47,7 @@ namespace MnistViewer
             {
                 for (int x = 0; x < Width; ++x)
                 {
-                    int pix = (int)Pixels[x + Height * y];
+                    int pix = Pixels[x + Height * y];
                     Color c = Color.FromArgb(pix, pix, pix);
                     bitmap.SetPixel(x, y, c);
                 }

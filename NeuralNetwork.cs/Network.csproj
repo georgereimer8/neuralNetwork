@@ -50,8 +50,6 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Gaussian.cs" />
     <Compile Include="Layer.cs" />
-    <Compile Include="networkAlpha.cs" />
-    <Compile Include="networkBeta.cs" />
     <Compile Include="NeuralNetwork.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

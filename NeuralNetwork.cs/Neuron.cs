@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Network
 {
+    /// <summary>
+    /// Neurons are a conceptual helper class
+    /// they don't really do anything except hold a count
+    /// </summary>
     public class Neuron
     {
         public Layer Parent { get; set; }

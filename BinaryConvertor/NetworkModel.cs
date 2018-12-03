@@ -54,7 +54,7 @@ namespace BinaryConvertor
             Network.AddLayer(HiddenLayerSize);
             Network.AddLayer(OutputLayerSize);
 
-            Network.Log = Log;
+            Network.LogMessage = Log;
 
             Log?.Invoke("Network Created");
         }

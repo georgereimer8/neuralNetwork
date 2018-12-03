@@ -18,24 +18,28 @@ namespace MnistViewer
             model.InitView = view.Init;
             model.SetMaxImageCount = view.SetMaxImageCount;
             model.ShowCurrentEpoch = console.SetCurrentEpoch;
+            model.ShowAccuracy = console.ShowAccuracy;
             model.SetEpochsMax = console.SetEpochMax;
             model.DisplayLayers = console.DisplayLayers;
+            model.ShowInputNeuronCount = view.ShowInputNeuronCount;
+            model.ShowHiddenLayerCount = view.ShowHiddenLayerCount;
+            model.ShowHiddenNeuronCount = view.ShowHiddenNeuronCount;
+            model.ShowOutputNeuronCount = view.ShowOutputNeuronCount;
 
             view.UpdateCurrentImage = model.UpdateCurrentImage;
             view.ReadImages = model.ReadImages;
-#if TEST_NETWORK_MATH
-            view.CreateNetwork = model.CreateTestNetwork;
-            view.TrainNetwork = model.TrainTestNetwork;
-#else
             view.CreateNetwork = model.CreateNetwork;
             view.TrainNetwork = model.TrainNetwork;
-#endif
             view.SetIfsImagesPath = (path) => model.TrainingImagesPath = path;
             view.SetIfsLabelsPath = (path) => model.TrainingLablesPath = path;
             view.Epochs = (count) => model.Epochs = count;
             view.BatchSize = (count) => model.BatchSize = count;
             view.LearningRate = (value) => model.LearningRate = value;
-            view.IncludeTestData = (setting) => model.IncludeTestData = setting;
+            view.TestEachEpoch = (setting) => model.TestEachEpoch = setting;
+            view.SetHiddenLayerCount = (count) => model.HiddenLayerCount = count;
+            view.SetHiddenNeuronCount = (count) => model.HiddenNeuronCount = count;
+            view.SetOutputNeuronCount = (count) => model.OutputNeuronCount = count;
+            view.Stop = model.Stop;
 
             model.Init();
         }

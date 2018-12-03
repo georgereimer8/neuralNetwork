@@ -29,6 +29,22 @@ namespace MnistViewer
                 }
             }
         }
+
+        /// <summary>
+        /// Normalize a list of integers into an array of doubles that range between 0 and 1
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="range"></param>
+        /// <returns></returns>
+        static public double[] Normalize( this List<int> input, int range )
+        {
+            double[] n = new double[input.Count()];
+            for( int i = 0; i < input.Count; ++i )
+            {
+                n[i] = (double)input[i] / (double)range;
+            }
+            return n;
+        }
     }
 }
 

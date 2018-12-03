@@ -78,6 +78,7 @@ class Network(object):
                 for k in range(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
+                wait = 0
             if test_data:
                 print ("Epoch {0}: {1} / {2}".format(
                     j, self.evaluate(test_data), n_test))
@@ -107,6 +108,7 @@ class Network(object):
 
         self.weights = [w-(eta/len(mini_batch))*nw
                         for w, nw in zip(self.weights, nabla_w)]
+        wait = 0
 
     def backprop(self, x, y):
         """Return a tuple ``(nabla_b, nabla_w)`` representing the
@@ -117,8 +119,8 @@ class Network(object):
         hidden = -2 
         output = -1 
 
-        nabla_b = [np.zeros(b.shape) for b in self.biases]
-        nabla_w = [np.zeros(w.shape) for w in self.weights]
+        delta_nabla_b = [np.zeros(b.shape) for b in self.biases]
+        delta_nabla_w = [np.zeros(w.shape) for w in self.weights]
         # feedforward
         activation = x
         activations = [x] # list to store all the activations, layer by layer
@@ -131,8 +133,8 @@ class Network(object):
 
         # backward pass
         outputError = self.cost_derivative(activations[output], y) * sigmoid_prime(zs[output])
-        nabla_b[output] = outputError
-        nabla_w[output] = np.dot(outputError, activations[hidden].transpose())
+        delta_nabla_b[output] = outputError
+        delta_nabla_w[output] = np.dot(outputError, activations[hidden].transpose())
 
         # Note that the variable l in the loop below is used a little
         # differently to the notation in Chapter 2 of the book.  Here,
@@ -145,10 +147,10 @@ class Network(object):
         #sp = sigmoid_prime(zs[hidden])
 
         hiddenError = np.dot(self.weights[output].transpose(), outputError) * sigmoid_prime(zs[hidden])
-        nabla_b[hidden] = hiddenError
-        nabla_w[hidden] = np.dot(hiddenError, activations[input].transpose())
+        delta_nabla_b[hidden] = hiddenError
+        delta_nabla_w[hidden] = np.dot(hiddenError, activations[input].transpose())
 
-        return (nabla_b, nabla_w)
+        return (delta_nabla_b, delta_nabla_w)
 
     def evaluate(self, test_data):
         """Return the number of test inputs for which the neural

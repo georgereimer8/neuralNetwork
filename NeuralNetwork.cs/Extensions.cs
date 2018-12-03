@@ -20,6 +20,11 @@ namespace Network
                 get { return Local ?? (Local = new Random(unchecked(Environment.TickCount * 31 + Thread.CurrentThread.ManagedThreadId))); }
             }
         }
+        /// <summary>
+        /// Randomly shuffle a list of objects
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
         public static void Shuffle<T>(this IList<T> list)
         {
             int n = list.Count;

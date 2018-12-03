@@ -62,7 +62,7 @@ namespace MnistViewer
                 //Refresh();
             }
         }
-        public void SetEpochMax( int count)
+        public void SetEpochMax( int count )
         {
             aquaGauge_epochs.SafeInvoke(() =>
             {
@@ -78,12 +78,20 @@ namespace MnistViewer
                 Refresh();
             });
         }
+        public void ShowAccuracy( double accuracy)
+        {
+            aquaGauge_accuracy.SafeInvoke(() =>
+            {
+                aquaGauge_accuracy.Value = (float)accuracy;
+                //Refresh();
+            });
+        }
 
         public void SetVisiblity( bool setting )
         {
             Visible = setting;
         }
-        public void Log( string message)
+        public void Log( string message )
         {
             richTextBox_console.SafeInvoke(() =>
             {

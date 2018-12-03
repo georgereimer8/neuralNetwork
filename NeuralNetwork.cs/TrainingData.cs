@@ -8,6 +8,9 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace Network 
 {
+    /// <summary>
+    /// A container class for network data and its label
+    /// </summary>
     public class NetworkData
     {
         public Vector<double> data { get; set; }

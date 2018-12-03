@@ -8,6 +8,9 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Network
 {
+    /// <summary>
+    /// These are Vector extenions that implement the sigmoid activation function
+    /// </summary>
     public class Activation
     {
         static public Vector<double> Sigmoid(Vector<double> z)

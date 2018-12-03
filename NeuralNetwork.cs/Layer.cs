@@ -8,6 +8,9 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace Network
 {
+    /// <summary>
+    /// Layers for a neural network
+    /// </summary>
     public class Layer
     {
         public const int InputLayerID = 0;
@@ -20,7 +23,6 @@ namespace Network
         public Matrix<double> Weights { get; set; }
         public Vector<double> Z { get; set; } // weighted neuron input
         public Vector<double> Error { get; set; }
-        public Vector<double> Costs { get; set; }
 
         public Vector<double> GradientBiases { get; set; }
         public Matrix<double> GradientWeights { get; set; }
@@ -42,6 +44,10 @@ namespace Network
         }
 
 
+        /// <summary>
+        /// initialize a new layer
+        /// special attention paid to first layer as it is the input layer
+        /// </summary>
         public void Init()
         {
             if (PreviousLayer == null)
@@ -51,21 +57,31 @@ namespace Network
             }
             else
             {
-                // so setup connections between this and the previous layer
                 PreviousLayer.NextLayer = this;
-                Activations = DenseVector.Build.Dense(Neurons.Count());
-                // Biases = DenseVector.Build.Random(Neurons.Count());
-                Biases = DenseVector.Build.Dense(Neurons.Count());
-                Costs = DenseVector.Build.Dense(Neurons.Count());
+
+                // so setup connections between this and the previous layer
+                Biases = DenseVector.Build.Random(Neurons.Count());
 
                 // activation weights,  one row per previous layer neurons, columns = this layer neurons
-               // Weights = DenseMatrix.Build.Random(Neurons.Count(), PreviousLayer.Neurons.Count());
-                Weights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count());
+                Weights = DenseMatrix.Build.Random(Neurons.Count(), PreviousLayer.Neurons.Count());
                 GradientWeights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count(), 0);
                 GradientBiases = DenseVector.Build.Dense(Neurons.Count());
+
+        
+                // zero init is for testing the network with deterministic values
+                bool zeroInit = false;
+                if( zeroInit == true )
+                {
+                    Activations = DenseVector.Build.Dense(Neurons.Count(),0.0);
+                    Biases = DenseVector.Build.Dense(Neurons.Count(),0.0);
+                    Weights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count(),0.0);
+                }
             }
         }
 
+        /// <summary>
+        /// Apply the layer's activation function
+        /// </summary>
         public void CalcActivation()
         {
             // first layer is input layer so activations don't get updated

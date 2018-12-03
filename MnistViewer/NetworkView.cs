@@ -92,24 +92,29 @@ namespace MnistViewer
             LearningRate?.Invoke((double)n.Value);
         }
 
-        public Action<bool> IncludeTestData;
-        private void checkBox_IncludeTestData_CheckedChanged(object sender, EventArgs e)
+        public Action<bool> TestEachEpoch;
+        private void checkBox_TestEachEpoch_CheckedChanged(object sender, EventArgs e)
         {
             var c = sender as CheckBox;
-            IncludeTestData?.Invoke(c.Checked);
+            TestEachEpoch?.Invoke(c.Checked);
         }
 
+        /// <summary>
+        ///  this function initializes the model as per the values set for these controls set in the designer
+        /// </summary>
+        /// <param name="epochs"></param>
+        /// <param name="batchSize"></param>
+        /// <param name="learningRate"></param>
+        /// <param name="includeTestData"></param>
         public void Init(int epochs, int batchSize, double learningRate, bool includeTestData)
         {
-            //numericUpDown_epochs.Value = epochs;
-            //numericUpDown_batchSize.Value = batchSize;
-            //numericUpDown_learningRate.Value = (decimal)learningRate;
-            //checkBox_IncludeTestData.Checked = includeTestData;
-
             numericUpDown_epochs_ValueChanged(numericUpDown_epochs, null);
             numericUpDown_batchSize_ValueChanged(numericUpDown_batchSize, null);
             numericUpDown_learningRate_ValueChanged(numericUpDown_learningRate, null);
-            checkBox_IncludeTestData_CheckedChanged(checkBox_IncludeTestData, null);
+            checkBox_TestEachEpoch_CheckedChanged(checkBox_IncludeTestData, null);
+            numericUpDown_OutputNeuronCount_ValueChanged(numericUpDown_OutputNeuronCount, null);
+            numericUpDown_HiddenNeuronCount_ValueChanged(numericUpDown_HiddenNeuronCount, null);
+            numericUpDown_HiddenLayerCount_ValueChanged(numericUpDown_HiddenLayerCount, null);
         }
 
         public Action<int> UpdateCurrentImage { get; set; }
@@ -130,6 +135,62 @@ namespace MnistViewer
             {
                 numericUpDown_currentImage.Maximum = count;
             });
+        }
+
+        public void ShowInputNeuronCount( int count )
+        {
+            textBox_inputNeuronCount.SafeInvoke(() => 
+            {
+                textBox_inputNeuronCount.Text = count.ToString();
+            });
+        }
+
+        public Action<int> SetHiddenLayerCount;
+        private void numericUpDown_HiddenLayerCount_ValueChanged(object sender, EventArgs e)
+        {
+            var n = sender as NumericUpDown;
+            SetHiddenLayerCount?.Invoke((int)n.Value);
+        }
+        public void ShowHiddenLayerCount( int count )
+        {
+            numericUpDown_HiddenLayerCount.SafeInvoke(() => 
+            {
+                numericUpDown_HiddenLayerCount.Value = count;
+            });
+        }
+
+        public Action<int> SetHiddenNeuronCount;
+        private void numericUpDown_HiddenNeuronCount_ValueChanged(object sender, EventArgs e)
+        {
+            var n = sender as NumericUpDown;
+            SetHiddenNeuronCount?.Invoke((int)n.Value);
+        }
+        public void ShowHiddenNeuronCount( int count )
+        {
+            numericUpDown_HiddenNeuronCount.SafeInvoke(() => 
+            {
+                numericUpDown_HiddenNeuronCount.Value = count;
+            });
+        }
+
+        public Action<int> SetOutputNeuronCount;
+        private void numericUpDown_OutputNeuronCount_ValueChanged(object sender, EventArgs e)
+        {
+            var n = sender as NumericUpDown;
+            SetOutputNeuronCount?.Invoke((int)n.Value);
+        }
+        public void ShowOutputNeuronCount( int count )
+        {
+            numericUpDown_OutputNeuronCount.SafeInvoke(() => 
+            {
+                numericUpDown_OutputNeuronCount.Value = count;
+            });
+        }
+
+        public Action<bool> Stop;
+        private void button_Stop_Click(object sender, EventArgs e)
+        {
+            Stop?.Invoke(true);
         }
     }
 }

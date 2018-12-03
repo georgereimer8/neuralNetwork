@@ -12,6 +12,7 @@ namespace MnistViewer
     public class NetworkModel
     {
         public Action<int> SetEpochsMax;
+        public Action<double > ShowAccuracy;
         public Action<int> ShowCurrentEpoch;
         public Action<List<Layer>> DisplayLayers { get; set; }
         public Action<bool> SetConsoleVisible;
@@ -31,6 +32,7 @@ namespace MnistViewer
         const int DefaultBatchSize = 10;
         const double DefaultLearningRate = 3.0;
         const bool DefaultIncludeTestData = false;
+        public enum MessageScope { Info, Error, Verbose, Debug };
 
         int epochs;
         public int Epochs
@@ -53,12 +55,60 @@ namespace MnistViewer
             }
         }
 
+        public Action<int> ShowHiddenNeuronCount;
+        int hiddenNeuronCount;
+        public int HiddenNeuronCount
+        {
+            get { return hiddenNeuronCount; }
+            set
+            {
+                hiddenNeuronCount = value;
+                ShowHiddenNeuronCount?.Invoke(hiddenNeuronCount);
+            }
+        }
+        public Action<int> ShowOutputNeuronCount;
+        int outputNeuronCount;
+        public int OutputNeuronCount
+        {
+            get { return outputNeuronCount; }
+            set
+            {
+                outputNeuronCount = value;
+                ShowHiddenNeuronCount?.Invoke(outputNeuronCount);
+            }
+        }
+
+        public Action<int> ShowHiddenLayerCount;
+        int hiddenLayerCount;
+        public int HiddenLayerCount
+        {
+            get { return hiddenLayerCount; }
+            set
+            {
+                hiddenLayerCount = value;
+                ShowHiddenLayerCount?.Invoke(hiddenLayerCount);
+            }
+        }
+
+        public Action<int> ShowInputNeuronCount;
+        int inputNeuronCount;
+        public int InputNeuronCount
+        {
+            get { return inputNeuronCount; }
+            set
+            {
+                inputNeuronCount = value;
+                ShowInputNeuronCount?.Invoke(inputNeuronCount);
+            }
+        }
+
         public int BatchSize { get; set; }
         public double LearningRate { get; set; }
-        public bool IncludeTestData { get; set; }
+        public bool TestEachEpoch { get; set; }
 
         MnistImages TrainingImages;
         MnistImages TestingImages;
+
 
         public void Init()
         {
@@ -73,98 +123,96 @@ namespace MnistViewer
             {
                 TrainingLablesPath = @"C:\Users\georgereimer\Source\Repos\neuralNetwork\mnist\train-labels.idx1-ubyte";
                 TrainingImagesPath = @"C:\Users\georgereimer\Source\Repos\neuralNetwork\mnist\train-images.idx3-ubyte";
-                TestingLablesPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-labels.idx1-ubyte";
-                TestingImagesPath = @"C:\Users\GeorgeR\source\repos\neuralNetwork\mnist\t10k-images.idx3-ubyte";
+                TestingLablesPath = @"C:\Users\georgereimer\source\repos\neuralNetwork\mnist\t10k-labels.idx1-ubyte";
+                TestingImagesPath = @"C:\Users\georgereimer\source\repos\neuralNetwork\mnist\t10k-images.idx3-ubyte";
             }
 
             InitView(DefaultEpochs, DefaultBatchSize, DefaultLearningRate, DefaultIncludeTestData);
         }
+
+        /// <summary>
+        /// Setup a new network and train using the current training data
+        /// Test is performance using the given test data
+        /// </summary>
         public void TrainNetwork()
         {
             CreateNetwork();
             SetConsoleVisible?.Invoke(true);
-
-            //List<NetworkData> trainingData = new List<NetworkData>();
-            //foreach (var i in TrainingImages.ImageList)
-            //{
-            //    trainingData.Add(new NetworkData(i.Index, i.Pixels.ToArray(), i.Label, Network.Layers.Last().Neurons.Count()));
-            //}
-
-            //List<NetworkData> testingData = new List<NetworkData>();
-            //foreach (var i in TestingImages.ImageList)
-            //{
-            //    testingData.Add(new NetworkData(i.Index, i.Pixels.ToArray(), i.Label, Network.Layers.Last().Neurons.Count()));
-            //}
-
             var trainingData = CreateData(TrainingImages.ImageList);
             var testingData = CreateData(TestingImages.ImageList);
             Network.Train( trainingData, testingData, Epochs, BatchSize, LearningRate);
         }
 
+
+        /// <summary>
+        /// Create the training or testing data from the given Mnist image
+        /// </summary>
+        /// <param name="images"></param>
+        /// <returns></returns>
         List<NetworkData> CreateData(List<MnistImage> images)
         {
             List<NetworkData> data = new List<NetworkData>();
             foreach (var i in images)
             {
-                data.Add(new NetworkData(i.Index, i.Pixels.ToArray(), i.Label, Network.Layers.Last().Neurons.Count()));
+                data.Add(new NetworkData(i.Index, i.Pixels.Normalize( Byte.MaxValue+1), i.Label, Network.Layers.Last().Neurons.Count()));
             }
             return data;
         }
-        public void CreateTestNetwork()
+
+        public void Stop(bool setting)
         {
-            Network = new Network.NeuralNetwork();
-            Network.Log = Log;
-            Network.UpdateCurrentImage = UpdateCurrentImage;
-            Network.ShowCurrentEpoch = ShowCurrentEpoch;
-
-
-            //Network.AddLayer(10);
-            //Network.AddLayer(4);
-            //Network.AddLayer(10);
-
-            Network.AddLayer(784);
-            Network.AddLayer(30);
-            Network.AddLayer(10);
+            if( Network != null )
+            {
+                Network.Stop = setting;
+            }
         }
 
-        double[] TestData = new double[5] { 1, 2, 3, 4, 5 };
-
-        public void TrainTestNetwork()
-        {
-            SetConsoleVisible?.Invoke(true);
-            List<NetworkData> trainingData = new List<NetworkData>();
-            trainingData.Add(new NetworkData(0, TestData, "0", Network.Layers.Last().Neurons.Count()));
-            Network.TrainingTest(trainingData);
-        }
-
+        /// <summary>
+        /// Create a new network
+        /// </summary>
         public void CreateNetwork()
         {
             Network = new Network.NeuralNetwork();
             Network.Log = Log;
             Network.ShowCurrentEpoch = ShowCurrentEpoch;
+            Network.ShowAccuracy = ShowAccuracy;
             Network.DisplayLayers = DisplayLayers;
+            Network.TestEachEpoch = TestEachEpoch;
 
-            Network.AddLayer(TrainingImages.ImageList.First().Pixels.Count); // input layer
-            Network.AddLayer(30);// hidden layer
-            Network.AddLayer(10); // output layer
+            Network.AddLayer(InputNeuronCount); // input layer
+            for (int i = 0; i < HiddenLayerCount; ++i)
+            {
+                Network.AddLayer(HiddenNeuronCount);// hidden layers
+            }
+            Network.AddLayer(OutputNeuronCount); // output layer
         }
 
+        /// <summary>
+        /// highlight the "current" image, whatever that means
+        /// </summary>
+        /// <param name="index"></param>
         public void UpdateCurrentImage(int index)
         {
             DisplayImage.Highlight(index);
             ShowImage?.Invoke(DisplayImage.Composite);
         }
 
+        /// <summary>
+        /// Read the Mnist images from the given paths
+        /// </summary>
         public void ReadImages()
         {
             try
             {
+                Log?.Invoke("Reading Images...");
                 TrainingImages = new MnistImages(TrainingLablesPath, TrainingImagesPath);
                 TestingImages = new MnistImages(TestingLablesPath, TestingImagesPath);
                 DisplayImage = new DisplayImage(TrainingImages.ImageList);
                 DisplayImage.GenerateComposite();
                 UpdateCurrentImage(0);
                 SetMaxImageCount?.Invoke(TrainingImages.ImageList.Count);
+                InputNeuronCount = TrainingImages.ImageList.First().Pixels.Count;
+                Log?.Invoke("Reading Images Complete");
             }
             catch (System.Exception ex)
             {
