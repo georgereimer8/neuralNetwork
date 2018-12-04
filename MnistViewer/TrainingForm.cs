@@ -96,14 +96,29 @@ namespace MnistViewer
             richTextBox_console.SafeInvoke(() =>
             {
                 richTextBox_console.AppendText(message + Environment.NewLine);
+                ScrollToBottom(richTextBox_console);
+
             });
         }
+        public void ScrollToBottom( RichTextBox r)
+        {
+            r.SafeInvoke(() =>
+            {
+                int count = r.Lines.Count() - 1;
+                if (count >= 0)
+                {
+                    r.SelectionStart = r.GetFirstCharIndexFromLine(count);
+                    r.ScrollToCaret();
+                }
+            });
 
-                    /// <summary>
-                    /// Overide form close
-                    /// <para>Dont really close it. Just hide.</para>
-                    /// </summary>
-                    /// <param name="e"></param>
+        }
+
+        /// <summary>
+        /// Overide form close
+        /// <para>Dont really close it. Just hide.</para>
+        /// </summary>
+        /// <param name="e"></param>
         private void TrainingForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)

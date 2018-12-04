@@ -192,5 +192,12 @@ namespace MnistViewer
         {
             Stop?.Invoke(true);
         }
+
+        public Action<bool> Verbose;
+        private void checkBox_Verbose_CheckedChanged(object sender, EventArgs e)
+        {
+            var c = sender as CheckBox;
+            Verbose?.Invoke(c.Checked);
+        }
     }
 }

@@ -79,6 +79,8 @@ class Network(object):
 
         self.weights = [w-(eta/len(mini_batch))*nw
                         for w, nw in zip(self.weights, nabla_w)]
+
+        self.printLayer( -1 )
         wait = 0
 
 
@@ -175,6 +177,27 @@ class Network(object):
         """Return the vector of partial derivatives \partial C_x /
         \partial a for the output activations."""
         return (output_activations-y)
+
+    def printLayer(self, layer ):
+        Name = self.getLayerName(layer) 
+        s = "Layer({0}) -----------\n".format( Name)
+        s += "           Activations:{0}\n".format(activations[layer])
+        s += "                Biases:{0}\n".format(self.Biases[layer])
+        s += "               Weights:{0}\n".format(self.Weights[layer])
+        s += "        GradientBiases:{0}\n".format(nabla_b[layer])
+        s += "       GradientWeights:{0}\n".format(nabla_w[layer])
+        s += "   deltaGradientBiases:{0}\n".format(delta_nabla_b[layer])
+        s += "  deltaGradientWeights:{0}\n".format(delta_nabla_w[layer])
+        print( s )
+
+    def getLayerName( self, layer ):
+        name = "Input"
+        if( layer == - 2 ):
+           name = "Hidden" 
+        else:
+            if( layer == -1 ):
+                name = "Output"
+        return name
 
 #### Miscellaneous functions
 def sigmoid(z):

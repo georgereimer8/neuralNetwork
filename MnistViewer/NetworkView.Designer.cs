@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button_Stop = new System.Windows.Forms.Button();
             this.textBox_inputNeuronCount = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -58,9 +59,9 @@
             this.textBox_labelsPath = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.zoomPicBox1 = new InspectionStation.Classes.Components.ZoomPicBox();
-            this.button_Stop = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.checkBox_Verbose = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_HiddenLayerCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_OutputNeuronCount)).BeginInit();
@@ -75,6 +76,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox_Verbose);
             this.groupBox1.Controls.Add(this.button_Stop);
             this.groupBox1.Controls.Add(this.textBox_inputNeuronCount);
             this.groupBox1.Controls.Add(this.label10);
@@ -105,12 +107,25 @@
             this.groupBox1.Controls.Add(this.textBox_labelsPath);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 257);
+            this.groupBox1.Location = new System.Drawing.Point(0, 278);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(807, 193);
+            this.groupBox1.Size = new System.Drawing.Size(807, 206);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Network Hyper Parameters";
+            // 
+            // button_Stop
+            // 
+            this.button_Stop.AutoEllipsis = true;
+            this.button_Stop.BackColor = System.Drawing.Color.Red;
+            this.button_Stop.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.button_Stop.Location = new System.Drawing.Point(29, 94);
+            this.button_Stop.Name = "button_Stop";
+            this.button_Stop.Size = new System.Drawing.Size(101, 23);
+            this.button_Stop.TabIndex = 39;
+            this.button_Stop.Text = "Stop Training";
+            this.button_Stop.UseVisualStyleBackColor = false;
+            this.button_Stop.Click += new System.EventHandler(this.button_Stop_Click);
             // 
             // textBox_inputNeuronCount
             // 
@@ -440,12 +455,8 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(807, 257);
+            this.panel1.Size = new System.Drawing.Size(807, 278);
             this.panel1.TabIndex = 1;
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // zoomPicBox1
             // 
@@ -456,29 +467,31 @@
             this.zoomPicBox1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
             this.zoomPicBox1.Location = new System.Drawing.Point(0, 0);
             this.zoomPicBox1.Name = "zoomPicBox1";
-            this.zoomPicBox1.Size = new System.Drawing.Size(807, 257);
+            this.zoomPicBox1.Size = new System.Drawing.Size(807, 278);
             this.zoomPicBox1.TabIndex = 0;
             this.zoomPicBox1.Text = "zoomPicBox1";
             this.zoomPicBox1.Zoom = 1F;
             // 
-            // button_Stop
+            // openFileDialog1
             // 
-            this.button_Stop.AutoEllipsis = true;
-            this.button_Stop.BackColor = System.Drawing.Color.Red;
-            this.button_Stop.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.button_Stop.Location = new System.Drawing.Point(29, 94);
-            this.button_Stop.Name = "button_Stop";
-            this.button_Stop.Size = new System.Drawing.Size(101, 23);
-            this.button_Stop.TabIndex = 39;
-            this.button_Stop.Text = "Stop Training";
-            this.button_Stop.UseVisualStyleBackColor = false;
-            this.button_Stop.Click += new System.EventHandler(this.button_Stop_Click);
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // checkBox_Verbose
+            // 
+            this.checkBox_Verbose.AutoSize = true;
+            this.checkBox_Verbose.Location = new System.Drawing.Point(515, 176);
+            this.checkBox_Verbose.Name = "checkBox_Verbose";
+            this.checkBox_Verbose.Size = new System.Drawing.Size(65, 17);
+            this.checkBox_Verbose.TabIndex = 40;
+            this.checkBox_Verbose.Text = "Verbose";
+            this.checkBox_Verbose.UseVisualStyleBackColor = true;
+            this.checkBox_Verbose.CheckedChanged += new System.EventHandler(this.checkBox_Verbose_CheckedChanged);
             // 
             // NetworkView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(807, 450);
+            this.ClientSize = new System.Drawing.Size(807, 484);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);
             this.Name = "NetworkView";
@@ -533,6 +546,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown_HiddenNeuronCount;
         private System.Windows.Forms.TextBox textBox_inputNeuronCount;
         private System.Windows.Forms.Button button_Stop;
+        private System.Windows.Forms.CheckBox checkBox_Verbose;
     }
 }
 

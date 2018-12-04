@@ -40,6 +40,7 @@ namespace MnistViewer
             view.SetHiddenNeuronCount = (count) => model.HiddenNeuronCount = count;
             view.SetOutputNeuronCount = (count) => model.OutputNeuronCount = count;
             view.Stop = model.Stop;
+            view.Verbose = (setting) => model.Verbose = setting;
 
             model.Init();
         }

@@ -166,6 +166,19 @@ namespace MnistViewer
                 Network.Stop = setting;
             }
         }
+        bool verbose;
+        public  bool Verbose
+        {
+            get { return verbose; }
+            set
+            {
+                verbose = value;
+                if (Network != null)
+                {
+                    Network.Verbose = verbose;
+                }
+            }
+        }
 
         /// <summary>
         /// Create a new network
@@ -178,13 +191,14 @@ namespace MnistViewer
             Network.ShowAccuracy = ShowAccuracy;
             Network.DisplayLayers = DisplayLayers;
             Network.TestEachEpoch = TestEachEpoch;
+            Network.Verbose = Verbose;
 
-            Network.AddLayer(InputNeuronCount); // input layer
+            Network.AddLayer(InputNeuronCount, "Input"); // input layer
             for (int i = 0; i < HiddenLayerCount; ++i)
             {
-                Network.AddLayer(HiddenNeuronCount);// hidden layers
+                Network.AddLayer(HiddenNeuronCount, String.Format("Hidden {0}", i ));// hidden layers
             }
-            Network.AddLayer(OutputNeuronCount); // output layer
+            Network.AddLayer(OutputNeuronCount, "Output"); // output layer
         }
 
         /// <summary>

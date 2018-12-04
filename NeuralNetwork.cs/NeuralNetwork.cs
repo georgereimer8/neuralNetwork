@@ -21,6 +21,7 @@ namespace Network
         public List<Layer> Layers { get; set; }
         public double Epochs { get; set; }
 
+        public bool Verbose { get; set; }
         public bool TestEachEpoch { get; set; }
         bool stop = false;
         public bool Stop
@@ -39,9 +40,9 @@ namespace Network
         /// First layer becomes input layer, last layer is output layer
         /// </summary>
         /// <param name="neuronCount"></param>
-        public void AddLayer( int neuronCount )
+        public void AddLayer( int neuronCount, string name )
         {
-            Layers.Add(new Layer(neuronCount, Layers.LastOrDefault(), Layers.Count));
+            Layers.Add(new Layer(name, neuronCount, Layers.LastOrDefault(), Layers.Count));
         }
 
         /// <summary>
@@ -184,6 +185,10 @@ namespace Network
             }
 
             gradientDescent( learningRate / batchData.Count);
+            if( Verbose == true)
+            {
+                Log?.Invoke(Layers.Last().ToString());
+            }
         }
 
         /// <summary>

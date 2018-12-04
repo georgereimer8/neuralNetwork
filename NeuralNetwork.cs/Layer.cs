@@ -29,11 +29,13 @@ namespace Network
 
         public Vector<double> deltaGradientBiases { get; set; }
         public Matrix<double> deltaGradientWeights { get; set; }
+        public string Name { get; set; }
 
         public List<Neuron> Neurons;
-        public Layer(int myNeuronCount, Layer myPreviousLayer, int myIndex)
+        public Layer( string myName, int myNeuronCount, Layer myPreviousLayer, int myIndex)
         {
             Index = myIndex;
+            Name = myName;
             Neurons = new List<Neuron>();
             for (int i = 0; i < myNeuronCount; ++i)
             {
@@ -92,5 +94,20 @@ namespace Network
             }
         }
 
+        override public string ToString()
+        {
+            string s;
+            s = String.Format("Layer({0}) -----------", Name) + Environment.NewLine;
+            s += String.Format("           Activations:{0}", Activations) + Environment.NewLine;
+            s += String.Format("                Biases:{0}", Biases) + Environment.NewLine;
+            s += String.Format("               Weights:{0}", Weights) + Environment.NewLine;
+            s += String.Format("        GradientBiases:{0}", GradientBiases) + Environment.NewLine;
+            s += String.Format("       GradientWeights:{0}", GradientWeights) + Environment.NewLine;
+            s += String.Format("   deltaGradientBiases:{0}", deltaGradientBiases) + Environment.NewLine;
+            s += String.Format("  deltaGradientWeights:{0}", deltaGradientWeights) + Environment.NewLine;
+            s += Environment.NewLine;
+
+            return s;
+        }
     }
 }
