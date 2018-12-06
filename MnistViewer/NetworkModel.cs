@@ -179,7 +179,19 @@ namespace MnistViewer
                 }
             }
         }
-
+        bool shuffle;
+        public bool Shuffle
+        {
+            get { return shuffle; }
+            set
+            {
+                verbose = value;
+                if (Network != null)
+                {
+                    Network.Shuffle = shuffle;
+                }
+            }
+        }
         /// <summary>
         /// Create a new network
         /// </summary>
@@ -192,6 +204,7 @@ namespace MnistViewer
             Network.DisplayLayers = DisplayLayers;
             Network.TestEachEpoch = TestEachEpoch;
             Network.Verbose = Verbose;
+            Network.Shuffle = Shuffle;
 
             Network.AddLayer(InputNeuronCount, "Input"); // input layer
             for (int i = 0; i < HiddenLayerCount; ++i)

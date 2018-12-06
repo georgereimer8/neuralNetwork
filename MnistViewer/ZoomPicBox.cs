@@ -9,7 +9,7 @@ using System.Windows.Forms;
 // http://bobpowell.net/zoompicbox.aspx
 // https://social.msdn.microsoft.com/Forums/vstudio/en-US/136ba4f8-a487-4e21-b146-300ec4738d2e/zooming-and-panning-images-using-picturebox-and-autoscroll-position-in-c?forum=csharpgeneral
 //
-namespace InspectionStation.Classes.Components
+namespace MnistViewer
 {
     public class ZoomPicBox : ScrollableControl
     {

@@ -295,5 +295,12 @@ namespace MnistViewer
             });
 
         }
+
+        public Action<bool> Shuffle;
+        private void checkBox_shuffle_CheckedChanged(object sender, EventArgs e)
+        {
+            var c = sender as CheckBox;
+            Shuffle?.Invoke(c.Checked);
+        }
     }
 }

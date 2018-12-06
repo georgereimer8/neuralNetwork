@@ -32,6 +32,7 @@
             System.Windows.Forms.DataVisualization.Charting.CustomLabel customLabel1 = new System.Windows.Forms.DataVisualization.Charting.CustomLabel();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox_shuffle = new System.Windows.Forms.CheckBox();
             this.checkBox_Verbose = new System.Windows.Forms.CheckBox();
             this.button_Stop = new System.Windows.Forms.Button();
             this.textBox_inputNeuronCount = new System.Windows.Forms.TextBox();
@@ -64,13 +65,13 @@
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.zoomPicBox1 = new MnistViewer.ZoomPicBox();
             this.chartActivations = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.richTextBox_console = new System.Windows.Forms.RichTextBox();
             this.aquaGauge_epochs = new AquaControls.AquaGauge();
             this.aquaGauge_accuracy = new AquaControls.AquaGauge();
-            this.zoomPicBox1 = new InspectionStation.Classes.Components.ZoomPicBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_HiddenLayerCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_OutputNeuronCount)).BeginInit();
@@ -94,6 +95,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox_shuffle);
             this.groupBox1.Controls.Add(this.checkBox_Verbose);
             this.groupBox1.Controls.Add(this.button_Stop);
             this.groupBox1.Controls.Add(this.textBox_inputNeuronCount);
@@ -132,16 +134,26 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Network Hyper Parameters";
             // 
+            // checkBox_shuffle
+            // 
+            this.checkBox_shuffle.AutoSize = true;
+            this.checkBox_shuffle.Location = new System.Drawing.Point(319, 189);
+            this.checkBox_shuffle.Name = "checkBox_shuffle";
+            this.checkBox_shuffle.Size = new System.Drawing.Size(101, 17);
+            this.checkBox_shuffle.TabIndex = 41;
+            this.checkBox_shuffle.Text = "Shuffle Batches";
+            this.checkBox_shuffle.UseVisualStyleBackColor = true;
+            this.checkBox_shuffle.CheckedChanged += new System.EventHandler(this.checkBox_shuffle_CheckedChanged);
+            // 
             // checkBox_Verbose
             // 
             this.checkBox_Verbose.AutoSize = true;
-            this.checkBox_Verbose.Location = new System.Drawing.Point(515, 176);
+            this.checkBox_Verbose.Location = new System.Drawing.Point(429, 189);
             this.checkBox_Verbose.Name = "checkBox_Verbose";
             this.checkBox_Verbose.Size = new System.Drawing.Size(65, 17);
             this.checkBox_Verbose.TabIndex = 40;
             this.checkBox_Verbose.Text = "Verbose";
             this.checkBox_Verbose.UseVisualStyleBackColor = true;
-            this.checkBox_Verbose.CheckedChanged += new System.EventHandler(this.checkBox_Verbose_CheckedChanged);
             // 
             // button_Stop
             // 
@@ -352,7 +364,7 @@
             this.checkBox_IncludeTestData.AutoSize = true;
             this.checkBox_IncludeTestData.Checked = true;
             this.checkBox_IncludeTestData.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_IncludeTestData.Location = new System.Drawing.Point(515, 160);
+            this.checkBox_IncludeTestData.Location = new System.Drawing.Point(500, 189);
             this.checkBox_IncludeTestData.Name = "checkBox_IncludeTestData";
             this.checkBox_IncludeTestData.Size = new System.Drawing.Size(109, 17);
             this.checkBox_IncludeTestData.TabIndex = 10;
@@ -504,6 +516,20 @@
             this.splitContainer2.SplitterDistance = 543;
             this.splitContainer2.TabIndex = 1;
             // 
+            // zoomPicBox1
+            // 
+            this.zoomPicBox1.AutoScroll = true;
+            this.zoomPicBox1.AutoScrollMargin = new System.Drawing.Size(543, 208);
+            this.zoomPicBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.zoomPicBox1.Image = null;
+            this.zoomPicBox1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+            this.zoomPicBox1.Location = new System.Drawing.Point(0, 0);
+            this.zoomPicBox1.Name = "zoomPicBox1";
+            this.zoomPicBox1.Size = new System.Drawing.Size(543, 208);
+            this.zoomPicBox1.TabIndex = 0;
+            this.zoomPicBox1.Text = "zoomPicBox1";
+            this.zoomPicBox1.Zoom = 1F;
+            // 
             // chartActivations
             // 
             this.chartActivations.AllowDrop = true;
@@ -590,20 +616,6 @@
             this.aquaGauge_accuracy.ThresholdPercent = 0F;
             this.aquaGauge_accuracy.Value = 0F;
             // 
-            // zoomPicBox1
-            // 
-            this.zoomPicBox1.AutoScroll = true;
-            this.zoomPicBox1.AutoScrollMargin = new System.Drawing.Size(543, 208);
-            this.zoomPicBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.zoomPicBox1.Image = null;
-            this.zoomPicBox1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
-            this.zoomPicBox1.Location = new System.Drawing.Point(0, 0);
-            this.zoomPicBox1.Name = "zoomPicBox1";
-            this.zoomPicBox1.Size = new System.Drawing.Size(543, 208);
-            this.zoomPicBox1.TabIndex = 0;
-            this.zoomPicBox1.Text = "zoomPicBox1";
-            this.zoomPicBox1.Zoom = 1F;
-            // 
             // NetworkView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -642,7 +654,7 @@
 
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Panel panel1;
-        private InspectionStation.Classes.Components.ZoomPicBox zoomPicBox1;
+        private ZoomPicBox zoomPicBox1;
         private System.Windows.Forms.TextBox textBox_labelsPath;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
@@ -680,6 +692,7 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartActivations;
         private System.Windows.Forms.RichTextBox richTextBox_console;
+        private System.Windows.Forms.CheckBox checkBox_shuffle;
     }
 }
 

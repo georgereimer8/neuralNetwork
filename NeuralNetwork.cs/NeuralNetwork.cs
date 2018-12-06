@@ -22,6 +22,7 @@ namespace Network
         public double Epochs { get; set; }
 
         public bool Verbose { get; set; }
+        public bool Shuffle { get; set; }
         public bool TestEachEpoch { get; set; }
         bool stop = false;
         public bool Stop
@@ -42,7 +43,7 @@ namespace Network
         /// <param name="neuronCount"></param>
         public void AddLayer( int neuronCount, string name )
         {
-            Layers.Add(new Layer(name, neuronCount, Layers.LastOrDefault(), Layers.Count));
+            Layers.Add(new Layer(name, neuronCount, Layers.LastOrDefault(), Layers.Count, Shuffle));
         }
 
         /// <summary>
@@ -87,7 +88,10 @@ namespace Network
                 }
                 var batchData = trainingData.GetRange(batchIndex, batchSize);
                 update(batchData, learningRate);
-                trainingData.Shuffle();
+                if (Shuffle == true)
+                {
+                    trainingData.Shuffle();
+                }
                 ShowCurrentEpoch?.Invoke(epoch);
                 DisplayLayers?.Invoke(Layers);
 

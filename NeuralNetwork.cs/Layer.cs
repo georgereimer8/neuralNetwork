@@ -30,12 +30,14 @@ namespace Network
         public Vector<double> deltaGradientBiases { get; set; }
         public Matrix<double> deltaGradientWeights { get; set; }
         public string Name { get; set; }
+        public bool Shuffle { get; set; }
 
         public List<Neuron> Neurons;
-        public Layer( string myName, int myNeuronCount, Layer myPreviousLayer, int myIndex)
+        public Layer( string myName, int myNeuronCount, Layer myPreviousLayer, int myIndex, bool myShuffle)
         {
             Index = myIndex;
             Name = myName;
+            Shuffle = myShuffle;
             Neurons = new List<Neuron>();
             for (int i = 0; i < myNeuronCount; ++i)
             {
@@ -71,8 +73,7 @@ namespace Network
 
         
                 // zero init is for testing the network with deterministic values
-                bool zeroInit = false;
-                if( zeroInit == true )
+                if( Shuffle == false )
                 {
                     Activations = DenseVector.Build.Dense(Neurons.Count(),0.0);
                     Biases = DenseVector.Build.Dense(Neurons.Count(),0.0);
