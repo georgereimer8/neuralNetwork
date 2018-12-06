@@ -8,19 +8,16 @@ namespace MnistViewer
 {
     public class NetworkPresenter
     {
-        public NetworkPresenter( NetworkView view, TrainingForm console, NetworkModel model )
+        public NetworkPresenter( NetworkView view, NetworkModel model )
         {
-            console.Show();
-
-            model.SetConsoleVisible = console.SetVisiblity;
-            model.Log = console.Log;
+            model.Log = view.Log;
             model.ShowImage = view.ShowImage;
             model.InitView = view.Init;
             model.SetMaxImageCount = view.SetMaxImageCount;
-            model.ShowCurrentEpoch = console.SetCurrentEpoch;
-            model.ShowAccuracy = console.ShowAccuracy;
-            model.SetEpochsMax = console.SetEpochMax;
-            model.DisplayLayers = console.DisplayLayers;
+            model.ShowCurrentEpoch = view.SetCurrentEpoch;
+            model.ShowAccuracy = view.ShowAccuracy;
+            model.SetEpochsMax = view.SetEpochMax;
+            model.DisplayLayers = view.DisplayLayers;
             model.ShowInputNeuronCount = view.ShowInputNeuronCount;
             model.ShowHiddenLayerCount = view.ShowHiddenLayerCount;
             model.ShowHiddenNeuronCount = view.ShowHiddenNeuronCount;

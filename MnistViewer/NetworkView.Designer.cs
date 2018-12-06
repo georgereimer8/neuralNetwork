@@ -28,7 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.CustomLabel customLabel1 = new System.Windows.Forms.DataVisualization.Charting.CustomLabel();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox_Verbose = new System.Windows.Forms.CheckBox();
             this.button_Stop = new System.Windows.Forms.Button();
             this.textBox_inputNeuronCount = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -59,9 +63,14 @@
             this.textBox_labelsPath = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.zoomPicBox1 = new InspectionStation.Classes.Components.ZoomPicBox();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.chartActivations = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.checkBox_Verbose = new System.Windows.Forms.CheckBox();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.richTextBox_console = new System.Windows.Forms.RichTextBox();
+            this.aquaGauge_epochs = new AquaControls.AquaGauge();
+            this.aquaGauge_accuracy = new AquaControls.AquaGauge();
+            this.zoomPicBox1 = new InspectionStation.Classes.Components.ZoomPicBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_HiddenLayerCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_OutputNeuronCount)).BeginInit();
@@ -72,6 +81,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_batchSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_epochs)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartActivations)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -107,12 +125,23 @@
             this.groupBox1.Controls.Add(this.textBox_labelsPath);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 278);
+            this.groupBox1.Location = new System.Drawing.Point(0, 382);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(807, 206);
+            this.groupBox1.Size = new System.Drawing.Size(845, 206);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Network Hyper Parameters";
+            // 
+            // checkBox_Verbose
+            // 
+            this.checkBox_Verbose.AutoSize = true;
+            this.checkBox_Verbose.Location = new System.Drawing.Point(515, 176);
+            this.checkBox_Verbose.Name = "checkBox_Verbose";
+            this.checkBox_Verbose.Size = new System.Drawing.Size(65, 17);
+            this.checkBox_Verbose.TabIndex = 40;
+            this.checkBox_Verbose.Text = "Verbose";
+            this.checkBox_Verbose.UseVisualStyleBackColor = true;
+            this.checkBox_Verbose.CheckedChanged += new System.EventHandler(this.checkBox_Verbose_CheckedChanged);
             // 
             // button_Stop
             // 
@@ -451,47 +480,136 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.zoomPicBox1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Controls.Add(this.splitContainer2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(807, 278);
+            this.panel1.Size = new System.Drawing.Size(845, 208);
             this.panel1.TabIndex = 1;
             // 
-            // zoomPicBox1
+            // splitContainer2
             // 
-            this.zoomPicBox1.AutoScroll = true;
-            this.zoomPicBox1.AutoScrollMargin = new System.Drawing.Size(807, 257);
-            this.zoomPicBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.zoomPicBox1.Image = null;
-            this.zoomPicBox1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
-            this.zoomPicBox1.Location = new System.Drawing.Point(0, 0);
-            this.zoomPicBox1.Name = "zoomPicBox1";
-            this.zoomPicBox1.Size = new System.Drawing.Size(807, 278);
-            this.zoomPicBox1.TabIndex = 0;
-            this.zoomPicBox1.Text = "zoomPicBox1";
-            this.zoomPicBox1.Zoom = 1F;
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.zoomPicBox1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.chartActivations);
+            this.splitContainer2.Size = new System.Drawing.Size(845, 208);
+            this.splitContainer2.SplitterDistance = 543;
+            this.splitContainer2.TabIndex = 1;
+            // 
+            // chartActivations
+            // 
+            this.chartActivations.AllowDrop = true;
+            this.chartActivations.BackColor = System.Drawing.SystemColors.Control;
+            customLabel1.Text = "Activations";
+            chartArea1.AxisX.CustomLabels.Add(customLabel1);
+            chartArea1.AxisX.Title = "Activations";
+            chartArea1.Name = "ChartArea1";
+            this.chartActivations.ChartAreas.Add(chartArea1);
+            this.chartActivations.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chartActivations.Location = new System.Drawing.Point(0, 0);
+            this.chartActivations.Name = "chartActivations";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartActivations.Series.Add(series1);
+            this.chartActivations.Size = new System.Drawing.Size(298, 208);
+            this.chartActivations.TabIndex = 5;
+            this.chartActivations.Text = "chart1";
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // checkBox_Verbose
+            // splitContainer1
             // 
-            this.checkBox_Verbose.AutoSize = true;
-            this.checkBox_Verbose.Location = new System.Drawing.Point(515, 176);
-            this.checkBox_Verbose.Name = "checkBox_Verbose";
-            this.checkBox_Verbose.Size = new System.Drawing.Size(65, 17);
-            this.checkBox_Verbose.TabIndex = 40;
-            this.checkBox_Verbose.Text = "Verbose";
-            this.checkBox_Verbose.UseVisualStyleBackColor = true;
-            this.checkBox_Verbose.CheckedChanged += new System.EventHandler(this.checkBox_Verbose_CheckedChanged);
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 208);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.richTextBox_console);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.aquaGauge_epochs);
+            this.splitContainer1.Panel2.Controls.Add(this.aquaGauge_accuracy);
+            this.splitContainer1.Size = new System.Drawing.Size(845, 174);
+            this.splitContainer1.SplitterDistance = 545;
+            this.splitContainer1.TabIndex = 2;
+            // 
+            // richTextBox_console
+            // 
+            this.richTextBox_console.BackColor = System.Drawing.SystemColors.Control;
+            this.richTextBox_console.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox_console.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox_console.Name = "richTextBox_console";
+            this.richTextBox_console.Size = new System.Drawing.Size(545, 174);
+            this.richTextBox_console.TabIndex = 3;
+            this.richTextBox_console.Text = "";
+            // 
+            // aquaGauge_epochs
+            // 
+            this.aquaGauge_epochs.BackColor = System.Drawing.Color.Transparent;
+            this.aquaGauge_epochs.DialColor = System.Drawing.Color.Lavender;
+            this.aquaGauge_epochs.DialText = "Epoch";
+            this.aquaGauge_epochs.Dock = System.Windows.Forms.DockStyle.Left;
+            this.aquaGauge_epochs.Glossiness = 11.36364F;
+            this.aquaGauge_epochs.Location = new System.Drawing.Point(150, 0);
+            this.aquaGauge_epochs.MaxValue = 30F;
+            this.aquaGauge_epochs.MinValue = 0F;
+            this.aquaGauge_epochs.Name = "aquaGauge_epochs";
+            this.aquaGauge_epochs.RecommendedValue = 0F;
+            this.aquaGauge_epochs.Size = new System.Drawing.Size(150, 150);
+            this.aquaGauge_epochs.TabIndex = 6;
+            this.aquaGauge_epochs.ThresholdPercent = 0F;
+            this.aquaGauge_epochs.Value = 0F;
+            // 
+            // aquaGauge_accuracy
+            // 
+            this.aquaGauge_accuracy.BackColor = System.Drawing.Color.Transparent;
+            this.aquaGauge_accuracy.DialColor = System.Drawing.Color.Lavender;
+            this.aquaGauge_accuracy.DialText = "Accuracy";
+            this.aquaGauge_accuracy.Dock = System.Windows.Forms.DockStyle.Left;
+            this.aquaGauge_accuracy.Glossiness = 11.36364F;
+            this.aquaGauge_accuracy.Location = new System.Drawing.Point(0, 0);
+            this.aquaGauge_accuracy.MaxValue = 100F;
+            this.aquaGauge_accuracy.MinValue = 0F;
+            this.aquaGauge_accuracy.Name = "aquaGauge_accuracy";
+            this.aquaGauge_accuracy.RecommendedValue = 0F;
+            this.aquaGauge_accuracy.Size = new System.Drawing.Size(150, 150);
+            this.aquaGauge_accuracy.TabIndex = 7;
+            this.aquaGauge_accuracy.ThresholdPercent = 0F;
+            this.aquaGauge_accuracy.Value = 0F;
+            // 
+            // zoomPicBox1
+            // 
+            this.zoomPicBox1.AutoScroll = true;
+            this.zoomPicBox1.AutoScrollMargin = new System.Drawing.Size(543, 208);
+            this.zoomPicBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.zoomPicBox1.Image = null;
+            this.zoomPicBox1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+            this.zoomPicBox1.Location = new System.Drawing.Point(0, 0);
+            this.zoomPicBox1.Name = "zoomPicBox1";
+            this.zoomPicBox1.Size = new System.Drawing.Size(543, 208);
+            this.zoomPicBox1.TabIndex = 0;
+            this.zoomPicBox1.Text = "zoomPicBox1";
+            this.zoomPicBox1.Zoom = 1F;
             // 
             // NetworkView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(807, 484);
+            this.ClientSize = new System.Drawing.Size(845, 588);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);
             this.Name = "NetworkView";
@@ -507,6 +625,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_batchSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_epochs)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chartActivations)).EndInit();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -547,6 +674,12 @@
         private System.Windows.Forms.TextBox textBox_inputNeuronCount;
         private System.Windows.Forms.Button button_Stop;
         private System.Windows.Forms.CheckBox checkBox_Verbose;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private AquaControls.AquaGauge aquaGauge_accuracy;
+        private AquaControls.AquaGauge aquaGauge_epochs;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartActivations;
+        private System.Windows.Forms.RichTextBox richTextBox_console;
     }
 }
 
