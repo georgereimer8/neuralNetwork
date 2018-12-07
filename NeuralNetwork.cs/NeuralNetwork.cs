@@ -31,10 +31,13 @@ namespace Network
             set { stop = value; }
         }
 
+        int sampleCount;
+
         public NeuralNetwork( )
         {
             Layers = new List<Layer>();
         }
+
 
         /// <summary>
         /// Layers connect themselves to previous layers as they are added
@@ -86,6 +89,7 @@ namespace Network
                     Log?.Invoke("Training Stopped");
                     break;
                 }
+                sampleCount = 0;
                 var batchData = trainingData.GetRange(batchIndex, batchSize);
                 update(batchData, learningRate);
                 if (Shuffle == true)
@@ -186,6 +190,7 @@ namespace Network
                         layer.GradientWeights = layer.GradientWeights.Add(layer.deltaGradientWeights);
                     }
                 }
+                Log?.Invoke(Layers.Last().printActivations(sampleCount++));
             }
 
             gradientDescent( learningRate / batchData.Count);

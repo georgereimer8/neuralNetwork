@@ -17,6 +17,10 @@ import numpy as np
 
 class Network(object):
 
+    Shuffle = 0
+    ZeroStart = 1
+    Verbose = 1
+
     def __init__(self, sizes):
         """The list ``sizes`` contains the number of neurons in the
         respective layers of the network.  For example, if the list
@@ -42,8 +46,7 @@ class Network(object):
         # epoch 4 3259  etc
 
         # zero start 
-        zeroStart = 0 
-        if zeroStart == 1:
+        if self.ZeroStart == 1:
             self.biases = [np.full((y,1),0.0) for y in sizes[1:]]
             self.weights = [np.full((y,x),0.0) for x,y in zip(sizes[:-1], sizes[1:])]
             self.num_layers = len(sizes)
@@ -60,12 +63,14 @@ class Network(object):
         gradient descent using backpropagation to a single mini batch.
         The ``mini_batch`` is a list of tuples ``(x, y)``, and ``eta``
         is the learning rate."""
-        nabla_b = [np.zeros(b.shape) for b in self.biases]
-        nabla_w = [np.zeros(w.shape) for w in self.weights]
+        self.nabla_b = [np.zeros(b.shape) for b in self.biases]
+        self.nabla_w = [np.zeros(w.shape) for w in self.weights]
         for x, y in mini_batch:
-            delta_nabla_b, delta_nabla_w = self.backprop(x, y)
-            nabla_b = [nb+dnb for nb, dnb in zip(nabla_b, delta_nabla_b)]
-            nabla_w = [nw+dnw for nw, dnw in zip(nabla_w, delta_nabla_w)]
+            self.delta_nabla_b, self.delta_nabla_w = self.backprop(x, y)
+            self.nabla_b = [nb+dnb for nb, dnb in zip(self.nabla_b, self.delta_nabla_b)]
+            self.nabla_w = [nw+dnw for nw, dnw in zip(self.nabla_w, self.delta_nabla_w)]
+            self.printActivations(-1, self.sampleCount)
+            self.sampleCount += 1
 
         """ 
         for b, nb in zip(self.biases, nabla_b):
@@ -75,12 +80,14 @@ class Network(object):
             a3 = 0 """
 
         self.biases = [b-(eta/len(mini_batch))*nb
-                       for b, nb in zip(self.biases, nabla_b)]
+                       for b, nb in zip(self.biases, self.nabla_b)]
 
         self.weights = [w-(eta/len(mini_batch))*nw
-                        for w, nw in zip(self.weights, nabla_w)]
+                        for w, nw in zip(self.weights, self.nabla_w)]
 
-        self.printLayer( -1 )
+        if self.Verbose == 9:
+            self.printLayer( -1 )
+
         wait = 0
 
 
@@ -101,12 +108,14 @@ class Network(object):
             test_data = list(test_data) 
             n_test = len(test_data)
 
+        self.sampleCount = 0
         runTests = 1
         training_data = list(training_data)
         n = len(training_data)
         for j in range(epochs):
             # keep deterministic while debugging so don't shuffle yet
-            random.shuffle(training_data) 
+            if self.Shuffle == 1:
+                random.shuffle(training_data) 
             mini_batches = [
                 training_data[k:k+mini_batch_size]
                 for k in range(0, n, mini_batch_size)]
@@ -130,22 +139,22 @@ class Network(object):
         hidden = -2 
         output = -1 
 
-        delta_nabla_b = [np.zeros(b.shape) for b in self.biases]
-        delta_nabla_w = [np.zeros(w.shape) for w in self.weights]
+        self.delta_nabla_b = [np.zeros(b.shape) for b in self.biases]
+        self.delta_nabla_w = [np.zeros(w.shape) for w in self.weights]
         # feedforward
         activation = x
-        activations = [x] # list to store all the activations, layer by layer
+        self.activations = [x] # list to store all the activations, layer by layer
         zs = [] # list to store all the z vectors, layer by layer
         for b, w in zip(self.biases, self.weights):
             z = np.dot(w, activation)+b
             zs.append(z)
             activation = sigmoid(z)
-            activations.append(activation)
+            self.activations.append(activation)
 
         # backward pass
-        outputError = self.cost_derivative(activations[output], y) * sigmoid_prime(zs[output])
-        delta_nabla_b[output] = outputError
-        delta_nabla_w[output] = np.dot(outputError, activations[hidden].transpose())
+        outputError = self.cost_derivative(self.activations[output], y) * sigmoid_prime(zs[output])
+        self.delta_nabla_b[output] = outputError
+        self.delta_nabla_w[output] = np.dot(outputError, self.activations[hidden].transpose())
 
         # Note that the variable l in the loop below is used a little
         # differently to the notation in Chapter 2 of the book.  Here,
@@ -158,10 +167,10 @@ class Network(object):
         #sp = sigmoid_prime(zs[hidden])
 
         hiddenError = np.dot(self.weights[output].transpose(), outputError) * sigmoid_prime(zs[hidden])
-        delta_nabla_b[hidden] = hiddenError
-        delta_nabla_w[hidden] = np.dot(hiddenError, activations[input].transpose())
+        self.delta_nabla_b[hidden] = hiddenError
+        self.delta_nabla_w[hidden] = np.dot(hiddenError, self.activations[input].transpose())
 
-        return (delta_nabla_b, delta_nabla_w)
+        return (self.delta_nabla_b, self.delta_nabla_w)
 
     def evaluate(self, test_data):
         """Return the number of test inputs for which the neural
@@ -178,16 +187,25 @@ class Network(object):
         \partial a for the output activations."""
         return (output_activations-y)
 
+    def printActivations( self, layer, sample ):
+        Name = self.getLayerName(layer) 
+        s = "Sample({0}):".format(sample)
+        s += " Layer({0}):".format( Name)
+        for a in self.activations[layer]:
+            s += "{0},".format(a)
+        s += "\n"
+        print(s)
+        
     def printLayer(self, layer ):
         Name = self.getLayerName(layer) 
         s = "Layer({0}) -----------\n".format( Name)
-        s += "           Activations:{0}\n".format(activations[layer])
-        s += "                Biases:{0}\n".format(self.Biases[layer])
-        s += "               Weights:{0}\n".format(self.Weights[layer])
-        s += "        GradientBiases:{0}\n".format(nabla_b[layer])
-        s += "       GradientWeights:{0}\n".format(nabla_w[layer])
-        s += "   deltaGradientBiases:{0}\n".format(delta_nabla_b[layer])
-        s += "  deltaGradientWeights:{0}\n".format(delta_nabla_w[layer])
+        s += "           Activations:{0}\n".format(self.activations[layer])
+        s += "                Biases:{0}\n".format(self.biases[layer])
+        s += "               Weights:{0}\n".format(self.weights[layer])
+        s += "        GradientBiases:{0}\n".format(self.nabla_b[layer])
+        s += "       GradientWeights:{0}\n".format(self.nabla_w[layer])
+        s += "   deltaGradientBiases:{0}\n".format(self.delta_nabla_b[layer])
+        s += "  deltaGradientWeights:{0}\n".format(self.delta_nabla_w[layer])
         print( s )
 
     def getLayerName( self, layer ):

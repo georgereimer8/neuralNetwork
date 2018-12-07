@@ -129,7 +129,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox1.Location = new System.Drawing.Point(0, 382);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(845, 206);
+            this.groupBox1.Size = new System.Drawing.Size(1174, 206);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Network Hyper Parameters";
@@ -496,7 +496,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(845, 208);
+            this.panel1.Size = new System.Drawing.Size(1174, 208);
             this.panel1.TabIndex = 1;
             // 
             // splitContainer2
@@ -512,8 +512,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.chartActivations);
-            this.splitContainer2.Size = new System.Drawing.Size(845, 208);
-            this.splitContainer2.SplitterDistance = 543;
+            this.splitContainer2.Size = new System.Drawing.Size(1174, 208);
+            this.splitContainer2.SplitterDistance = 754;
             this.splitContainer2.TabIndex = 1;
             // 
             // zoomPicBox1
@@ -525,7 +525,7 @@
             this.zoomPicBox1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
             this.zoomPicBox1.Location = new System.Drawing.Point(0, 0);
             this.zoomPicBox1.Name = "zoomPicBox1";
-            this.zoomPicBox1.Size = new System.Drawing.Size(543, 208);
+            this.zoomPicBox1.Size = new System.Drawing.Size(754, 208);
             this.zoomPicBox1.TabIndex = 0;
             this.zoomPicBox1.Text = "zoomPicBox1";
             this.zoomPicBox1.Zoom = 1F;
@@ -546,7 +546,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chartActivations.Series.Add(series1);
-            this.chartActivations.Size = new System.Drawing.Size(298, 208);
+            this.chartActivations.Size = new System.Drawing.Size(416, 208);
             this.chartActivations.TabIndex = 5;
             this.chartActivations.Text = "chart1";
             // 
@@ -568,8 +568,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.aquaGauge_epochs);
             this.splitContainer1.Panel2.Controls.Add(this.aquaGauge_accuracy);
-            this.splitContainer1.Size = new System.Drawing.Size(845, 174);
-            this.splitContainer1.SplitterDistance = 545;
+            this.splitContainer1.Size = new System.Drawing.Size(1174, 174);
+            this.splitContainer1.SplitterDistance = 757;
             this.splitContainer1.TabIndex = 2;
             // 
             // richTextBox_console
@@ -578,7 +578,7 @@
             this.richTextBox_console.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox_console.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_console.Name = "richTextBox_console";
-            this.richTextBox_console.Size = new System.Drawing.Size(545, 174);
+            this.richTextBox_console.Size = new System.Drawing.Size(757, 174);
             this.richTextBox_console.TabIndex = 3;
             this.richTextBox_console.Text = "";
             // 
@@ -620,7 +620,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(845, 588);
+            this.ClientSize = new System.Drawing.Size(1174, 588);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);

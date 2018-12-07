@@ -95,6 +95,17 @@ namespace Network
             }
         }
 
+        public string printActivations( int sampleNumber )
+        {
+            var s = String.Format("Sample({0}):Layer({0}):", sampleNumber, Name);
+            foreach (var a in Activations)
+            {
+                s += String.Format("{0:0.00000000},", a);
+            }
+            s += Environment.NewLine;
+            return s;
+        }
+
         override public string ToString()
         {
             string s;
