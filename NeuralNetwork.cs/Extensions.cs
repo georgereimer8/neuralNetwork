@@ -46,24 +46,27 @@ namespace Network
         /// <returns></returns>
         static public Matrix<double> Dot( this Vector<double> v1, Vector<double>v2)
         {
-            var rows = v2.Count;
-            var cols = v1.Count;
-            Matrix<double> m = DenseMatrix.Build.Dense(rows, cols);
-            if (v1.Count > 0 && v2.Count > 0)
-            {
-                for( int col = 0; col < cols; ++col)
-                {
-                    // for( int row = 0; row < v1.Count; ++row )
-                    Parallel.For(0, rows, (int row) =>
-                    {
-                        m[row, col] = v2[row] * v1[col];
-                    });
-                }
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(String.Format("parameter error in Vector.Dot()"));
-            }
+            Matrix<double> a = DenseMatrix.Build.DenseOfColumnVectors(v1);
+            Matrix<double> b = DenseMatrix.Build.DenseOfRowVectors(v2);
+            Matrix<double> m = a.Multiply(b).Transpose();
+            //var rows = v2.Count;
+            //var cols = v1.Count;
+            //Matrix<double> m = DenseMatrix.Build.Dense(rows, cols);
+            //if (v1.Count > 0 && v2.Count > 0)
+            //{
+            //    for( int col = 0; col < cols; ++col)
+            //    {
+            //        // for( int row = 0; row < v1.Count; ++row )
+            //        Parallel.For(0, rows, (int row) =>
+            //        {
+            //            m[row, col] = v2[row] * v1[col];
+            //        });
+            //    }
+            //}
+            //else
+            //{
+            //    throw new ArgumentOutOfRangeException(String.Format("parameter error in Vector.Dot()"));
+            //}
             return m;
         }
         /// <summary>

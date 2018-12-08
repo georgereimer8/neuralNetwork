@@ -11,6 +11,8 @@ namespace MnistViewer
 
     public class NetworkModel
     {
+        public Action<int> SetBatchMax;
+        public Action<int> ShowCurrentBatch;
         public Action<int> SetEpochsMax;
         public Action<double > ShowAccuracy;
         public Action<int> ShowCurrentEpoch;
@@ -200,6 +202,7 @@ namespace MnistViewer
             Network = new Network.NeuralNetwork();
             Network.Log = Log;
             Network.ShowCurrentEpoch = ShowCurrentEpoch;
+            Network.ShowCurrentBatch = ShowCurrentBatch;
             Network.ShowAccuracy = ShowAccuracy;
             Network.DisplayLayers = DisplayLayers;
             Network.TestEachEpoch = TestEachEpoch;
@@ -238,6 +241,7 @@ namespace MnistViewer
                 DisplayImage.GenerateComposite();
                 UpdateCurrentImage(0);
                 SetMaxImageCount?.Invoke(TrainingImages.ImageList.Count);
+                SetBatchMax?.Invoke(TrainingImages.ImageList.Count/BatchSize);
                 InputNeuronCount = TrainingImages.ImageList.First().Pixels.Count;
                 Log?.Invoke("Reading Images Complete");
             }

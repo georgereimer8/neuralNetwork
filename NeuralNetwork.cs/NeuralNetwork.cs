@@ -12,10 +12,11 @@ namespace Network
 {
     public class NeuralNetwork
     {
-        public Action<string>Log { get; set; }
+        public Action<string> Log { get; set; }
         public Action<List<Layer>> DisplayLayers { get; set; }
         public Action<int> UpdateCurrentImage { get; set; }
         public Action<int> ShowCurrentEpoch { get; set; }
+        public Action<int> ShowCurrentBatch { get; set; }
         public Action<double> ShowAccuracy { get; set; }
 
         public List<Layer> Layers { get; set; }
@@ -33,7 +34,7 @@ namespace Network
 
         int sampleCount;
 
-        public NeuralNetwork( )
+        public NeuralNetwork()
         {
             Layers = new List<Layer>();
         }
@@ -44,10 +45,19 @@ namespace Network
         /// First layer becomes input layer, last layer is output layer
         /// </summary>
         /// <param name="neuronCount"></param>
-        public void AddLayer( int neuronCount, string name )
+        public void AddLayer(int neuronCount, string name)
         {
             Layers.Add(new Layer(name, neuronCount, Layers.LastOrDefault(), Layers.Count, Shuffle));
         }
+
+        string getOptions(string s)
+        {
+            if (Verbose) s += ",Verbose";
+            if (Shuffle) s += ",Shuffle";
+            if (TestEachEpoch) s += ",TestEachEpoch";
+            return s;
+        } 
+
 
         /// <summary>
         /// Train the network using the training data and using the hyper parameters
@@ -59,9 +69,12 @@ namespace Network
         /// <param name="learningRate"></param>
         public void Train(List<NetworkData> trainingData, List<NetworkData> testingData, int epochs, int batchSize, double learningRate)
         {
-            Log?.Invoke("Training Started");
+            var msg = "Training Started";
+            msg = getOptions(msg);
+            Log?.Invoke(msg);
             try
             {
+                sampleCount = 0;
                 StochasticGradientDescent(trainingData, testingData, epochs, batchSize, learningRate);
             }
             catch (System.Exception ex)
@@ -80,24 +93,33 @@ namespace Network
         /// <param name="learningRate"></param>
         void StochasticGradientDescent( List<NetworkData>trainingData, List<NetworkData> testingData, int epochs, int batchSize, double learningRate )
         {
-            int batchIndex = 0;
             int correctCount = 0;
             for (int epoch = 0; epoch < epochs; ++epoch)
             {
+                int batchCount = 0;
+                int sampleIndex = 0;
                 if( Stop == true )
                 {
                     Log?.Invoke("Training Stopped");
                     break;
                 }
-                sampleCount = 0;
-                var batchData = trainingData.GetRange(batchIndex, batchSize);
-                update(batchData, learningRate);
+                while (sampleIndex < trainingData.Count)
+                {
+                    if( batchCount % 100 == 0 )
+                        ShowCurrentBatch?.Invoke(batchCount);
+
+                    var batchData = trainingData.GetRange(sampleIndex, batchSize);
+                    update(batchData, learningRate);
+                    sampleIndex += batchSize;
+                    ++batchCount;
+                }
                 if (Shuffle == true)
                 {
                     trainingData.Shuffle();
                 }
                 ShowCurrentEpoch?.Invoke(epoch);
                 DisplayLayers?.Invoke(Layers);
+                //Log?.Invoke(Layers.Last().printActivations(batchCount++));
 
                 if (TestEachEpoch)
                 {
@@ -109,7 +131,7 @@ namespace Network
                 {
                     Log?.Invoke(String.Format("Epoch #{0}", epoch));
                 }
-                batchIndex += 10;
+                //Log?.Invoke(Layers.Last().printActivations(epoch));
             }
             correctCount = evaluate(testingData);
             ShowAccuracy?.Invoke(((double)correctCount / (double)testingData.Count()) * 100.0);
@@ -165,7 +187,6 @@ namespace Network
             clearGradients();
             foreach (var batch in batchData)
             {
-                UpdateCurrentImage?.Invoke(batch.Index);
                 // feed forward
                 Layers.First().Activations = batch.data;
                 foreach(var layer in Layers)
@@ -190,7 +211,7 @@ namespace Network
                         layer.GradientWeights = layer.GradientWeights.Add(layer.deltaGradientWeights);
                     }
                 }
-                Log?.Invoke(Layers.Last().printActivations(sampleCount++));
+                // Log?.Invoke(Layers.Last().printActivations(sampleCount++));
             }
 
             gradientDescent( learningRate / batchData.Count);
@@ -232,16 +253,29 @@ namespace Network
                 if (layer.NextLayer == null)
                 {
                     // output layer
-                    var o = (layer.Activations - label);
-                    var z = Activation.SigmoidPrime(layer.Z);
-                    var db = o.PointwiseMultiply( z); 
+                    //var o = (layer.Activations - label);
+                    //var z = Activation.SigmoidPrime(layer.Z);
+                    //var db = o.PointwiseMultiply( z); 
                     layer.deltaGradientBiases = (layer.Activations - label).PointwiseMultiply( Activation.SigmoidPrime(layer.Z)); // update output error
                     layer.deltaGradientWeights = layer.PreviousLayer.Activations.Dot(layer.deltaGradientBiases);
+                    //try
+                    //{
+                    //    Matrix<double> a = DenseMatrix.Build.DenseOfColumnVectors(layer.PreviousLayer.Activations);
+                    //    Matrix<double> b = DenseMatrix.Build.DenseOfRowVectors(layer.deltaGradientBiases);
+                    //    layer.deltaGradientWeights = a.Multiply(b).Transpose();
+                    //}
+                    //catch
+                    //{ }
+                    //bool wait = true;
                 }
                 else
                 {
                     // hidden layers
-                    layer.deltaGradientBiases = layer.NextLayer.Weights.Transpose().Dot(layer.NextLayer.deltaGradientBiases).PointwiseMultiply( Activation.SigmoidPrime(layer.Z)); // update output error
+                    //var db = layer.NextLayer.Weights.Transpose().Dot(layer.NextLayer.deltaGradientBiases);
+                    //var db2 = layer.NextLayer.Weights.Transpose() * layer.NextLayer.deltaGradientBiases;
+                    layer.deltaGradientBiases = (layer.NextLayer.Weights.Transpose() * layer.NextLayer.deltaGradientBiases).PointwiseMultiply( Activation.SigmoidPrime(layer.Z)); // update output error
+
+                    //layer.deltaGradientBiases = layer.NextLayer.Weights.Transpose().Dot(layer.NextLayer.deltaGradientBiases).PointwiseMultiply( Activation.SigmoidPrime(layer.Z)); // update output error
                     layer.deltaGradientWeights = layer.PreviousLayer.Activations.Dot(layer.deltaGradientBiases);
                 }
                 result = true;

@@ -69,7 +69,7 @@ class Network(object):
             self.delta_nabla_b, self.delta_nabla_w = self.backprop(x, y)
             self.nabla_b = [nb+dnb for nb, dnb in zip(self.nabla_b, self.delta_nabla_b)]
             self.nabla_w = [nw+dnw for nw, dnw in zip(self.nabla_w, self.delta_nabla_w)]
-            self.printActivations(-1, self.sampleCount)
+            #self.printActivations(-1, self.sampleCount)
             self.sampleCount += 1
 
         """ 
@@ -112,6 +112,7 @@ class Network(object):
         runTests = 1
         training_data = list(training_data)
         n = len(training_data)
+        batchIndex = 0
         for j in range(epochs):
             # keep deterministic while debugging so don't shuffle yet
             if self.Shuffle == 1:
@@ -121,12 +122,15 @@ class Network(object):
                 for k in range(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
+                self.printActivations(-1, batchIndex)
+                batchIndex += 1
                 wait = 0
-            if runTests == 1:
-                if test_data:
-                    print ("Epoch {0}: {1} / {2}".format( j, self.evaluate(test_data), n_test))
-            else:
-                print ("Epoch {0} complete".format(j))
+            #if runTests == 1:
+            #    if test_data:
+                    # self.printActivations(-1, j)
+                    #print ("Epoch {0}: {1} / {2}".format( j, self.evaluate(test_data), n_test))
+            #else:
+            #    print ("Epoch {0} complete".format(j))
 
         print ("Epoch {0}: {1} / {2}".format( j, self.evaluate(test_data), n_test))
         
@@ -189,11 +193,12 @@ class Network(object):
 
     def printActivations( self, layer, sample ):
         Name = self.getLayerName(layer) 
-        s = "Sample({0}):".format(sample)
-        s += " Layer({0}):".format( Name)
+        s = "{0},".format(sample)
         for a in self.activations[layer]:
             s += "{0},".format(a)
         s += "\n"
+        for char in '[]':
+            s = s.replace(char,'')
         print(s)
         
     def printLayer(self, layer ):

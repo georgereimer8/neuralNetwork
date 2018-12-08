@@ -268,6 +268,21 @@ namespace MnistViewer
                 //Refresh();
             });
         }
+        public void SetBatchMax(int count)
+        {
+            aquaGauge_batch.SafeInvoke(() =>
+            {
+                aquaGauge_batch.MaxValue = count;
+            });
+        }
+        public void ShowCurrentBatch(int count)
+        {
+            aquaGauge_batch.SafeInvoke(() =>
+            {
+                aquaGauge_batch.Value = (float)count;
+                //Refresh();
+            });
+        }
 
         public void SetVisiblity(bool setting)
         {

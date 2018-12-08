@@ -17,6 +17,8 @@ namespace MnistViewer
             model.ShowCurrentEpoch = view.SetCurrentEpoch;
             model.ShowAccuracy = view.ShowAccuracy;
             model.SetEpochsMax = view.SetEpochMax;
+            model.SetBatchMax = view.SetBatchMax;
+            model.ShowCurrentBatch = view.ShowCurrentBatch;
             model.DisplayLayers = view.DisplayLayers;
             model.ShowInputNeuronCount = view.ShowInputNeuronCount;
             model.ShowHiddenLayerCount = view.ShowHiddenLayerCount;

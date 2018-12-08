@@ -54,28 +54,25 @@ namespace Network
         /// </summary>
         public void Init()
         {
-            if (PreviousLayer == null)
+            // Input Layer only needs activations for input values
+            Activations = DenseVector.Build.Dense(Neurons.Count(), 0.0);
+            if (PreviousLayer != null)
             {
-                // Input Layer,  just need activations for input values
-                Activations = DenseVector.Build.Dense(Neurons.Count(), 0.0);
-            }
-            else
-            {
+                // so setup connections between this and the previous layer
                 PreviousLayer.NextLayer = this;
 
-                // so setup connections between this and the previous layer
-                Biases = DenseVector.Build.Random(Neurons.Count());
-
                 // activation weights,  one row per previous layer neurons, columns = this layer neurons
-                Weights = DenseMatrix.Build.Random(Neurons.Count(), PreviousLayer.Neurons.Count());
                 GradientWeights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count(), 0);
                 GradientBiases = DenseVector.Build.Dense(Neurons.Count());
 
-        
-                // zero init is for testing the network with deterministic values
-                if( Shuffle == false )
+                // use shuffle semaphore for zero init for testing the network with deterministic values
+                if (Shuffle == true)
                 {
-                    Activations = DenseVector.Build.Dense(Neurons.Count(),0.0);
+                    Biases = DenseVector.Build.Random(Neurons.Count());
+                    Weights = DenseMatrix.Build.Random(Neurons.Count(), PreviousLayer.Neurons.Count());
+                }
+                else
+                { 
                     Biases = DenseVector.Build.Dense(Neurons.Count(),0.0);
                     Weights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count(),0.0);
                 }
@@ -90,14 +87,15 @@ namespace Network
             // first layer is input layer so activations don't get updated
             if (PreviousLayer != null)
             {
-                Z = Weights.Dot(PreviousLayer.Activations) + Biases;
+                Z = ( Weights * PreviousLayer.Activations) + Biases;
+                // Z = Weights.Dot(PreviousLayer.Activations) + Biases;
                 Activations = Activation.Sigmoid(Z);
             }
         }
 
         public string printActivations( int sampleNumber )
         {
-            var s = String.Format("Sample({0}):Layer({0}):", sampleNumber, Name);
+            var s = String.Format("{0},", sampleNumber);
             foreach (var a in Activations)
             {
                 s += String.Format("{0:0.00000000},", a);

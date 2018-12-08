@@ -72,6 +72,7 @@
             this.richTextBox_console = new System.Windows.Forms.RichTextBox();
             this.aquaGauge_epochs = new AquaControls.AquaGauge();
             this.aquaGauge_accuracy = new AquaControls.AquaGauge();
+            this.aquaGauge_batch = new AquaControls.AquaGauge();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_HiddenLayerCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_OutputNeuronCount)).BeginInit();
@@ -129,7 +130,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox1.Location = new System.Drawing.Point(0, 382);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1174, 206);
+            this.groupBox1.Size = new System.Drawing.Size(1302, 206);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Network Hyper Parameters";
@@ -496,7 +497,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1174, 208);
+            this.panel1.Size = new System.Drawing.Size(1302, 208);
             this.panel1.TabIndex = 1;
             // 
             // splitContainer2
@@ -512,20 +513,20 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.chartActivations);
-            this.splitContainer2.Size = new System.Drawing.Size(1174, 208);
-            this.splitContainer2.SplitterDistance = 754;
+            this.splitContainer2.Size = new System.Drawing.Size(1302, 208);
+            this.splitContainer2.SplitterDistance = 836;
             this.splitContainer2.TabIndex = 1;
             // 
             // zoomPicBox1
             // 
             this.zoomPicBox1.AutoScroll = true;
-            this.zoomPicBox1.AutoScrollMargin = new System.Drawing.Size(543, 208);
+            this.zoomPicBox1.AutoScrollMargin = new System.Drawing.Size(754, 208);
             this.zoomPicBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.zoomPicBox1.Image = null;
             this.zoomPicBox1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
             this.zoomPicBox1.Location = new System.Drawing.Point(0, 0);
             this.zoomPicBox1.Name = "zoomPicBox1";
-            this.zoomPicBox1.Size = new System.Drawing.Size(754, 208);
+            this.zoomPicBox1.Size = new System.Drawing.Size(836, 208);
             this.zoomPicBox1.TabIndex = 0;
             this.zoomPicBox1.Text = "zoomPicBox1";
             this.zoomPicBox1.Zoom = 1F;
@@ -546,7 +547,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chartActivations.Series.Add(series1);
-            this.chartActivations.Size = new System.Drawing.Size(416, 208);
+            this.chartActivations.Size = new System.Drawing.Size(462, 208);
             this.chartActivations.TabIndex = 5;
             this.chartActivations.Text = "chart1";
             // 
@@ -566,10 +567,11 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.aquaGauge_epochs);
+            this.splitContainer1.Panel2.Controls.Add(this.aquaGauge_batch);
             this.splitContainer1.Panel2.Controls.Add(this.aquaGauge_accuracy);
-            this.splitContainer1.Size = new System.Drawing.Size(1174, 174);
-            this.splitContainer1.SplitterDistance = 757;
+            this.splitContainer1.Panel2.Controls.Add(this.aquaGauge_epochs);
+            this.splitContainer1.Size = new System.Drawing.Size(1302, 174);
+            this.splitContainer1.SplitterDistance = 839;
             this.splitContainer1.TabIndex = 2;
             // 
             // richTextBox_console
@@ -578,7 +580,7 @@
             this.richTextBox_console.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox_console.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_console.Name = "richTextBox_console";
-            this.richTextBox_console.Size = new System.Drawing.Size(757, 174);
+            this.richTextBox_console.Size = new System.Drawing.Size(839, 174);
             this.richTextBox_console.TabIndex = 3;
             this.richTextBox_console.Text = "";
             // 
@@ -589,7 +591,7 @@
             this.aquaGauge_epochs.DialText = "Epoch";
             this.aquaGauge_epochs.Dock = System.Windows.Forms.DockStyle.Left;
             this.aquaGauge_epochs.Glossiness = 11.36364F;
-            this.aquaGauge_epochs.Location = new System.Drawing.Point(150, 0);
+            this.aquaGauge_epochs.Location = new System.Drawing.Point(0, 0);
             this.aquaGauge_epochs.MaxValue = 30F;
             this.aquaGauge_epochs.MinValue = 0F;
             this.aquaGauge_epochs.Name = "aquaGauge_epochs";
@@ -606,7 +608,7 @@
             this.aquaGauge_accuracy.DialText = "Accuracy";
             this.aquaGauge_accuracy.Dock = System.Windows.Forms.DockStyle.Left;
             this.aquaGauge_accuracy.Glossiness = 11.36364F;
-            this.aquaGauge_accuracy.Location = new System.Drawing.Point(0, 0);
+            this.aquaGauge_accuracy.Location = new System.Drawing.Point(150, 0);
             this.aquaGauge_accuracy.MaxValue = 100F;
             this.aquaGauge_accuracy.MinValue = 0F;
             this.aquaGauge_accuracy.Name = "aquaGauge_accuracy";
@@ -616,11 +618,28 @@
             this.aquaGauge_accuracy.ThresholdPercent = 0F;
             this.aquaGauge_accuracy.Value = 0F;
             // 
+            // aquaGauge_batch
+            // 
+            this.aquaGauge_batch.BackColor = System.Drawing.Color.Transparent;
+            this.aquaGauge_batch.DialColor = System.Drawing.Color.Lavender;
+            this.aquaGauge_batch.DialText = "Batch";
+            this.aquaGauge_batch.Dock = System.Windows.Forms.DockStyle.Left;
+            this.aquaGauge_batch.Glossiness = 11.36364F;
+            this.aquaGauge_batch.Location = new System.Drawing.Point(300, 0);
+            this.aquaGauge_batch.MaxValue = 30F;
+            this.aquaGauge_batch.MinValue = 0F;
+            this.aquaGauge_batch.Name = "aquaGauge_batch";
+            this.aquaGauge_batch.RecommendedValue = 0F;
+            this.aquaGauge_batch.Size = new System.Drawing.Size(150, 150);
+            this.aquaGauge_batch.TabIndex = 8;
+            this.aquaGauge_batch.ThresholdPercent = 0F;
+            this.aquaGauge_batch.Value = 0F;
+            // 
             // NetworkView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1174, 588);
+            this.ClientSize = new System.Drawing.Size(1302, 588);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);
@@ -693,6 +712,7 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chartActivations;
         private System.Windows.Forms.RichTextBox richTextBox_console;
         private System.Windows.Forms.CheckBox checkBox_shuffle;
+        private AquaControls.AquaGauge aquaGauge_batch;
     }
 }
 
