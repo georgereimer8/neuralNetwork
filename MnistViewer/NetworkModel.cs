@@ -212,7 +212,7 @@ namespace MnistViewer
             Network.AddLayer(InputNeuronCount, "Input"); // input layer
             for (int i = 0; i < HiddenLayerCount; ++i)
             {
-                Network.AddLayer(HiddenNeuronCount, String.Format("Hidden {0}", i ));// hidden layers
+                Network.AddLayer(HiddenNeuronCount, String.Format("Hidden{0}", i ));// hidden layers
             }
             Network.AddLayer(OutputNeuronCount, "Output"); // output layer
         }

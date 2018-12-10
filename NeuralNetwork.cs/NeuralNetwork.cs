@@ -1,5 +1,6 @@
 ﻿using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.Data.Text;
 using MathNet.Numerics;
 using System;
 using System.Collections.Generic;
@@ -56,8 +57,28 @@ namespace Network
             if (Shuffle) s += ",Shuffle";
             if (TestEachEpoch) s += ",TestEachEpoch";
             return s;
-        } 
+        }
+        // TODO: pass in folder path
+        // create if necessary
+        // have each layer save itself so network can be rebuilt from saved files
+        public void Save(string folderPath = @"C:\temp\trainedNetwork")
+        {
+            foreach (var layer in Layers)
+            {
+                if (layer.Biases != null)
+                {
+                    Matrix<double> bm = DenseMatrix.Build.DenseOfRowVectors(layer.Biases);
+                    var biasesFilePath = String.Format("{0}\\{1}.Biases.csv", folderPath, layer.Name);
+                    DelimitedWriter.Write(biasesFilePath, bm, ",");
+                }
 
+                if (layer.Weights != null)
+                {
+                    var weightsFilePath = String.Format("{0}\\{1}.Weights.csv", folderPath, layer.Name);
+                    DelimitedWriter.Write(weightsFilePath, layer.Weights, ",");
+                }
+            }
+        } 
 
         /// <summary>
         /// Train the network using the training data and using the hyper parameters
@@ -76,6 +97,7 @@ namespace Network
             {
                 sampleCount = 0;
                 StochasticGradientDescent(trainingData, testingData, epochs, batchSize, learningRate);
+                Save();
             }
             catch (System.Exception ex)
             {
