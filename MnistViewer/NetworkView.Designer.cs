@@ -70,9 +70,9 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.richTextBox_console = new System.Windows.Forms.RichTextBox();
-            this.aquaGauge_epochs = new AquaControls.AquaGauge();
-            this.aquaGauge_accuracy = new AquaControls.AquaGauge();
             this.aquaGauge_batch = new AquaControls.AquaGauge();
+            this.aquaGauge_accuracy = new AquaControls.AquaGauge();
+            this.aquaGauge_epochs = new AquaControls.AquaGauge();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_HiddenLayerCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_OutputNeuronCount)).BeginInit();
@@ -520,7 +520,7 @@
             // zoomPicBox1
             // 
             this.zoomPicBox1.AutoScroll = true;
-            this.zoomPicBox1.AutoScrollMargin = new System.Drawing.Size(754, 208);
+            this.zoomPicBox1.AutoScrollMargin = new System.Drawing.Size(836, 208);
             this.zoomPicBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.zoomPicBox1.Image = null;
             this.zoomPicBox1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
@@ -584,22 +584,22 @@
             this.richTextBox_console.TabIndex = 3;
             this.richTextBox_console.Text = "";
             // 
-            // aquaGauge_epochs
+            // aquaGauge_batch
             // 
-            this.aquaGauge_epochs.BackColor = System.Drawing.Color.Transparent;
-            this.aquaGauge_epochs.DialColor = System.Drawing.Color.Lavender;
-            this.aquaGauge_epochs.DialText = "Epoch";
-            this.aquaGauge_epochs.Dock = System.Windows.Forms.DockStyle.Left;
-            this.aquaGauge_epochs.Glossiness = 11.36364F;
-            this.aquaGauge_epochs.Location = new System.Drawing.Point(0, 0);
-            this.aquaGauge_epochs.MaxValue = 30F;
-            this.aquaGauge_epochs.MinValue = 0F;
-            this.aquaGauge_epochs.Name = "aquaGauge_epochs";
-            this.aquaGauge_epochs.RecommendedValue = 0F;
-            this.aquaGauge_epochs.Size = new System.Drawing.Size(150, 150);
-            this.aquaGauge_epochs.TabIndex = 6;
-            this.aquaGauge_epochs.ThresholdPercent = 0F;
-            this.aquaGauge_epochs.Value = 0F;
+            this.aquaGauge_batch.BackColor = System.Drawing.Color.Transparent;
+            this.aquaGauge_batch.DialColor = System.Drawing.Color.Lavender;
+            this.aquaGauge_batch.DialText = "Batch";
+            this.aquaGauge_batch.Dock = System.Windows.Forms.DockStyle.Left;
+            this.aquaGauge_batch.Glossiness = 11.36364F;
+            this.aquaGauge_batch.Location = new System.Drawing.Point(300, 0);
+            this.aquaGauge_batch.MaxValue = 30F;
+            this.aquaGauge_batch.MinValue = 0F;
+            this.aquaGauge_batch.Name = "aquaGauge_batch";
+            this.aquaGauge_batch.RecommendedValue = 0F;
+            this.aquaGauge_batch.Size = new System.Drawing.Size(150, 150);
+            this.aquaGauge_batch.TabIndex = 8;
+            this.aquaGauge_batch.ThresholdPercent = 0F;
+            this.aquaGauge_batch.Value = 0F;
             // 
             // aquaGauge_accuracy
             // 
@@ -618,22 +618,22 @@
             this.aquaGauge_accuracy.ThresholdPercent = 0F;
             this.aquaGauge_accuracy.Value = 0F;
             // 
-            // aquaGauge_batch
+            // aquaGauge_epochs
             // 
-            this.aquaGauge_batch.BackColor = System.Drawing.Color.Transparent;
-            this.aquaGauge_batch.DialColor = System.Drawing.Color.Lavender;
-            this.aquaGauge_batch.DialText = "Batch";
-            this.aquaGauge_batch.Dock = System.Windows.Forms.DockStyle.Left;
-            this.aquaGauge_batch.Glossiness = 11.36364F;
-            this.aquaGauge_batch.Location = new System.Drawing.Point(300, 0);
-            this.aquaGauge_batch.MaxValue = 30F;
-            this.aquaGauge_batch.MinValue = 0F;
-            this.aquaGauge_batch.Name = "aquaGauge_batch";
-            this.aquaGauge_batch.RecommendedValue = 0F;
-            this.aquaGauge_batch.Size = new System.Drawing.Size(150, 150);
-            this.aquaGauge_batch.TabIndex = 8;
-            this.aquaGauge_batch.ThresholdPercent = 0F;
-            this.aquaGauge_batch.Value = 0F;
+            this.aquaGauge_epochs.BackColor = System.Drawing.Color.Transparent;
+            this.aquaGauge_epochs.DialColor = System.Drawing.Color.Lavender;
+            this.aquaGauge_epochs.DialText = "Epoch";
+            this.aquaGauge_epochs.Dock = System.Windows.Forms.DockStyle.Left;
+            this.aquaGauge_epochs.Glossiness = 11.36364F;
+            this.aquaGauge_epochs.Location = new System.Drawing.Point(0, 0);
+            this.aquaGauge_epochs.MaxValue = 30F;
+            this.aquaGauge_epochs.MinValue = 0F;
+            this.aquaGauge_epochs.Name = "aquaGauge_epochs";
+            this.aquaGauge_epochs.RecommendedValue = 0F;
+            this.aquaGauge_epochs.Size = new System.Drawing.Size(150, 150);
+            this.aquaGauge_epochs.TabIndex = 6;
+            this.aquaGauge_epochs.ThresholdPercent = 0F;
+            this.aquaGauge_epochs.Value = 0F;
             // 
             // NetworkView
             // 

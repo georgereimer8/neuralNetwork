@@ -187,7 +187,7 @@ namespace MnistViewer
             get { return shuffle; }
             set
             {
-                verbose = value;
+                shuffle = value;
                 if (Network != null)
                 {
                     Network.Shuffle = shuffle;

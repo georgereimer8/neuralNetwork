@@ -18,8 +18,8 @@ import numpy as np
 class Network(object):
 
     Shuffle = 0
-    ZeroStart = 1
-    Verbose = 1
+    ZeroStart = 0
+    Verbose = 0
 
     def __init__(self, sizes):
         """The list ``sizes`` contains the number of neurons in the
@@ -122,15 +122,16 @@ class Network(object):
                 for k in range(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
-                self.printActivations(-1, batchIndex)
+                if self.Verbose == 9:
+                    self.printActivations(-1, batchIndex)
                 batchIndex += 1
                 wait = 0
-            #if runTests == 1:
-            #    if test_data:
+            if runTests == 1:
+                if test_data:
                     # self.printActivations(-1, j)
-                    #print ("Epoch {0}: {1} / {2}".format( j, self.evaluate(test_data), n_test))
-            #else:
-            #    print ("Epoch {0} complete".format(j))
+                    print ("Epoch {0}: {1} / {2}".format( j, self.evaluate(test_data), n_test))
+                else:
+                    print ("Epoch {0} complete".format(j))
 
         print ("Epoch {0}: {1} / {2}".format( j, self.evaluate(test_data), n_test))
         
