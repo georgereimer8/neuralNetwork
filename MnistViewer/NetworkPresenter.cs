@@ -26,6 +26,9 @@ namespace MnistViewer
             model.ShowHiddenNeuronCount = view.ShowHiddenNeuronCount;
             model.ShowOutputNeuronCount = view.ShowOutputNeuronCount;
 
+            view.EvaluateImage = model.EvaluateImage;
+            view.SaveNetwork = model.SaveNetwork;
+            view.LoadNetwork = model.LoadNetwork;
             view.UpdateCurrentImage = model.UpdateCurrentImage;
             view.ReadImages = model.ReadImages;
             view.CreateNetwork = model.CreateNetwork;

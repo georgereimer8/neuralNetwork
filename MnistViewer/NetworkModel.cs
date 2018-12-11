@@ -147,6 +147,52 @@ namespace MnistViewer
             Network.Train( trainingData, testingData, Epochs, BatchSize, LearningRate);
         }
 
+        public void LoadNetwork(string folderPath)
+        {
+            Network = new Network.NeuralNetwork();
+            HookEvents();
+            LoadLayers(folderPath);
+        }
+
+        public void SaveNetwork( string folderPath )
+        {
+            if (Network != null)
+            {
+                Network.Save(folderPath);
+            }
+            else Log?.Invoke("Cannot save Network. Network not yet created");
+        }
+
+        void LoadLayers(string folderPath)
+        {
+            var folders = Directory.EnumerateDirectories(folderPath);
+            List<string> l = folders.ToList();
+            l.Sort();
+            string inputLayerPath = "";
+            string outputLayerPath = "";
+            List<string> hiddenLayerPaths = new List<string>();
+            foreach (var folder in l)
+            {
+                if (Path.GetFileName(folder) == "Input")
+                {
+                    inputLayerPath = folder;
+                }
+                else if (Path.GetFileName(folder).Contains("Hidden"))
+                {
+                    hiddenLayerPaths.Add(folder);
+                }
+                else if (Path.GetFileName(folder) == "Output")
+                {
+                    outputLayerPath = folder;
+                }
+            }
+            Network.LoadLayer(inputLayerPath, "Input");
+            foreach( var path in hiddenLayerPaths )
+            {
+                Network.LoadLayer(path, Path.GetFileName(path));
+            }
+            Network.LoadLayer(outputLayerPath, "Output");
+        } 
 
         /// <summary>
         /// Create the training or testing data from the given Mnist image
@@ -196,12 +242,31 @@ namespace MnistViewer
                 }
             }
         }
+
+        public void EvaluateImage( Bitmap image )
+        {
+            if( Network != null)
+            {
+                if( TrainingImages != null  )
+                {
+
+                    MnistImage mnistImage = new MnistImage()
+                }
+                Network.EvaluateImage(image);
+            }
+        }
         /// <summary>
         /// Create a new network
         /// </summary>
         public void CreateNetwork()
         {
             Network = new Network.NeuralNetwork();
+            HookEvents();
+            AddLayers();
+        }
+
+        public void HookEvents()
+        {
             Network.Log = Log;
             Network.ShowCurrentEpoch = ShowCurrentEpoch;
             Network.ShowCurrentBatch = ShowCurrentBatch;
@@ -210,7 +275,10 @@ namespace MnistViewer
             Network.TestEachEpoch = TestEachEpoch;
             Network.Verbose = Verbose;
             Network.Shuffle = Shuffle;
+        } 
 
+        public void AddLayers()
+        { 
             Network.AddLayer(InputNeuronCount, "Input"); // input layer
             for (int i = 0; i < HiddenLayerCount; ++i)
             {

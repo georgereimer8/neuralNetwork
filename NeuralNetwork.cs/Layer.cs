@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.Data.Text;
+using System.IO;
 
 namespace Network
 {
@@ -46,6 +48,95 @@ namespace Network
             PreviousLayer = myPreviousLayer;
             Init();
         }
+        public Layer(string folderPath, string myName, Layer myPreviousLayer, int myIndex, bool myShuffle)
+        {
+            Index = myIndex;
+            Name = myName;
+            Shuffle = myShuffle;
+            PreviousLayer = myPreviousLayer;
+
+            if (Load(folderPath) == true)
+            {
+                Neurons = new List<Neuron>();
+                for (int i = 0; i < Activations.Count; ++i)
+                {
+                    Neurons.Add(new Neuron(i, this));
+                }
+                if (PreviousLayer != null)
+                {
+                    // so setup connections between this and the previous layer
+                    PreviousLayer.NextLayer = this;
+                    // activation weights,  one row per previous layer neurons, columns = this layer neurons
+                    GradientWeights = DenseMatrix.Build.Dense(Neurons.Count(), PreviousLayer.Neurons.Count(), 0);
+                    GradientBiases = DenseVector.Build.Dense(Neurons.Count());
+                }
+            }
+        } 
+
+        public void Save( string folderPath )
+        {
+            string layerPath = folderPath + "\\" + Name;
+            Directory.CreateDirectory(layerPath);
+
+            if (Activations != null)
+            {
+                Matrix<double> a = DenseMatrix.Build.DenseOfRowVectors(Activations);
+                var activationsFilePath = String.Format("{0}\\Activations.csv", layerPath);
+                DelimitedWriter.Write(activationsFilePath, a, ",");
+            }
+
+            if (Biases != null)
+            {
+                Matrix<double> bm = DenseMatrix.Build.DenseOfRowVectors(Biases);
+                var biasesFilePath = String.Format("{0}\\Biases.csv", layerPath);
+                DelimitedWriter.Write(biasesFilePath, bm, ",");
+            }
+
+            if (Weights != null)
+            {
+                var weightsFilePath = String.Format("{0}\\Weights.csv", layerPath);
+                DelimitedWriter.Write(weightsFilePath, Weights, ",");
+            }
+        }
+        public bool Load(string folderPath)
+        {
+            bool result = false;
+            string layerPath = folderPath;
+            if (Directory.Exists(folderPath) == true)
+            {
+
+                var activationsFilePath = String.Format("{0}\\Activations.csv", layerPath);
+                if (File.Exists(activationsFilePath))
+                {
+                    Matrix<double> a = DelimitedReader.Read<double>(activationsFilePath, sparse: false, delimiter: ",");
+                    var arrays = a.ToRowArrays();
+                    Activations = DenseVector.Build.DenseOfArray(arrays[0]);
+                }
+                else throw new System.IO.DirectoryNotFoundException(activationsFilePath);
+
+                if (Name != "Input")
+                {
+                    var biasesFilePath = String.Format("{0}\\Biases.csv", layerPath);
+                    if (File.Exists(biasesFilePath))
+                    {
+                        Matrix<double> a = DelimitedReader.Read<double>(biasesFilePath, sparse: false, delimiter: ",");
+                        var arrays = a.ToRowArrays();
+                        Biases = DenseVector.Build.DenseOfArray(arrays[0]);
+                    }
+                    else throw new System.IO.DirectoryNotFoundException(biasesFilePath);
+
+                    var weightsFilePath = String.Format("{0}\\Weights.csv", layerPath);
+                    if (File.Exists(weightsFilePath))
+                    {
+                        Weights = DelimitedReader.Read<double>(weightsFilePath, sparse: false, delimiter: ",");
+                    }
+                    else throw new System.IO.DirectoryNotFoundException(weightsFilePath);
+                }
+                result = true;
+            }
+            else throw new System.IO.DirectoryNotFoundException(folderPath);
+            return result;
+        } 
 
 
         /// <summary>

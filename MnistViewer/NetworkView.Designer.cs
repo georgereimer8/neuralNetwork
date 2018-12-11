@@ -32,6 +32,7 @@
             System.Windows.Forms.DataVisualization.Charting.CustomLabel customLabel1 = new System.Windows.Forms.DataVisualization.Charting.CustomLabel();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button_loadNetwork = new System.Windows.Forms.Button();
             this.checkBox_shuffle = new System.Windows.Forms.CheckBox();
             this.checkBox_Verbose = new System.Windows.Forms.CheckBox();
             this.button_Stop = new System.Windows.Forms.Button();
@@ -65,16 +66,18 @@
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.zoomPicBox1 = new MnistViewer.ZoomPicBox();
             this.chartActivations = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pictureBox_input = new System.Windows.Forms.PictureBox();
+            this.label_result = new System.Windows.Forms.Label();
             this.richTextBox_console = new System.Windows.Forms.RichTextBox();
             this.aquaGauge_batch = new AquaControls.AquaGauge();
             this.aquaGauge_accuracy = new AquaControls.AquaGauge();
             this.aquaGauge_epochs = new AquaControls.AquaGauge();
-            this.label_result = new System.Windows.Forms.Label();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.button_SaveNetwork = new System.Windows.Forms.Button();
+            this.zoomPicBox1 = new MnistViewer.ZoomPicBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_HiddenLayerCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_OutputNeuronCount)).BeginInit();
@@ -99,6 +102,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button_SaveNetwork);
+            this.groupBox1.Controls.Add(this.button_loadNetwork);
             this.groupBox1.Controls.Add(this.checkBox_shuffle);
             this.groupBox1.Controls.Add(this.checkBox_Verbose);
             this.groupBox1.Controls.Add(this.button_Stop);
@@ -137,6 +142,17 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Network Hyper Parameters";
+            // 
+            // button_loadNetwork
+            // 
+            this.button_loadNetwork.BackColor = System.Drawing.Color.LightGreen;
+            this.button_loadNetwork.Location = new System.Drawing.Point(777, 38);
+            this.button_loadNetwork.Name = "button_loadNetwork";
+            this.button_loadNetwork.Size = new System.Drawing.Size(99, 23);
+            this.button_loadNetwork.TabIndex = 42;
+            this.button_loadNetwork.Text = "Load Network";
+            this.button_loadNetwork.UseVisualStyleBackColor = false;
+            this.button_loadNetwork.Click += new System.EventHandler(this.button_loadNetwork_Click);
             // 
             // checkBox_shuffle
             // 
@@ -452,7 +468,7 @@
             this.button_load.Name = "button_load";
             this.button_load.Size = new System.Drawing.Size(101, 23);
             this.button_load.TabIndex = 4;
-            this.button_load.Text = "1. Load";
+            this.button_load.Text = "1. Load Images";
             this.button_load.UseVisualStyleBackColor = false;
             this.button_load.Click += new System.EventHandler(this.button_load_Click);
             // 
@@ -520,20 +536,6 @@
             this.splitContainer2.SplitterDistance = 836;
             this.splitContainer2.TabIndex = 1;
             // 
-            // zoomPicBox1
-            // 
-            this.zoomPicBox1.AutoScroll = true;
-            this.zoomPicBox1.AutoScrollMargin = new System.Drawing.Size(836, 208);
-            this.zoomPicBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.zoomPicBox1.Image = null;
-            this.zoomPicBox1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
-            this.zoomPicBox1.Location = new System.Drawing.Point(0, 0);
-            this.zoomPicBox1.Name = "zoomPicBox1";
-            this.zoomPicBox1.Size = new System.Drawing.Size(836, 208);
-            this.zoomPicBox1.TabIndex = 0;
-            this.zoomPicBox1.Text = "zoomPicBox1";
-            this.zoomPicBox1.Zoom = 1F;
-            // 
             // chartActivations
             // 
             this.chartActivations.AllowDrop = true;
@@ -560,6 +562,7 @@
             // 
             // splitContainer1
             // 
+            this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 208);
             this.splitContainer1.Name = "splitContainer1";
@@ -581,15 +584,28 @@
             // 
             // pictureBox_input
             // 
+            this.pictureBox_input.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox_input.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox_input.Location = new System.Drawing.Point(535, 0);
             this.pictureBox_input.Name = "pictureBox_input";
-            this.pictureBox_input.Size = new System.Drawing.Size(206, 174);
+            this.pictureBox_input.Size = new System.Drawing.Size(204, 172);
             this.pictureBox_input.TabIndex = 4;
             this.pictureBox_input.TabStop = false;
             this.pictureBox_input.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_input_MouseDown);
+            this.pictureBox_input.MouseLeave += new System.EventHandler(this.pictureBox_input_MouseLeave);
             this.pictureBox_input.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_input_MouseMove);
             this.pictureBox_input.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_input_MouseUp);
+            // 
+            // label_result
+            // 
+            this.label_result.AutoSize = true;
+            this.label_result.Dock = System.Windows.Forms.DockStyle.Right;
+            this.label_result.Font = new System.Drawing.Font("Microsoft Sans Serif", 72F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_result.Location = new System.Drawing.Point(739, 0);
+            this.label_result.Name = "label_result";
+            this.label_result.Size = new System.Drawing.Size(98, 108);
+            this.label_result.TabIndex = 5;
+            this.label_result.Text = "0";
             // 
             // richTextBox_console
             // 
@@ -597,7 +613,7 @@
             this.richTextBox_console.Dock = System.Windows.Forms.DockStyle.Left;
             this.richTextBox_console.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_console.Name = "richTextBox_console";
-            this.richTextBox_console.Size = new System.Drawing.Size(535, 174);
+            this.richTextBox_console.Size = new System.Drawing.Size(535, 172);
             this.richTextBox_console.TabIndex = 3;
             this.richTextBox_console.Text = "";
             // 
@@ -652,16 +668,30 @@
             this.aquaGauge_epochs.ThresholdPercent = 0F;
             this.aquaGauge_epochs.Value = 0F;
             // 
-            // label_result
+            // button_SaveNetwork
             // 
-            this.label_result.AutoSize = true;
-            this.label_result.Dock = System.Windows.Forms.DockStyle.Right;
-            this.label_result.Font = new System.Drawing.Font("Microsoft Sans Serif", 72F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_result.Location = new System.Drawing.Point(741, 0);
-            this.label_result.Name = "label_result";
-            this.label_result.Size = new System.Drawing.Size(98, 108);
-            this.label_result.TabIndex = 5;
-            this.label_result.Text = "0";
+            this.button_SaveNetwork.BackColor = System.Drawing.Color.LightGreen;
+            this.button_SaveNetwork.Location = new System.Drawing.Point(777, 65);
+            this.button_SaveNetwork.Name = "button_SaveNetwork";
+            this.button_SaveNetwork.Size = new System.Drawing.Size(99, 23);
+            this.button_SaveNetwork.TabIndex = 43;
+            this.button_SaveNetwork.Text = "Save Network";
+            this.button_SaveNetwork.UseVisualStyleBackColor = false;
+            this.button_SaveNetwork.Click += new System.EventHandler(this.button_SaveNetwork_Click);
+            // 
+            // zoomPicBox1
+            // 
+            this.zoomPicBox1.AutoScroll = true;
+            this.zoomPicBox1.AutoScrollMargin = new System.Drawing.Size(836, 208);
+            this.zoomPicBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.zoomPicBox1.Image = null;
+            this.zoomPicBox1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+            this.zoomPicBox1.Location = new System.Drawing.Point(0, 0);
+            this.zoomPicBox1.Name = "zoomPicBox1";
+            this.zoomPicBox1.Size = new System.Drawing.Size(836, 208);
+            this.zoomPicBox1.TabIndex = 0;
+            this.zoomPicBox1.Text = "zoomPicBox1";
+            this.zoomPicBox1.Zoom = 1F;
             // 
             // NetworkView
             // 
@@ -672,7 +702,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);
             this.Name = "NetworkView";
-            this.Text = "Form1";
+            this.Text = "MNIST Network";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_HiddenLayerCount)).EndInit();
@@ -745,6 +775,9 @@
         private AquaControls.AquaGauge aquaGauge_batch;
         private System.Windows.Forms.PictureBox pictureBox_input;
         private System.Windows.Forms.Label label_result;
+        private System.Windows.Forms.Button button_loadNetwork;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.Button button_SaveNetwork;
     }
 }
 

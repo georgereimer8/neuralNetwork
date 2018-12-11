@@ -54,6 +54,16 @@ namespace MnistViewer
             }
             return bitmap;
         }
+
+        public List<int> GetPixels (Bitmap bitmap, int width, int height )
+        {
+            List<int> pixels = new List<int>();
+
+            Bitmap resized = new Bitmap(bitmap, new Size(width, height));
+
+
+            return pixels;
+        }
     }
     public class DisplayImage
     {

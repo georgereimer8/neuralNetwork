@@ -51,6 +51,11 @@ namespace Network
             Layers.Add(new Layer(name, neuronCount, Layers.LastOrDefault(), Layers.Count, Shuffle));
         }
 
+        public void LoadLayer( string folderPath, string layerName)
+        {
+            Layers.Add(new Layer(folderPath, layerName, Layers.LastOrDefault(), Layers.Count, Shuffle));
+        }
+
         string getOptions(string s)
         {
             if (Verbose) s += ",Verbose";
@@ -65,18 +70,7 @@ namespace Network
         {
             foreach (var layer in Layers)
             {
-                if (layer.Biases != null)
-                {
-                    Matrix<double> bm = DenseMatrix.Build.DenseOfRowVectors(layer.Biases);
-                    var biasesFilePath = String.Format("{0}\\{1}.Biases.csv", folderPath, layer.Name);
-                    DelimitedWriter.Write(biasesFilePath, bm, ",");
-                }
-
-                if (layer.Weights != null)
-                {
-                    var weightsFilePath = String.Format("{0}\\{1}.Weights.csv", folderPath, layer.Name);
-                    DelimitedWriter.Write(weightsFilePath, layer.Weights, ",");
-                }
+                layer.Save(folderPath);
             }
         } 
 
@@ -160,6 +154,7 @@ namespace Network
             Log?.Invoke(String.Format("Epoch #{0}: {1}/{2}", epochs, correctCount, testingData.Count()));
         }
 
+
         /// <summary>
         /// Apply the test data to the current weights and biases
         /// and evaluate their performance
@@ -182,6 +177,16 @@ namespace Network
                 }
             }
             return correctCount;
+        }
+
+        public int EvaluatePixels(List<double> pixels)
+        {
+            Layers.First().Activations = DenseVector.Build.DenseOfArray(pixels.ToArray());
+            foreach (var layer in Layers)
+            {
+                layer.CalcActivation();
+            }
+            return (Layers.Last().Activations.MaximumIndex());
         } 
 
         void clearGradients()

@@ -371,7 +371,7 @@ namespace MnistViewer
                         g.SmoothingMode = SmoothingMode.HighQuality;
                         //this is to give the drawing a more smoother, less sharper look
                         SolidBrush brush = new SolidBrush(Color.White);
-                        g.FillEllipse(brush, e.Location.X, e.Location.Y, (int)xScale, (int)yScale);
+                        g.FillEllipse(brush, e.Location.X, e.Location.Y, (int)xScale*2, (int)yScale*2);
                     }
                     pictureBox_input.Invalidate();//refreshes the picturebox
                 }
@@ -381,6 +381,30 @@ namespace MnistViewer
         {
             isMouseDown = false;
             //set the previous point back to null if the user lets go of the mouse button
+        }
+
+        public Action<string> LoadNetwork;
+        private void button_loadNetwork_Click(object sender, EventArgs e)
+        {
+           if( folderBrowserDialog1.ShowDialog() == DialogResult.OK )
+            {
+                LoadNetwork?.Invoke(folderBrowserDialog1.SelectedPath);
+            }
+        }
+
+        public Action<string> SaveNetwork;
+        private void button_SaveNetwork_Click(object sender, EventArgs e)
+        {
+           if( folderBrowserDialog1.ShowDialog() == DialogResult.OK )
+            {
+                SaveNetwork?.Invoke(folderBrowserDialog1.SelectedPath);
+            }
+        }
+
+        public Action<Bitmap> EvaluateImage;
+        private void pictureBox_input_MouseLeave(object sender, EventArgs e)
+        {
+            EvaluateImage?.Invoke((Bitmap)pictureBox_input.Image);
         }
     }
 }

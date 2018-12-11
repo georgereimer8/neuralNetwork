@@ -31,6 +31,27 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "miniNetwork", "miniNetwork\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AquaGauge", "AquaGauge\AquaGauge.csproj", "{0E5542E0-FC5D-4F67-950D-9F28C5D1225A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "trainedNetwork", "trainedNetwork", "{F8A679D8-3318-439E-802A-8B0655175FCC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Input", "Input", "{0EBAFB13-99A6-4E8E-9FF7-DE4689DBBFF2}"
+	ProjectSection(SolutionItems) = preProject
+		trainedNetwork\Input\Activations.csv = trainedNetwork\Input\Activations.csv
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hidden0", "Hidden0", "{02C65AE1-7D8B-4BFE-8AA6-9490B211754D}"
+	ProjectSection(SolutionItems) = preProject
+		trainedNetwork\Hidden0\Activations.csv = trainedNetwork\Hidden0\Activations.csv
+		trainedNetwork\Hidden0\Biases.csv = trainedNetwork\Hidden0\Biases.csv
+		trainedNetwork\Hidden0\Weights.csv = trainedNetwork\Hidden0\Weights.csv
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Output", "Output", "{2FD2DD71-D4D0-456D-B28E-6A9BB2A14DAA}"
+	ProjectSection(SolutionItems) = preProject
+		trainedNetwork\Output\Activations.csv = trainedNetwork\Output\Activations.csv
+		trainedNetwork\Output\Biases.csv = trainedNetwork\Output\Biases.csv
+		trainedNetwork\Output\Weights.csv = trainedNetwork\Output\Weights.csv
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +89,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0EBAFB13-99A6-4E8E-9FF7-DE4689DBBFF2} = {F8A679D8-3318-439E-802A-8B0655175FCC}
+		{02C65AE1-7D8B-4BFE-8AA6-9490B211754D} = {F8A679D8-3318-439E-802A-8B0655175FCC}
+		{2FD2DD71-D4D0-456D-B28E-6A9BB2A14DAA} = {F8A679D8-3318-439E-802A-8B0655175FCC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {288A16F7-2D5D-4F37-B68C-04EEA4E360DC}
