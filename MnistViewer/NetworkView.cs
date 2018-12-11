@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -45,7 +46,7 @@ namespace MnistViewer
             }
         }
 
-        public void ShowImage(Bitmap b)
+        public void ShowImages(Bitmap b)
         {
             button1.SafeInvoke(() =>
             {
@@ -316,6 +317,70 @@ namespace MnistViewer
         {
             var c = sender as CheckBox;
             Shuffle?.Invoke(c.Checked);
+        }
+
+        bool isMouseDown = new Boolean();//this is used to evaluate whether our mousebutton is down or not
+        private void pictureBox_input_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isMouseDown = true;//we set to true because our mouse button is down (clicked)
+            }
+            else if( e.Button == MouseButtons.Right )
+            {
+                if (pictureBox_input.Image != null)
+                {
+                    pictureBox_input.Image = new Bitmap( pictureBox_input.Height, pictureBox_input.Height );
+                    using (Graphics g = Graphics.FromImage(pictureBox_input.Image))
+                    using( SolidBrush b = new SolidBrush( Color.Black ))
+                    {
+                        g.FillRectangle(b, 0,0,pictureBox_input.Image.Width, pictureBox_input.Image.Height);
+                    }
+                    Invalidate();
+                }
+            }
+        }
+
+        double xScale;
+        double yScale;
+        public void ShowImage( Bitmap image ) 
+        {
+            calcScale(  new Point( image.Width, image.Height), new Point( pictureBox_input.Width, pictureBox_input.Height ));
+            Bitmap b = new Bitmap(image, (int)(image.Width * xScale), (int)(image.Height * yScale));
+            pictureBox_input.Image = b;
+        }
+        void calcScale( Point small, Point large )
+        {
+            xScale = (double)large.X / (double)small.X;
+            yScale = (double)large.Y / (double)small.Y;
+        }
+
+        Point scale( Point input )
+        {
+            return new Point((int)(input.X / xScale ), (int)(input.Y / yScale ));
+        }
+        private void pictureBox_input_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isMouseDown == true)//check to see if the mouse button is down
+            {
+                if (pictureBox_input.Image != null)//if no available bitmap exists on the picturebox to draw on
+                {
+                    using (Graphics g = Graphics.FromImage(pictureBox_input.Image))
+                    {//we need to create a Graphics object to draw on the picture box, its our main tool
+                     //when making a Pen object, you can just give it color only or give it color and pen size
+                        g.SmoothingMode = SmoothingMode.HighQuality;
+                        //this is to give the drawing a more smoother, less sharper look
+                        SolidBrush brush = new SolidBrush(Color.White);
+                        g.FillEllipse(brush, e.Location.X, e.Location.Y, (int)xScale, (int)yScale);
+                    }
+                    pictureBox_input.Invalidate();//refreshes the picturebox
+                }
+            }
+        }
+        private void pictureBox_input_MouseUp(object sender, MouseEventArgs e)
+        {
+            isMouseDown = false;
+            //set the previous point back to null if the user lets go of the mouse button
         }
     }
 }

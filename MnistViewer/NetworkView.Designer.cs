@@ -69,10 +69,12 @@
             this.chartActivations = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.pictureBox_input = new System.Windows.Forms.PictureBox();
             this.richTextBox_console = new System.Windows.Forms.RichTextBox();
             this.aquaGauge_batch = new AquaControls.AquaGauge();
             this.aquaGauge_accuracy = new AquaControls.AquaGauge();
             this.aquaGauge_epochs = new AquaControls.AquaGauge();
+            this.label_result = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_HiddenLayerCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_OutputNeuronCount)).BeginInit();
@@ -92,6 +94,7 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_input)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -563,6 +566,8 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.pictureBox_input);
+            this.splitContainer1.Panel1.Controls.Add(this.label_result);
             this.splitContainer1.Panel1.Controls.Add(this.richTextBox_console);
             // 
             // splitContainer1.Panel2
@@ -574,13 +579,25 @@
             this.splitContainer1.SplitterDistance = 839;
             this.splitContainer1.TabIndex = 2;
             // 
+            // pictureBox_input
+            // 
+            this.pictureBox_input.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox_input.Location = new System.Drawing.Point(535, 0);
+            this.pictureBox_input.Name = "pictureBox_input";
+            this.pictureBox_input.Size = new System.Drawing.Size(206, 174);
+            this.pictureBox_input.TabIndex = 4;
+            this.pictureBox_input.TabStop = false;
+            this.pictureBox_input.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_input_MouseDown);
+            this.pictureBox_input.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_input_MouseMove);
+            this.pictureBox_input.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_input_MouseUp);
+            // 
             // richTextBox_console
             // 
             this.richTextBox_console.BackColor = System.Drawing.SystemColors.Control;
-            this.richTextBox_console.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox_console.Dock = System.Windows.Forms.DockStyle.Left;
             this.richTextBox_console.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_console.Name = "richTextBox_console";
-            this.richTextBox_console.Size = new System.Drawing.Size(839, 174);
+            this.richTextBox_console.Size = new System.Drawing.Size(535, 174);
             this.richTextBox_console.TabIndex = 3;
             this.richTextBox_console.Text = "";
             // 
@@ -635,6 +652,17 @@
             this.aquaGauge_epochs.ThresholdPercent = 0F;
             this.aquaGauge_epochs.Value = 0F;
             // 
+            // label_result
+            // 
+            this.label_result.AutoSize = true;
+            this.label_result.Dock = System.Windows.Forms.DockStyle.Right;
+            this.label_result.Font = new System.Drawing.Font("Microsoft Sans Serif", 72F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_result.Location = new System.Drawing.Point(741, 0);
+            this.label_result.Name = "label_result";
+            this.label_result.Size = new System.Drawing.Size(98, 108);
+            this.label_result.TabIndex = 5;
+            this.label_result.Text = "0";
+            // 
             // NetworkView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -662,9 +690,11 @@
             this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chartActivations)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_input)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -713,6 +743,8 @@
         private System.Windows.Forms.RichTextBox richTextBox_console;
         private System.Windows.Forms.CheckBox checkBox_shuffle;
         private AquaControls.AquaGauge aquaGauge_batch;
+        private System.Windows.Forms.PictureBox pictureBox_input;
+        private System.Windows.Forms.Label label_result;
     }
 }
 

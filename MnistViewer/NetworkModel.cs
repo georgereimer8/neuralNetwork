@@ -11,6 +11,7 @@ namespace MnistViewer
 
     public class NetworkModel
     {
+
         public Action<int> SetBatchMax;
         public Action<int> ShowCurrentBatch;
         public Action<int> SetEpochsMax;
@@ -20,6 +21,7 @@ namespace MnistViewer
         public Action<bool> SetConsoleVisible;
         public Action<string> Log { get; set; }
         public Action<int, int, double, bool> InitView { get; set; }
+        public Action<Bitmap> ShowImages { get; set; }
         public Action<Bitmap> ShowImage { get; set; }
         public Action<int> SetMaxImageCount { get; set; }
         public string TrainingLablesPath { get; set; }
@@ -224,9 +226,14 @@ namespace MnistViewer
         public void UpdateCurrentImage(int index)
         {
             DisplayImage.Highlight(index);
-            ShowImage?.Invoke(DisplayImage.Composite);
+            ShowImages?.Invoke(DisplayImage.Composite);
+            UpdateDrawingImage(index);
         }
 
+        public void UpdateDrawingImage( int index )
+        {
+            ShowImage?.Invoke(TrainingImages.ImageList[index].Bitmap);
+        }
         /// <summary>
         /// Read the Mnist images from the given paths
         /// </summary>

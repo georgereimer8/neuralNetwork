@@ -11,6 +11,7 @@ namespace MnistViewer
         public NetworkPresenter( NetworkView view, NetworkModel model )
         {
             model.Log = view.Log;
+            model.ShowImages = view.ShowImages;
             model.ShowImage = view.ShowImage;
             model.InitView = view.Init;
             model.SetMaxImageCount = view.SetMaxImageCount;
