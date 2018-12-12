@@ -21,12 +21,13 @@ namespace MnistViewer
                     else
                         control.BeginInvoke((Action)delegate { SafeInvoke(control, action, synchronous); });
                 }
-                else if (control.IsHandleCreated == true)
+                else if (control.IsHandleCreated == false)
                 {
-                    // we're on the controls thread, make sure it has a handle before invoking action on it
-                    // may want to restore default handle creation? IntPtr h = p_control.Handle;
-                    action.Invoke();
+                    IntPtr h = control.Handle;
                 }
+                // we're on the controls thread, make sure it has a handle before invoking action on it
+                // may want to restore default handle creation? 
+                action.Invoke();
             }
         }
 

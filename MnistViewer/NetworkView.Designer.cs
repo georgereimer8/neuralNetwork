@@ -28,11 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.CustomLabel customLabel2 = new System.Windows.Forms.DataVisualization.Charting.CustomLabel();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NetworkView));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.CustomLabel customLabel1 = new System.Windows.Forms.DataVisualization.Charting.CustomLabel();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button_SaveNetwork = new System.Windows.Forms.Button();
             this.button_loadNetwork = new System.Windows.Forms.Button();
             this.checkBox_shuffle = new System.Windows.Forms.CheckBox();
@@ -40,7 +41,6 @@
             this.button_Stop = new System.Windows.Forms.Button();
             this.textBox_inputNeuronCount = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.numericUpDown_HiddenLayerCount = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.numericUpDown_OutputNeuronCount = new System.Windows.Forms.NumericUpDown();
@@ -51,7 +51,6 @@
             this.numericUpDown_HiddenNeuronCount = new System.Windows.Forms.NumericUpDown();
             this.label_zoomLevel = new System.Windows.Forms.Label();
             this.trackBar_zoomLevel = new System.Windows.Forms.TrackBar();
-            this.numericUpDown_currentImage = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -66,6 +65,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.textBox_labelsPath = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.numericUpDown_currentImage = new System.Windows.Forms.NumericUpDown();
             this.panel1 = new System.Windows.Forms.Panel();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.chartActivations = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -79,16 +80,16 @@
             this.aquaGauge_epochs = new AquaControls.AquaGauge();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.zoomPicBox1 = new MnistViewer.ZoomPicBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label_TrainingInProgress = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_HiddenLayerCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_OutputNeuronCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_HiddenNeuronCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_zoomLevel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_currentImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_learningRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_batchSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_epochs)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_currentImage)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
@@ -143,6 +144,18 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Network Hyper Parameters";
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.richTextBox1.Location = new System.Drawing.Point(917, 16);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.Size = new System.Drawing.Size(320, 187);
+            this.richTextBox1.TabIndex = 44;
+            this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
+            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // button_SaveNetwork
             // 
@@ -219,16 +232,6 @@
             this.label10.Size = new System.Drawing.Size(34, 13);
             this.label10.TabIndex = 37;
             this.label10.Text = "Zoom";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(693, 137);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(93, 13);
-            this.label9.TabIndex = 36;
-            this.label9.Text = "Select Test Image";
-            this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
             // numericUpDown_HiddenLayerCount
             // 
@@ -358,14 +361,6 @@
             this.trackBar_zoomLevel.TabIndex = 15;
             this.trackBar_zoomLevel.Value = 100;
             this.trackBar_zoomLevel.Scroll += new System.EventHandler(this.trackBar_zoomLevel_Scroll);
-            // 
-            // numericUpDown_currentImage
-            // 
-            this.numericUpDown_currentImage.Location = new System.Drawing.Point(709, 111);
-            this.numericUpDown_currentImage.Name = "numericUpDown_currentImage";
-            this.numericUpDown_currentImage.Size = new System.Drawing.Size(53, 20);
-            this.numericUpDown_currentImage.TabIndex = 14;
-            this.numericUpDown_currentImage.ValueChanged += new System.EventHandler(this.numericUpDown_currentImage_ValueChanged);
             // 
             // label3
             // 
@@ -525,6 +520,24 @@
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(693, 137);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(93, 13);
+            this.label9.TabIndex = 36;
+            this.label9.Text = "Select Test Image";
+            this.label9.Click += new System.EventHandler(this.label9_Click);
+            // 
+            // numericUpDown_currentImage
+            // 
+            this.numericUpDown_currentImage.Location = new System.Drawing.Point(709, 111);
+            this.numericUpDown_currentImage.Name = "numericUpDown_currentImage";
+            this.numericUpDown_currentImage.Size = new System.Drawing.Size(53, 20);
+            this.numericUpDown_currentImage.TabIndex = 14;
+            this.numericUpDown_currentImage.ValueChanged += new System.EventHandler(this.numericUpDown_currentImage_ValueChanged);
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.splitContainer2);
@@ -555,18 +568,18 @@
             // 
             this.chartActivations.AllowDrop = true;
             this.chartActivations.BackColor = System.Drawing.SystemColors.Control;
-            customLabel2.Text = "Activations";
-            chartArea2.AxisX.CustomLabels.Add(customLabel2);
-            chartArea2.AxisX.Title = "Activations";
-            chartArea2.Name = "ChartArea1";
-            this.chartActivations.ChartAreas.Add(chartArea2);
+            customLabel1.Text = "Activations";
+            chartArea1.AxisX.CustomLabels.Add(customLabel1);
+            chartArea1.AxisX.Title = "Activations";
+            chartArea1.Name = "ChartArea1";
+            this.chartActivations.ChartAreas.Add(chartArea1);
             this.chartActivations.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chartActivations.Location = new System.Drawing.Point(0, 0);
             this.chartActivations.Name = "chartActivations";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chartActivations.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartActivations.Series.Add(series1);
             this.chartActivations.Size = new System.Drawing.Size(440, 409);
             this.chartActivations.TabIndex = 5;
             this.chartActivations.Text = "chart1";
@@ -592,6 +605,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.label_TrainingInProgress);
             this.splitContainer1.Panel2.Controls.Add(this.aquaGauge_batch);
             this.splitContainer1.Panel2.Controls.Add(this.aquaGauge_accuracy);
             this.splitContainer1.Panel2.Controls.Add(this.aquaGauge_epochs);
@@ -701,17 +715,17 @@
             this.zoomPicBox1.Zoom = 1F;
             this.zoomPicBox1.Click += new System.EventHandler(this.zoomPicBox1_Click);
             // 
-            // richTextBox1
+            // label_TrainingInProgress
             // 
-            this.richTextBox1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.richTextBox1.Location = new System.Drawing.Point(917, 16);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(320, 187);
-            this.richTextBox1.TabIndex = 44;
-            this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
-            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            this.label_TrainingInProgress.AutoSize = true;
+            this.label_TrainingInProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_TrainingInProgress.ForeColor = System.Drawing.Color.DarkRed;
+            this.label_TrainingInProgress.Location = new System.Drawing.Point(117, 145);
+            this.label_TrainingInProgress.Name = "label_TrainingInProgress";
+            this.label_TrainingInProgress.Size = new System.Drawing.Size(199, 24);
+            this.label_TrainingInProgress.TabIndex = 37;
+            this.label_TrainingInProgress.Text = "Training in Progress";
+            this.label_TrainingInProgress.Visible = false;
             // 
             // NetworkView
             // 
@@ -729,10 +743,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_OutputNeuronCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_HiddenNeuronCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_zoomLevel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_currentImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_learningRate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_batchSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_epochs)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_currentImage)).EndInit();
             this.panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
@@ -742,6 +756,7 @@
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_input)).EndInit();
@@ -799,6 +814,7 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button button_SaveNetwork;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label label_TrainingInProgress;
     }
 }
 

@@ -115,6 +115,7 @@ namespace MnistViewer
             numericUpDown_batchSize_ValueChanged(numericUpDown_batchSize, null);
             numericUpDown_learningRate_ValueChanged(numericUpDown_learningRate, null);
             checkBox_TestEachEpoch_CheckedChanged(checkBox_IncludeTestData, null);
+            checkBox_shuffle_CheckedChanged(checkBox_shuffle, null);
             numericUpDown_OutputNeuronCount_ValueChanged(numericUpDown_OutputNeuronCount, null);
             numericUpDown_HiddenNeuronCount_ValueChanged(numericUpDown_HiddenNeuronCount, null);
             numericUpDown_HiddenLayerCount_ValueChanged(numericUpDown_HiddenLayerCount, null);
@@ -416,6 +417,13 @@ namespace MnistViewer
             });
         }
 
+        public void ShowTrainingInProgress( bool setting )
+        {
+            label_TrainingInProgress.SafeInvoke(() =>
+            {
+                label_TrainingInProgress.Visible = setting;
+            });
+        }
         private void label9_Click(object sender, EventArgs e)
         {
 

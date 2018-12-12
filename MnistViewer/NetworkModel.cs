@@ -12,6 +12,7 @@ namespace MnistViewer
     public class NetworkModel
     {
 
+        public Action<bool> ShowTrainingInProgress;
         public Action<int> ShowResult;
         public Action<int> SetBatchMax;
         public Action<int> ShowCurrentBatch;
@@ -281,6 +282,7 @@ namespace MnistViewer
         public void HookEvents()
         {
             Network.Log = Log;
+            Network.ShowTrainingInProgress = ShowTrainingInProgress;
             Network.ShowCurrentEpoch = ShowCurrentEpoch;
             Network.ShowCurrentBatch = ShowCurrentBatch;
             Network.ShowAccuracy = ShowAccuracy;

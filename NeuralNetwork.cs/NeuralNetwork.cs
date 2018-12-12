@@ -20,6 +20,7 @@ namespace Network
         public Action<int> ShowCurrentBatch { get; set; }
         public Action<double> ShowAccuracy { get; set; }
 
+        public Action<bool> ShowTrainingInProgress;
         public List<Layer> Layers { get; set; }
         public double Epochs { get; set; }
 
@@ -63,9 +64,9 @@ namespace Network
             if (TestEachEpoch) s += ",TestEachEpoch";
             return s;
         }
-        // TODO: pass in folder path
-        // create if necessary
-        // have each layer save itself so network can be rebuilt from saved files
+        /// <summary>
+        /// Each layer saves itself so network can be rebuilt from saved files
+        /// </summary>
         public void Save(string folderPath = @"C:\temp\trainedNetwork")
         {
             foreach (var layer in Layers)
@@ -84,6 +85,7 @@ namespace Network
         /// <param name="learningRate"></param>
         public void Train(List<NetworkData> trainingData, List<NetworkData> testingData, int epochs, int batchSize, double learningRate)
         {
+            ShowTrainingInProgress?.Invoke(true);
             var msg = "Training Started";
             msg = getOptions(msg);
             Log?.Invoke(msg);
@@ -97,6 +99,7 @@ namespace Network
             {
                 Log?.Invoke(String.Format("Training failed: {0}", ex.Message));
             }
+            ShowTrainingInProgress?.Invoke(false);
         }
 
         /// <summary>
