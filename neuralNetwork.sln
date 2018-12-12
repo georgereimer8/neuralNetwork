@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{1F733615-B
 		docs\bookmarks_9_30_18.html = docs\bookmarks_9_30_18.html
 		docs\network visio2002.vsd = docs\network visio2002.vsd
 		docs\network.vsd = docs\network.vsd
+		docs\network2.vsd = docs\network2.vsd
 		docs\references.html = docs\references.html
 	EndProjectSection
 EndProject
