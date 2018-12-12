@@ -12,6 +12,7 @@ namespace MnistViewer
     public class NetworkModel
     {
 
+        public Action<int> ShowResult;
         public Action<int> SetBatchMax;
         public Action<int> ShowCurrentBatch;
         public Action<int> SetEpochsMax;
@@ -152,6 +153,7 @@ namespace MnistViewer
             Network = new Network.NeuralNetwork();
             HookEvents();
             LoadLayers(folderPath);
+            Log?.Invoke(String.Format("Network Loaded({0})", folderPath));
         }
 
         public void SaveNetwork( string folderPath )
@@ -159,6 +161,7 @@ namespace MnistViewer
             if (Network != null)
             {
                 Network.Save(folderPath);
+                Log?.Invoke(String.Format("Network Saved({0})", folderPath));
             }
             else Log?.Invoke("Cannot save Network. Network not yet created");
         }
@@ -250,9 +253,19 @@ namespace MnistViewer
                 if( TrainingImages != null  )
                 {
 
-                    MnistImage mnistImage = new MnistImage()
+                    var x = TrainingImages.ImageList.First().Width;
+                    var y = TrainingImages.ImageList.First().Height;
+                    MnistImage mnistImage = new MnistImage(x, y);
+                    mnistImage.GetPixels(image, x, y);
+
+                    //var data = mnistImage.Pixels.Normalize(Byte.MaxValue + 1);
+                    var data = mnistImage.Pixels.ToArray();
+                    var result = Network.EvaluateData(data);
+                    ShowResult?.Invoke(result);
+                    DisplayLayers(Network.Layers);
+                    //ShowImage(mnistImage.Bitmap);
+                    Log?.Invoke(String.Format("Image Evaluates to:{0}", result));
                 }
-                Network.EvaluateImage(image);
             }
         }
         /// <summary>

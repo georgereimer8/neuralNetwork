@@ -25,6 +25,7 @@ namespace MnistViewer
         {
             Width = x;
             Height = y;
+            Label = "0";
             Pixels = new List<int>();
         }
 
@@ -55,14 +56,20 @@ namespace MnistViewer
             return bitmap;
         }
 
-        public List<int> GetPixels (Bitmap bitmap, int width, int height )
+        public void GetPixels (Bitmap bitmap, int width, int height )
         {
-            List<int> pixels = new List<int>();
+            Pixels = new List<int>();
 
             Bitmap resized = new Bitmap(bitmap, new Size(width, height));
-
-
-            return pixels;
+            for( int y = 0; y < height; ++y )
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    Color c = resized.GetPixel(x, y);
+                    var pixel = c.GetBrightness();
+                    Pixels.Add((int)(pixel + 0.5 ));
+                }
+            }
         }
     }
     public class DisplayImage

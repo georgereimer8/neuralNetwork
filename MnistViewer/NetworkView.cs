@@ -124,6 +124,7 @@ namespace MnistViewer
         private void numericUpDown_currentImage_ValueChanged(object sender, EventArgs e)
         {
             UpdateCurrentImage?.Invoke((int)numericUpDown_currentImage.Value);
+            EvaluateImage?.Invoke((Bitmap)pictureBox_input.Image);
         }
 
         private void trackBar_zoomLevel_Scroll(object sender, EventArgs e)
@@ -405,6 +406,29 @@ namespace MnistViewer
         private void pictureBox_input_MouseLeave(object sender, EventArgs e)
         {
             EvaluateImage?.Invoke((Bitmap)pictureBox_input.Image);
+        }
+
+        public void ShowResult( int result )
+        {
+            label_result.SafeInvoke(() =>
+            {
+                label_result.Text = result.ToString();
+            });
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void zoomPicBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

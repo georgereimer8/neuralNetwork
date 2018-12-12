@@ -15,6 +15,7 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "cheatsheet", "cheatsheet\ch
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{1F733615-B857-4E2C-84E2-7DED0C3407D7}"
 	ProjectSection(SolutionItems) = preProject
+		docs\algorithm.PNG = docs\algorithm.PNG
 		docs\Book1.xlsx = docs\Book1.xlsx
 		docs\bookmarks_10_4_18.html = docs\bookmarks_10_4_18.html
 		docs\bookmarks_9_30_18.html = docs\bookmarks_9_30_18.html

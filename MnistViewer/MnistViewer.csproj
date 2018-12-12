@@ -84,6 +84,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="TrainingForm.resx">
       <DependentUpon>TrainingForm.cs</DependentUpon>
@@ -111,6 +112,9 @@
       <Project>{861ef5a1-07b5-4d7a-bd46-154251896119}</Project>
       <Name>Network</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\algorithm.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -179,9 +179,19 @@ namespace Network
             return correctCount;
         }
 
-        public int EvaluatePixels(List<double> pixels)
+        public int EvaluateData( int[] myValues)
         {
-            Layers.First().Activations = DenseVector.Build.DenseOfArray(pixels.ToArray());
+            List<double> d = new List<double>();
+            foreach( var i in myValues)
+            {
+                d.Add((double)i);
+            }
+            return EvaluateData(d.ToArray());
+        }
+        public int EvaluateData(double[] myValues )
+        {
+            var data = DenseVector.Build.Dense(myValues);
+            Layers.First().Activations = data;
             foreach (var layer in Layers)
             {
                 layer.CalcActivation();
